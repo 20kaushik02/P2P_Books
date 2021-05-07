@@ -1,0 +1,17 @@
+users - username, password, locationID, reputation, phone/mail or whatever contact details 
+  - username is PK, locationID is FK referencing locationID in location rel
+
+transactions - transactionID, buyer, bookoutID, return date 
+- transactionID is PK, buyer is FK referencing username in users rel, bookoutID is FK referencing bookoutID in bookout rel
+
+location - locationID, state, city, area, street 
+- locationID is PK
+
+book - bookID, title, author, whatever else we want 
+- bookID is PK
+
+book_out - bookoutID, bookID, bookout_status (available/sold/not for sale), seller 
+- bookoutID is PK, bookID is FK referencing bookID in book rel, seller is FK referencing username in users rel
+
+offer - offerID, bookoutID, buyer 
+- offerID is PK, bookoutID is FK referencing bookoutID in bookout rel, buyer is FK referencing username in users rel
