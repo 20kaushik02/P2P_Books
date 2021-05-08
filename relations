@@ -1,13 +1,13 @@
 users - username, password, locationID, reputation, phone/mail or whatever contact details 
   - username is PK, locationID is FK referencing locationID in location rel
 
-transactions - transactionID, buyer, bookoutID, return date 
-- transactionID is PK, buyer is FK referencing username in users rel, bookoutID is FK referencing bookoutID in bookout rel
+transactions - transactionID, offerID, issue date, return date 
+- transactionID is PK, offerID is FK referencing offerID in offer rel
 
 location - locationID, state, city, area, street 
 - locationID is PK
 
-book - bookID, title, author, whatever else we want 
+book - bookID, title, author, category (multi valued, but that won't be in a normal form... or doesn't that matter?)
 - bookID is PK
 
 book_out - bookoutID, bookID, bookout_status (available/sold/not for sale), seller 
