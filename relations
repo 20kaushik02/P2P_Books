@@ -1,4 +1,4 @@
-users - username, password, locationID, reputation, phone/mail or whatever contact details 
+users - username, password, locationID, reputation, phone, mail, DOB
   - username is PK, locationID is FK referencing locationID in location rel
 
 transactions - transactionID, offerID, issue date, return date 
@@ -7,7 +7,7 @@ transactions - transactionID, offerID, issue date, return date
 location - locationID, state, city, area, street 
 - locationID is PK
 
-book - bookID, title, author, category (multi valued, but that won't be in a normal form... or doesn't that matter?)
+book - bookID, title, author, category
 - bookID is PK
 
 book_out - bookoutID, bookID, bookout_status (available/sold/not for sale), seller 
@@ -15,3 +15,6 @@ book_out - bookoutID, bookID, bookout_status (available/sold/not for sale), sell
 
 offer - offerID, bookoutID, buyer 
 - offerID is PK, bookoutID is FK referencing bookoutID in bookout rel, buyer is FK referencing username in users rel
+
+request - requestID, bookID, requester, request date, expiry date (initially derived from request date, extensible)
+- requestID is PK, bookID is FK referencing bookID in book rel, requester is FK referencing username in users rel
