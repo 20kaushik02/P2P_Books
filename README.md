@@ -1,6 +1,7 @@
 # P2P_Books
-<h1>Let's see if this works bois</h1>
-<p>lesdodis</p>
-=======
-<h2>Test</h2>
-
+<h1>Things to do:</h1>
+<ul>
+  <li>finish the sql component</li>
+  <li>learn react</li>
+  <li>learn express</li>
+</ul>
