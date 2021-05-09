@@ -1,20 +1,28 @@
-users - username, password, locationID, reputation, phone, mail, DOB
-  - username is PK, locationID is FK referencing locationID in location rel
+Users - username, password, reputation, phone, name, mail, DOB, gender, location_id
+  - username is primary key
+  - location_id is foreign key referencing location_id in Location relation
 
-transactions - transactionID, offerID, issue date, return date 
-- transactionID is PK, offerID is FK referencing offerID in offer rel
+Transactions - transaction_id, date_of_transac, return_date, offer_id
+  - transaction_id is primary key
+  - offer_id is foreign key referencing offer_id in Offers relation
 
-location - locationID, state, city, area, street 
-- locationID is PK
+Location - location_id, state, city, area, street 
+  - location_id is primary key
 
-book - bookID, title, author, category
-- bookID is PK
+Books - books_id, title, author, category
+  - books_id is primary key
 
-book_out - bookoutID, bookID, bookout_status (available/sold/not for sale), seller 
-- bookoutID is PK, bookID is FK referencing bookID in book rel, seller is FK referencing username in users rel
+Books_active - book_active_id, book_status (available/sold/not for sale), books_id, renter 
+  - book_active_id is primary key
+  - books_id is foreign key referencing books_id in Books relation
+  - renter is foreign key referencing username in Users relation
 
-offer - offerID, bookoutID, buyer 
-- offerID is PK, bookoutID is FK referencing bookoutID in bookout rel, buyer is FK referencing username in users rel
+Offers - offer_id, book_active_id, rentee
+  - offer_id is primary key
+  - book_active_id is foreign key referencing book_active_id in Books_active relation
+  - rentee is foreign key referencing username in Users relation
 
-request - requestID, bookID, requester, request date, expiry date (initially derived from request date, extensible)
-- requestID is PK, bookID is FK referencing bookID in book rel, requester is FK referencing username in users rel
+Requests - request_id, request date, expiry date (initially derived from request date, extensible), books_id, requester 
+  - request_id is primary key
+  - books_id is foreign key referencing books_id in Books relation
+  - requester is foreign key referencing username in Users relation
