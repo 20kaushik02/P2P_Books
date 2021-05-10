@@ -11,15 +11,12 @@ owner rep +3, renter rep -1
 
 */
 
-SET search_path TO p2p_books_schema;
-
 CREATE OR REPLACE FUNCTION TransactOfferCleanupProc()
     RETURNS TRIGGER
-    SET SCHEMA 'p2p_books_schema'
     LANGUAGE plpgsql
     AS '
-        DECLARE final_bai offers.book_active_id%TYPE;
-        DECLARE final_renter offers.renter%TYPE;
+        DECLARE final_bai books_active.book_active_id%TYPE;
+        DECLARE final_renter users.username%TYPE;
         DECLARE temp_doi offers.offer_id%TYPE;
     BEGIN
         SELECT book_active_id, renter INTO final_bai, final_renter FROM offers 
@@ -35,7 +32,6 @@ CREATE OR REPLACE FUNCTION TransactOfferCleanupProc()
 
 CREATE OR REPLACE FUNCTION UserReputationUpdateProc()
     RETURNS TRIGGER
-    SET SCHEMA 'p2p_books_schema' 
     LANGUAGE plpgsql
     AS '
     BEGIN

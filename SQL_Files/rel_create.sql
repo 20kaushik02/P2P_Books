@@ -1,13 +1,11 @@
-SET search_path TO p2p_books_schema;
+CREATE SEQUENCE IF NOT EXISTS location_pk_seq START 10000;
+CREATE SEQUENCE IF NOT EXISTS books_pk_seq START 20000;
+CREATE SEQUENCE IF NOT EXISTS books_act_pk_seq START 30000;
+CREATE SEQUENCE IF NOT EXISTS offers_pk_seq START 40000;
+CREATE SEQUENCE IF NOT EXISTS requests_pk_seq START 50000;
+CREATE SEQUENCE IF NOT EXISTS transacs_pk_seq START 60000;
 
-CREATE SEQUENCE IF NOT EXISTS p2p_books_schema.location_pk_seq START 10000;
-CREATE SEQUENCE IF NOT EXISTS p2p_books_schema.books_pk_seq START 20000;
-CREATE SEQUENCE IF NOT EXISTS p2p_books_schema.books_act_pk_seq START 30000;
-CREATE SEQUENCE IF NOT EXISTS p2p_books_schema.offers_pk_seq START 40000;
-CREATE SEQUENCE IF NOT EXISTS p2p_books_schema.requests_pk_seq START 50000;
-CREATE SEQUENCE IF NOT EXISTS p2p_books_schema.transacs_pk_seq START 60000;
-
-CREATE TABLE IF NOT EXISTS p2p_books_schema.location (
+CREATE TABLE IF NOT EXISTS location (
     location_id INT NOT NULL DEFAULT nextval('location_pk_seq'),
     state VARCHAR(20) NOT NULL,
     city VARCHAR(20) NOT NULL,
@@ -16,7 +14,7 @@ CREATE TABLE IF NOT EXISTS p2p_books_schema.location (
     PRIMARY KEY (location_id)
 );
 
-CREATE TABLE IF NOT EXISTS p2p_books_schema.users (
+CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(25) NOT NULL,
     password VARCHAR(15) NOT NULL,
     name VARCHAR(25) NOT NULL,
@@ -30,7 +28,7 @@ CREATE TABLE IF NOT EXISTS p2p_books_schema.users (
     FOREIGN KEY (location_id) REFERENCES location(location_id)
 );
 
-CREATE TABLE IF NOT EXISTS p2p_books_schema.books (
+CREATE TABLE IF NOT EXISTS books (
     books_id INT NOT NULL DEFAULT nextval('books_pk_seq'),
     title VARCHAR(20) NOT NULL,
     author VARCHAR(20) NOT NULL,
@@ -38,7 +36,7 @@ CREATE TABLE IF NOT EXISTS p2p_books_schema.books (
     PRIMARY KEY (books_id)
 );
 
-CREATE TABLE IF NOT EXISTS p2p_books_schema.books_active (
+CREATE TABLE IF NOT EXISTS books_active (
     book_active_id INT NOT NULL DEFAULT nextval('books_act_pk_seq'),
     book_status CHAR(1) NOT NULL CHECK (book_status IN ('A', 'R', 'N')),
     books_id INT NOT NULL,
@@ -48,7 +46,7 @@ CREATE TABLE IF NOT EXISTS p2p_books_schema.books_active (
     FOREIGN KEY (owner) REFERENCES users(username)
 );
 
-CREATE TABLE IF NOT EXISTS p2p_books_schema.offers (
+CREATE TABLE IF NOT EXISTS offers (
     offer_id INT NOT NULL DEFAULT nextval('offers_pk_seq'),
     book_active_id INT NOT NULL,
     renter VARCHAR NOT NULL,
@@ -57,7 +55,7 @@ CREATE TABLE IF NOT EXISTS p2p_books_schema.offers (
     FOREIGN KEY (renter) REFERENCES users(username)
 );
 
-CREATE TABLE IF NOT EXISTS p2p_books_schema.requests (
+CREATE TABLE IF NOT EXISTS requests (
     request_id INT NOT NULL DEFAULT nextval('requests_pk_seq'),
     request_date DATE NOT NULL,
     expiry_date DATE NOT NULL,
@@ -68,7 +66,7 @@ CREATE TABLE IF NOT EXISTS p2p_books_schema.requests (
     FOREIGN KEY (requester) REFERENCES users(username)
 );
 
-CREATE TABLE IF NOT EXISTS p2p_books_schema.transactions (
+CREATE TABLE IF NOT EXISTS transactions (
     transaction_id INT NOT NULL DEFAULT nextval('transacs_pk_seq'),
     date_of_transac DATE NOT NULL,
     return_date DATE NOT NULL,
