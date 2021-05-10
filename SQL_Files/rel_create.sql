@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(25) NOT NULL,
     password VARCHAR(15) NOT NULL,
     name VARCHAR(25) NOT NULL,
-    reputation FLOAT NOT NULL,
+    reputation NUMERIC(4,2) NOT NULL DEFAULT 10.00,
     phone VARCHAR(10) NOT NULL,
     mail VARCHAR(30) NOT NULL,
     DOB DATE NOT NULL,
