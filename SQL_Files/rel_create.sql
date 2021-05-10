@@ -40,19 +40,19 @@ CREATE TABLE IF NOT EXISTS books_active (
     book_active_id INT NOT NULL DEFAULT nextval('books_act_pk_seq'),
     book_status CHAR(1) NOT NULL CHECK (book_status IN ('A', 'R', 'N')),
     books_id INT NOT NULL,
-    renter VARCHAR NOT NULL,
+    owner VARCHAR NOT NULL,
     PRIMARY KEY (book_active_id),
     FOREIGN KEY (books_id) REFERENCES books(books_id),
-    FOREIGN KEY (renter) REFERENCES users(username)
+    FOREIGN KEY (owner) REFERENCES users(username)
 );
 
 CREATE TABLE IF NOT EXISTS offers (
     offer_id INT NOT NULL DEFAULT nextval('offers_pk_seq'),
     book_active_id INT NOT NULL,
-    rentee VARCHAR NOT NULL,
+    renter VARCHAR NOT NULL,
     PRIMARY KEY (offer_id),
     FOREIGN KEY (book_active_id) REFERENCES books_active(book_active_id),
-    FOREIGN KEY (rentee) REFERENCES users(username)
+    FOREIGN KEY (renter) REFERENCES users(username)
 );
 
 CREATE TABLE IF NOT EXISTS requests (
