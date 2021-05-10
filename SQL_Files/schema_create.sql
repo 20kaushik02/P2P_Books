@@ -1,0 +1,1 @@
+CREATE SCHEMA IF NOT EXISTS p2p_books_schema AUTHORIZATION postgres;

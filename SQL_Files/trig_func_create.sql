@@ -5,16 +5,18 @@ find the offer id of transaction, get the book active id and renter X (buyer) of
 find all offers with that book active id that have renter other than X
 remove them
 
-2. Update reputation of user after a transaction is made as well after it is completed
-find 
+2. Update reputation of users after a transaction is made
+find owner and renter from books_active and offers respectively
+owner rep +3, renter rep -1
 
 */
 
+SET search_path TO p2p_books_schema;
+
 CREATE OR REPLACE FUNCTION TransactOfferCleanupProc()
     RETURNS TRIGGER
-    SET SCHEMA 'public'
+    SET SCHEMA 'p2p_books_schema'
     LANGUAGE plpgsql
-    SET search_path = public
     AS '
         DECLARE final_bai offers.book_active_id%TYPE;
         DECLARE final_renter offers.renter%TYPE;
@@ -30,17 +32,20 @@ CREATE OR REPLACE FUNCTION TransactOfferCleanupProc()
         END LOOP;
     END;
     ';
-/*
-CREATE OR REPLACE FUNCTION ReputationCalc()
+
+CREATE OR REPLACE FUNCTION UserReputationUpdateProc()
     RETURNS TRIGGER
-    SET SCHEMA 'public'
+    SET SCHEMA 'p2p_books_schema' 
     LANGUAGE plpgsql
-    SET search_path = public
     AS '
-        DECLARE;
     BEGIN
-        UPDATE users
-            SET do the rep calc part here for seller
-                WHERE username = (SELECT username FROM users WHERE )
+        UPDATE users SET reputation = reputation + 3 WHERE username = 
+            (SELECT owner FROM books_active WHERE book_active_id = 
+                (SELECT book_active_id FROM offers WHERE offer_id = NEW.offer_id)
+            );
+
+        UPDATE users SET reputation = reputation - 1 WHERE username = 
+                (SELECT renter FROM offers WHERE offer_id = NEW.offer_id);
+
+    END;
     ';
-*/
