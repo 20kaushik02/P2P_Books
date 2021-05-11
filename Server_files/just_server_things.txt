@@ -1,0 +1,8 @@
+to do list:
+
+initialise the folder with npm init with proper parameters (which idk much abt yet) so as to create a package.json file 
+npm i express --save
+npm i pg --save
+npm i cors --save (necessary?)
+npm i body-parser (necessary?)
+npm i password-hash --save 
