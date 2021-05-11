@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS requests (
     request_date DATE NOT NULL,
     expiry_date DATE NOT NULL,
     books_id INT NOT NULL,
-    requester(25) VARCHAR NOT NULL,
+    requester VARCHAR(25) NOT NULL,
     PRIMARY KEY (request_id),
     FOREIGN KEY (books_id) REFERENCES books(books_id),
     FOREIGN KEY (requester) REFERENCES users(username)
