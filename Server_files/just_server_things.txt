@@ -6,3 +6,20 @@ npm i pg --save
 npm i cors --save (necessary?)
 npm i body-parser (necessary?)
 npm i password-hash --save 
+
+routes needed:
+
+home page
+my requests
+my offers
+my books (both owned and borrowed?)
+browse requests
+browse books_active
+login
+add book
+add book for sale
+make offer
+make request
+update transaction
+update book status
+accept offer
