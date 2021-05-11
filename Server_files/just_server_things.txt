@@ -4,7 +4,6 @@ initialise the folder with npm init with proper parameters (which idk much abt y
 npm i express --save
 npm i pg --save
 npm i cors --save (necessary?)
-npm i body-parser (necessary?)
 npm i password-hash --save 
 
 routes needed:
