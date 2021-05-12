@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "nmon": "nodemon index.js" //to run, do npm run nmon
+    "nmon": "nodemon index.js" 
   },
   "author": "KNK",
   "license": "ISC",
