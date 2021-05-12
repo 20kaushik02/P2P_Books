@@ -8,17 +8,16 @@ npm i password-hash --save
 
 routes needed:
 
-home page
+home page - all active books
 my requests
 my offers
-my books (both owned and borrowed?)
-browse requests
-browse books_active
-login
+my books
+browse requests - all requests
+login (pop up)
 add book
 add book for sale
 make offer
 make request
 update transaction
-update book status
+update book status 
 accept offer
