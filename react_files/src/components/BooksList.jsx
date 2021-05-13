@@ -7,7 +7,7 @@ const BooksList = (props) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await Homepage.get("/");
+                const response = await Homepage.get("/all");
                 setBooks(response.data.data.Books);
             } catch (error) {
                 console.error(error);

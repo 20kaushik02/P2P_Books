@@ -7,20 +7,20 @@ CREATE SEQUENCE IF NOT EXISTS transacs_pk_seq START 60000;
 
 CREATE TABLE IF NOT EXISTS location (
     location_id INT NOT NULL DEFAULT nextval('location_pk_seq'),
-    state VARCHAR(20) NOT NULL,
-    city VARCHAR(20) NOT NULL,
-    area VARCHAR(20) NOT NULL,
-    street VARCHAR(20) NOT NULL,
+    state VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    area VARCHAR(255) NOT NULL,
+    street VARCHAR(255) NOT NULL,
     PRIMARY KEY (location_id)
 );
 
 CREATE TABLE IF NOT EXISTS users (
-    username VARCHAR(25) NOT NULL,
-    password VARCHAR(15) NOT NULL,
-    name VARCHAR(25) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     reputation NUMERIC(4,2) NOT NULL DEFAULT 10.00,
-    phone VARCHAR(10) NOT NULL,
-    mail VARCHAR(30) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    mail VARCHAR(255) NOT NULL,
     DOB DATE NOT NULL,
     gender CHAR(1) NOT NULL CHECK (gender IN ('M', 'F', 'O')),
     location_id INT NOT NULL,
@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS books (
     books_id INT NOT NULL DEFAULT nextval('books_pk_seq'),
-    title VARCHAR(20) NOT NULL,
-    author VARCHAR(20) NOT NULL,
-    category VARCHAR(20) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    category VARCHAR(255) NOT NULL,
     PRIMARY KEY (books_id)
 );
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS books_active (
     book_active_id INT NOT NULL DEFAULT nextval('books_act_pk_seq'),
     book_status CHAR(1) NOT NULL CHECK (book_status IN ('A', 'R', 'N')),
     books_id INT NOT NULL,
-    owner VARCHAR(25) NOT NULL,
+    owner VARCHAR(255) NOT NULL,
     PRIMARY KEY (book_active_id),
     FOREIGN KEY (books_id) REFERENCES books(books_id),
     FOREIGN KEY (owner) REFERENCES users(username)
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS books_active (
 CREATE TABLE IF NOT EXISTS offers (
     offer_id INT NOT NULL DEFAULT nextval('offers_pk_seq'),
     book_active_id INT NOT NULL,
-    renter VARCHAR(25) NOT NULL,
+    renter VARCHAR(255) NOT NULL,
     PRIMARY KEY (offer_id),
     FOREIGN KEY (book_active_id) REFERENCES books_active(book_active_id),
     FOREIGN KEY (renter) REFERENCES users(username)
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS requests (
     request_date DATE NOT NULL,
     expiry_date DATE NOT NULL,
     books_id INT NOT NULL,
-    requester VARCHAR(25) NOT NULL,
+    requester VARCHAR(255) NOT NULL,
     PRIMARY KEY (request_id),
     FOREIGN KEY (books_id) REFERENCES books(books_id),
     FOREIGN KEY (requester) REFERENCES users(username)

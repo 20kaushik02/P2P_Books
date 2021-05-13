@@ -25,7 +25,7 @@ router.get("/:username", async (req,res) => {
 });
 */
 //get all active books
-router.get("/", async (req,res) => {
+router.get("/all", async (req,res) => {
   try{
     console.log('initiating get request for all active books...');
     const get_result = await db.query(
