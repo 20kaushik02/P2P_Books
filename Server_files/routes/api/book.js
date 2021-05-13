@@ -4,13 +4,12 @@ const db = require("../../DB_files");
 
 //for inserting a book
 router.post("/", async (req, res) => {
-    console.log(req.body);
     try {
         const results = await db.query(
         "INSERT INTO books(title, author, category) VALUES ($1, $2, $3) RETURNING *",
         [req.body.title, req.body.author, req.body.category]
         );
-        console.log(results);
+        console.log(results.rows);
         res.status(201).json({
           status: "success",
           data: {
