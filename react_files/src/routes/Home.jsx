@@ -1,5 +1,5 @@
 import React from 'react'
-import AddBook from '../components/AddBook'
+import SearchBox from '../components/SearchBox'
 import BooksList from '../components/BooksList'
 import Header from '../components/Header'
 
@@ -7,7 +7,7 @@ const Home = () => {
     return (
         <div>
            <Header/>
-           <AddBook/>
+           <SearchBox/>
            <BooksList/>
         </div>
     )

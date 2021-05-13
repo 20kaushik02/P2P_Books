@@ -1,30 +1,32 @@
 import React from 'react'
 
-const AddBook = () => {
+const SearchBox = () => {
     return (
         <div className="mb-4">
             <form action="">
-                <div className="form-row">
+                <div className="row">
                     <div className="col">
-                        <input type="text" className="form-control-inline" placeholder="Title"/>
+                        <input type="text" className="form-control" placeholder="Title"/>
                     </div>
                     <div className="col">
-                        <input type="text" className="form-control-inline" placeholder="Author"/>
+                        <input type="text" className="form-control" placeholder="Author"/>
                     </div>
                     <div className="col">
                         <select className="custom-select my-1 mr-sm-2">
-                            <option disabled>Category</option>
+                            <option disabled>Select Category</option>
                             <option value="fant">Fantasy</option>
                             <option value="mys">Mystery</option>
                             <option value="thr">Thriller</option>
                             <option value="dyst">Dystopia</option>
                         </select>
                     </div>
-                    <button className="btn btn-primary">Add</button>
+                    <div className="col">
+                        <button className="btn btn-primary">Search</button>
+                    </div>
                 </div>
             </form>
         </div>
     )
 }
 
-export default AddBook;
+export default SearchBox;
