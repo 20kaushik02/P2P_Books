@@ -6,13 +6,13 @@ const db = require("../../DB_files");
 //get all active books
 router.get("/get/:username", async (req,res) => {
     try{
-        console.log(req.params);
-        const username = req.params;
+        console.log(req.params.username);
+        const username = req.params.username;
       console.log('initiating get request for all active books...');
       const get_result = await db.query(
-        "SELECT b.title FROM books b INNER JOIN books_active ba ON ba.book_id = b.books_id AND ba.owner = $1",
+        "SELECT b.title FROM books b INNER JOIN books_active ba ON ba.books_id = b.books_id AND ba.owner = $1",
         [username]);
-        console.log(get_result);
+        console.log(get_result.rows);
         res.status(201).json({
           status: "success",
           data: {

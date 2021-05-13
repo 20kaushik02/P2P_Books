@@ -28,7 +28,7 @@ router.get("/get", async (req,res) => {
     console.log('initiating get request for all books...');
     const get_result = await db.query(
       "SELECT title,author,category FROM books");
-      console.log(get_result);
+      console.log(get_result.rows);
       res.status(201).json({
         status: "success",
         data: {
