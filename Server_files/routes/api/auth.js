@@ -38,7 +38,7 @@ function validTokenTest (req, res, next) {
     }
 };
 
-router.post("/register", async (req, res) => {
+router.post("/register", testMissing, async (req, res) => {
     const {username, password, name, phone, mail, dob, gender, state, 
             city, area, street} = req.body;
     console.log(name)
