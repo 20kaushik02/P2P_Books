@@ -13,7 +13,7 @@ const SearchBox = () => {
                     </div>
                     <div className="col">
                         <select className="custom-select my-1 mr-sm-2">
-                            <option disabled>Select Category</option>
+                            <option value="all">Any</option>
                             <option value="fant">Fantasy</option>
                             <option value="mys">Mystery</option>
                             <option value="thr">Thriller</option>
