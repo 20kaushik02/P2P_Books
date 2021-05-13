@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import Homepage from "../apis/HomepageAPI";
+import BooksActive from "../apis/BooksActiveAPI";
 import { BooksContext } from '../context/BooksContext';
 
 const BooksList = (props) => {
@@ -7,7 +7,7 @@ const BooksList = (props) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await Homepage.get("/all");
+                const response = await BooksActive.get("/all");
                 setBooks(response.data.data.Books);
             } catch (error) {
                 console.error(error);
