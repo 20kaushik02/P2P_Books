@@ -66,7 +66,7 @@ router.post('/login', credCheck, async (req, res) => {
     }
 });
 
-router.post("/verify", credCheck, tokenCheck, (req, res) => {
+router.post("/verify", tokenCheck, (req, res) => {
     try {
       res.json(true);
     } catch (err) {
