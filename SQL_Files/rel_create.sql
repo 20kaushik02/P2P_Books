@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(255) NOT NULL,
     reputation NUMERIC(4,2) NOT NULL DEFAULT 10.00,
     phone VARCHAR(255) NOT NULL,
-    mail VARCHAR(255) NOT NULL,
+    mail VARCHAR(255) UNIQUE NOT NULL,
     DOB DATE NOT NULL,
     gender CHAR(1) NOT NULL CHECK (gender IN ('M', 'F', 'O')),
     location_id INT NOT NULL,
