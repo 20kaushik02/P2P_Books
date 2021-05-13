@@ -10,7 +10,7 @@ router.get("/get/:username", async (req,res) => {
         const username = req.params;
       console.log('initiating get request for all active books...');
       const get_result = await db.query(
-        "SELECT b.title FROM books b INNER JOIN books_active ba ON ba.book_active_id = b.books_id AND ba.owner = $1",
+        "SELECT b.title FROM books b INNER JOIN books_active ba ON ba.book_id = b.books_id AND ba.owner = $1",
         [username]);
         console.log(get_result);
         res.status(201).json({
