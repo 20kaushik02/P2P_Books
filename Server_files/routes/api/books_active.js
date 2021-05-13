@@ -43,8 +43,6 @@ router.get("/all", async (req,res) => {
   }
 });
 
-module.exports = router;
-
 //filter books based on parameters
 router.get("/", async (req, res) => {
   try {
@@ -120,3 +118,5 @@ router.get("/", async (req, res) => {
     console.log(error);
   }
 });
+
+module.exports = router;
