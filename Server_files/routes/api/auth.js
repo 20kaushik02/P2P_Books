@@ -1,54 +1,25 @@
+require("dotenv").config();
 const express = require('express');
 const router = express.Router();
 const db = require("../../DB_files");
 const bcrypt = require("bcrypt");
+
 const jwtGenerator = require("../../jwtGenerator");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const credCheck = require('../../middleware/missingCred');
+const tokenCheck = require('../../middleware/tokenCheck');
 
-function testMissing (req, res, next) {
-    const {username, password, name, phone, mail, dob, gender, state, 
-        city, area, street} = req.body;
-    
-    if (req.path === "/register") {
-        if (![username, password, name, phone, mail, dob, gender, state, 
-            city, area, street].every(Boolean)) {
-          return res.json("Missing Credentials");
-        } 
-    } else if (req.path === "/login") {
-        if (![username, password].every(Boolean)) {
-          return res.json("Missing Credentials");
-        } 
-    }
-    next();
-};
-  
-function validTokenTest (req, res, next) {
-    const token = req.header("token");
-    if (!token) {
-      return res.status(403).json({ msg: "authorization denied" });
-    }
-  
-    try {
-      const verify = jwt.verify(token, `${process.env.jwtSecret}`);
-      req.user = verify.user;
-      next();
-    } catch (err) {
-      res.status(401).json({ msg: "Token is not valid" });
-    }
-};
-
-router.post("/register", testMissing, async (req, res) => {
+router.post("/register", credCheck, async (req, res) => {
     const {username, password, name, phone, mail, dob, gender, state, 
             city, area, street} = req.body;
-    console.log(name)
+    console.log(name);
     try {   
         const user = await db.query(
-            "SELECT * FROM users WHERE username = $1",[username]
+            "SELECT * FROM users WHERE username = $1\
+            UNION SELECT * FROM users WHERE mail = $2",[username, mail]
         );
             
         if (user.rows.length > 0) {
-            return res.status(401).json("User already exist!");
+            return res.status(401).json("User already exists!");
         }
         
         const salt = await bcrypt.genSalt(10);
@@ -68,24 +39,21 @@ router.post("/register", testMissing, async (req, res) => {
     }
 });
 
-router.post('/login', testMissing, async (req, res) => {
+router.post('/login', credCheck, async (req, res) => {
     const {username, password} = req.body;
     try {
-        const user = await db.query(
-            "SELECT * FROM users WHERE username = $1",[username]
-        );
-            
-        if (user.rows.length === 0) {
+        var user = await db.query("SELECT * FROM users WHERE username = $1",[username]);
+        
+        if(user.rows.length === 0)
+            user = await db.query("SELECT * FROM users WHERE mail = $1", [username]);
+
+        if(user.rows.length === 0)
             return res.status(401).json("User does not exist");
-        }
-
-        console.log(user);
-
-        const validPassword = await bcrypt.compare(
-            password,
-            user.rows[0].password
-        );
-
+        
+        console.log(username);
+        
+        const validPassword = await bcrypt.compare(password, user.rows[0].password);
+        
         if (!validPassword) {
             return res.status(401).json("Invalid username or password");
         }
@@ -98,7 +66,7 @@ router.post('/login', testMissing, async (req, res) => {
     }
 });
 
-router.post("/verify", validTokenTest, (req, res) => {
+router.post("/verify", credCheck, tokenCheck, (req, res) => {
     try {
       res.json(true);
     } catch (err) {
