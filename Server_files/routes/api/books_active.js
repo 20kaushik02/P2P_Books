@@ -87,28 +87,28 @@ router.get("/filter", async (req, res) => {
       case 4:
         get_result = await db.query(
           "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND b.category ~ $1)",
+          AND b.category = $1)",
           [search_category]
         );
         break;
       case 5:
         get_result = await db.query(
           "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND b.title ~ $1 AND b.category ~ $2)",
+          AND b.title ~ $1 AND b.category = $2)",
           [search_title, search_category]
         );
         break;
       case 6:
         get_result = await db.query(
           "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND b.author ~ $1 AND b.category ~ $2)",
+          AND b.author ~ $1 AND b.category = $2)",
           [search_author, search_category]
         );
         break;
       case 7:
         get_result = await db.query(
           "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND b.title ~ $1 AND b.author ~ $2 AND b.category ~ $3)",
+          AND b.title ~ $1 AND b.author ~ $2 AND b.category = $3)",
           [search_title, search_author, search_category]
         );
         break;
@@ -172,28 +172,28 @@ router.get("/profile/filter", tokenCheck, async (req, res) => {
       case 4:
         get_result = await db.query(
           "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND b.category ~ $1) WHERE ba.owner = $2",
+          AND b.category = $1) WHERE ba.owner = $2",
           [search_category, user]
         );
         break;
       case 5:
         get_result = await db.query(
           "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND b.title ~ $1 AND b.category ~ $2) WHERE ba.owner = $3",
+          AND b.title ~ $1 AND b.category = $2) WHERE ba.owner = $3",
           [search_title, search_category, user]
         );
         break;
       case 6:
         get_result = await db.query(
           "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND b.author ~ $1 AND b.category ~ $2) WHERE ba.owner = $3",
+          AND b.author ~ $1 AND b.category = $2) WHERE ba.owner = $3",
           [search_author, search_category, user]
         );
         break;
       case 7:
         get_result = await db.query(
           "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND b.title ~ $1 AND b.author ~ $2 AND b.category ~ $3) WHERE ba.owner = $4",
+          AND b.title ~ $1 AND b.author ~ $2 AND b.category = $3) WHERE ba.owner = $4",
           [search_title, search_author, search_category, user]
         );
         break;
@@ -217,7 +217,7 @@ router.get("/category", async (req, res) => {
   try {
     console.log("initiating get request for all active book categories...");
     const get_result = await db.query(
-      "SELECT b.books_id, b.category FROM books b INNER JOIN books_active ba ON ba.books_id = b.books_id"
+      "SELECT DISTINCT b.category FROM books b INNER JOIN books_active ba ON ba.books_id = b.books_id"
     );
     console.log(get_result.rows);
     res.status(201).json({
