@@ -3,19 +3,7 @@ import { BooksContext } from '../context/BooksContext';
 
 const FilteredBooksList = () => {
     const { books, setBooks } = useContext(BooksContext);
-{/*
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setBooks(books);
-                console.log(response.data.data.Books);
-            } catch (error) {
-                console.error(error);
-            }   
-        }   
-        fetchData();
-    },[]);
-*/}
+
     return (
         <div className="list-group">
             <table className="table table-hover table-light">

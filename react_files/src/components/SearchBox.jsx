@@ -13,7 +13,7 @@ const SearchBox = (props) => {
 
     const handleSearchBook = async (e) => {
         try {
-            const response = await BooksActive.get("/", {
+            const response = await BooksActive.get("/filter", {
                 params: {
                     search_title: title,
                     search_author: author,
