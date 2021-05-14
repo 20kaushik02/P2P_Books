@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../DB_files');
+const tokenCheck = require("../../middleware/tokenCheck");
 
 //get user offers
-router.get("/get/:username", async (req,res) => {
+router.get("/get/:username", tokenCheck, async (req,res) => {
     try{
         console.log(req.params.username);
         const username = req.params.username;

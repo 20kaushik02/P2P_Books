@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require("../../DB_files");
+const tokenCheck = require("../../middleware/tokenCheck");
 
 //for inserting a book
-router.post("/", async (req, res) => {
+router.post("/", tokenCheck, async (req, res) => {
     try {
+        console.log(req.user);
         const results = await db.query(
         "INSERT INTO books(title, author, category) VALUES ($1, $2, $3) RETURNING *",
         [req.body.title, req.body.author, req.body.category]
@@ -24,6 +26,7 @@ router.post("/", async (req, res) => {
 //get all books
 router.get("/", async (req,res) => {
   try{
+    console.log(req.user);
     console.log('initiating get request for all books...');
     const get_result = await db.query(
       "SELECT title, author, category FROM books");
