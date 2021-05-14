@@ -1,6 +1,6 @@
 import React from 'react'
 import SearchBox from '../components/SearchBox'
-import BooksList from '../components/BooksList'
+import AllActiveBooksList from '../components/AllActiveBooksList'
 import Header from '../components/Header'
 
 const Home = () => {
@@ -8,7 +8,7 @@ const Home = () => {
         <div>
            <Header/>
            <SearchBox/>
-           <BooksList/>
+           <AllActiveBooksList/>
         </div>
     )
 }
