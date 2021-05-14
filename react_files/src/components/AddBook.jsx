@@ -25,15 +25,18 @@ const AddBook = () => {
                 <div>
                     <div>
                         Title of book:
-                        <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className="form-control" placeholder="Title"/>
+                        <input value={title} onChange={(e) => setTitle(e.target.value)} 
+                        type="text" className="form-control" placeholder="Title"/>
                     </div>
                     <div>
                         Author of book:
-                        <input value={author} onChange={(e) => setAuthor(e.target.value)} type="text" className="form-control" placeholder="Author"/>
+                        <input value={author} onChange={(e) => setAuthor(e.target.value)} 
+                        type="text" className="form-control" placeholder="Author"/>
                     </div>
                     <div>
                         Category of book (only one):
-                        <input value={category} onChange={(e) => setCategory(e.target.value)} type="text" className="form-control" placeholder="Category"/>
+                        <input value={category} onChange={(e) => setCategory(e.target.value)} 
+                        type="text" className="form-control" placeholder="Category"/>
                     </div>
                     <div>
                         <button onClick={handleAddBook} type="submit" className="btn btn-primary">Add Book</button>
