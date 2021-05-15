@@ -1,20 +1,14 @@
 to do list:
 
-initialise the folder with npm init with proper parameters (which idk much abt yet) so as to create a package.json file 
-npm i express --save
-npm i pg --save
-npm i cors --save (necessary?)
-npm i password-hash --save 
-
 routes needed:
 
-home page - all active books
+home page - all active books - done
 my requests
 my offers
 my books
 browse requests - all requests
-login (pop up)
-add book
+login, register, verify - done
+add book - done
 add book for sale
 make offer
 make request
