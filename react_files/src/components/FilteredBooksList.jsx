@@ -17,7 +17,7 @@ const FilteredBooksList = () => {
                 <tbody>
                     { books && books.map((book) => {
                         return(
-                        <tr key={book.books_id}>
+                        <tr key={book.book_active_id}>
                             <td>{book.title}</td>
                             <td>{book.author}</td>
                             <td>{book.category}</td>

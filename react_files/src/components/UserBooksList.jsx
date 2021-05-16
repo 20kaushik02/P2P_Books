@@ -1,13 +1,17 @@
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import BooksActive from "../apis/BooksActiveAPI";
 import { BooksContext } from '../context/BooksContext';
 
-const BooksList = (props) => {
+const UserBooksList = (props) => {
     const {books, setBooks} = useContext(BooksContext);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await BooksActive.get("/all");
+                const response = await BooksActive.get("/profile", {
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                });
                 setBooks(response.data.data.Books);
             } catch (error) {
                 console.error(error);
@@ -41,4 +45,4 @@ const BooksList = (props) => {
     )
 }
 
-export default BooksList;
+export default UserBooksList;

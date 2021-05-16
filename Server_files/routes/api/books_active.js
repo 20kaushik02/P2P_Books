@@ -26,11 +26,11 @@ router.get("/all", async (req, res) => {
 router.get("/profile", tokenCheck, async (req, res) => {
   try {
     console.log("initiating get request for user's active books...");
-    const username = req.user;
+    const user = req.user;
     const get_result = await db.query(
       "SELECT b.* FROM books b INNER JOIN books_active ba ON ba.books_id = b.books_id\
       AND ba.owner = $1",
-      [username]
+      [user]
     );
     console.log(get_result.rows);
     res.status(201).json({
@@ -60,54 +60,54 @@ router.get("/filter", async (req, res) => {
     switch (search_method) {
       case 0:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id)"
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id)"
         );
         break;
       case 1:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1))",
           [search_title]
         );
         break;
       case 2:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.author) ~ LOWER($1))",
           [search_author]
         );
         break;
       case 3:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2))",
           [search_title, search_author]
         );
         break;
       case 4:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.category) = LOWER($1))",
           [search_category]
         );
         break;
       case 5:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
           [search_title, search_category]
         );
         break;
       case 6:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.author) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
           [search_author, search_category]
         );
         break;
       case 7:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2) AND LOWER(b.category) = LOWER($3))",
           [search_title, search_author, search_category]
         );
@@ -143,57 +143,58 @@ router.get("/profile/filter", tokenCheck, async (req, res) => {
     switch (search_method) {
       case 0:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id)\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id)\
           WHERE ba.owner = $1",
           [user]
         );
         break;
       case 1:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1)) WHERE ba.owner = $2",
           [search_title, user]
         );
         break;
       case 2:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.author) ~ LOWER($1)) WHERE ba.owner = $2",
           [search_author, user]
         );
         break;
       case 3:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2)) WHERE ba.owner = $3",
           [search_title, search_author, user]
         );
         break;
       case 4:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.category) = LOWER($1)) WHERE ba.owner = $2",
           [search_category, user]
         );
         break;
       case 5:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.category) = LOWER($2)) WHERE ba.owner = $3",
           [search_title, search_category, user]
         );
         break;
       case 6:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.author) ~ LOWER($1) AND LOWER(b.category) = LOWER($2)) WHERE ba.owner = $3",
           [search_author, search_category, user]
         );
         break;
       case 7:
         get_result = await db.query(
-          "SELECT b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
-          AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2) AND LOWER(b.category) = LOWER($3)) WHERE ba.owner = $4",
+          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2) AND LOWER(b.category) = LOWER($3))\
+          WHERE ba.owner = $4",
           [search_title, search_author, search_category, user]
         );
         break;
@@ -228,45 +229,49 @@ router.get("/category", async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({
-      status: "bad request"
+      status: "bad request",
     });
   }
 });
 
 //insert a particular user's active book
-router.post("/profile/insert", tokenCheck, async(req,res) => {
-  try{
+router.post("/profile/insert", tokenCheck, async (req, res) => {
+  try {
     const username = req.user;
-    const book_name = req.body.book_name;
-    const get_book_id = await db.query("SELECT books_id FROM books WHERE LOWER(title) = LOWER($1)",[book_name]);
-    console.log(get_book_id.rows);
-    const insert_active_book = await db.query("INSERT INTO books_active (book_status, books_id, owner)\
-    values('A',$1,$2) RETURNING *",[get_book_id.rows[0].books_id, username]);
-    console.log(insert_active_book.rows[0]);
+    const { books_id } = req.body;
+
+    const new_active_book = await db.query(
+      "INSERT INTO books_active (book_status, books_id, owner)\
+      VALUES ('A',$1,$2) RETURNING *",
+      [books_id, username]
+    );
+
+    console.log(new_active_book.rows[0]);
     res.status(201).json({
-      status: "success"
+      status: "success",
     });
-  }
-  catch(err){
+  } catch (err) {
     console.log(err);
   }
 });
 
 //change user's active book status to unavailable
-router.put("/profile/unav", tokenCheck, async(req, res) => {
+router.put("/profile/unav", tokenCheck, async (req, res) => {
   try {
-      const username = req.user;
-      const book_name = req.body.book_name;
-      const get_book_id = await db.query("SELECT books_id FROM books WHERE LOWER(title) = LOWER($1)",[book_name]);
-      console.log(get_book_id.rows);
-      const update_to_unav = await db.query("UPDATE books_active SET book_status = 'N' WHERE\
-      books_id = $1 AND owner = $2",[get_book_id.rows[0].books_id, username]);
-      console.log(update_to_unav.rows[0]);
+    const username = req.user;
+    const { book_active_id } = req.body;
+
+    const unav_book = await db.query(
+      "UPDATE books_active SET book_status = 'N' WHERE\
+      book_active_id = $1 AND owner = $2",
+      [book_active_id, username]
+    );
+    console.log(unav_book.rows[0]);
     res.status(201).json({
-      status: "success"
+      status: "success",
     });
   } catch (err) {
-      console.log(err);
+    console.log(err);
   }
 });
 module.exports = router;

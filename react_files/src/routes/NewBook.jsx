@@ -1,13 +1,13 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import AddBook from '../components/AddBook'
 import Header from '../components/Header'
 
-const NewBook = () => {
+const NewBook = ({ setAuth }) => {
     return (
-        <div>
-           <Header/>
-           <AddBook/>
-        </div>
+        <Fragment>
+            <Header/>
+            <AddBook setAuth={setAuth}/>
+        </Fragment>
     )
 }
 

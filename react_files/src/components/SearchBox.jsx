@@ -4,7 +4,7 @@ import BooksActive from '../apis/BooksActiveAPI';
 import { BooksContext } from '../context/BooksContext';
 import { CategoriesContext } from '../context/CategoriesContext';
 
-const SearchBox = (props) => {
+const SearchBox = ({ setAuth }) => {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [category, setCategory] = useState("");
@@ -51,7 +51,7 @@ const SearchBox = (props) => {
                     </div>
                     <div className="col">
                         <select value={category} onChange={(e) => setCategory(e.target.value)}
-                        className="custom-select my-1 mr-sm-2">
+                        className="custom-select my-1 mr-sm-4 fs-5">
                                     <option value="all">All categories</option>
                             { categories && categories.map((category_option) => {
                                 return(
@@ -61,11 +61,11 @@ const SearchBox = (props) => {
                             })}
                         </select>
                     </div>
-                    <div className="col">
-                        <Link to="/search">
-                            <button onClick={handleSearchBook} className="btn btn-primary">Search</button>
-                        </Link>
-                    </div>
+                </div><br/>
+                <div className="row">
+                    <Link className="col" to="/search">
+                        <button onClick={handleSearchBook} className="btn btn-primary">Search P2P Books</button>
+                    </Link>
                 </div>
             </form>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Books from "../apis/BooksAPI";
 
-const AddBook = () => {
+const AddBook = ({ setAuth }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
@@ -13,56 +13,56 @@ const AddBook = () => {
         title,
         author,
         category,
+      }, {
+        headers: { token: localStorage.token }
       });
-      console.log("Added book to database:" + response);
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <div className="mb-4">
+      <div className="mb-4">
       <form action="">
-        <div>
-          <div>
-            Title of book:
+        <div class="row">
+          <div className="col">
+            <p className="fs-4">Title of book:</p>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               type="text"
               className="form-control"
               placeholder="Title"
-            />
+              />
           </div>
-          <div>
-            Author of book:
+          <div className="col">
+            <p className="fs-4">Author of book:</p>
             <input
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
               type="text"
               className="form-control"
               placeholder="Author"
-            />
+              />
           </div>
-          <div>
-            Category of book (only one):
+          <div className="col">
+            <p className="fs-4">Category of book (only one):</p>
             <input
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               type="text"
               className="form-control"
               placeholder="Category"
-            />
+              />
           </div>
-          <div>
+          </div>
+          <br/>
             <button
               onClick={handleAddBook}
               type="submit"
               className="btn btn-primary"
-            >
+              >
               Add Book
             </button>
-          </div>
-        </div>
       </form>
     </div>
   );
