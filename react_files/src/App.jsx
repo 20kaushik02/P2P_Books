@@ -10,6 +10,7 @@ import SearchResults from "./routes/SearchResults";
 
 import Login from "./components/login";
 import Register from "./components/register";
+import Sidebar from './components/sidebar'
 
 import AuthAPI from "./apis/AuthAPI";
 
@@ -39,9 +40,10 @@ const App = () => {
     return (
         <BooksContextProvider>
             <CategoriesContextProvider>
-                <div className="container">
                     <Router>
+                        <Sidebar setAuth={setAuth}/>
                         <Switch>
+                        <div className="container">
                             <Route exact path="/"
                                 component={(props) => isAuthenticated ? (<Home {...props} setAuth={setAuth} />) : (<Redirect to="/login" />)} />
                             <Route exact path="/login"
@@ -52,9 +54,9 @@ const App = () => {
                                 component={(props) => isAuthenticated ? (<NewBook {...props} setAuth={setAuth} />) : (<Redirect to="/login" />)}/>
                             <Route exact path="/search"
                                 component={(props) => isAuthenticated ? (<SearchResults {...props} setAuth={setAuth} />) : (<Redirect to="/login" />)}/>
+                        </div>
                         </Switch>
                     </Router>
-                </div>
             </CategoriesContextProvider>
         </BooksContextProvider>
     );

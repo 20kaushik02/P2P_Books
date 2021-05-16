@@ -20,16 +20,6 @@ const Home = ({ setAuth }) => {
     }
   };
 
-  const logout = async (e) => {
-    e.preventDefault();
-    try {
-      localStorage.removeItem("token");
-      setAuth(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
     getProfile();
   }, []);
@@ -37,9 +27,6 @@ const Home = ({ setAuth }) => {
   return (
     <div>
       <h2>Welcome {name}</h2>
-      <button onClick={(e) => logout(e)} className="btn btn-danger">
-        Logout
-      </button>
       <Header />
       <SearchBox />
       <AllActiveBooksList />
