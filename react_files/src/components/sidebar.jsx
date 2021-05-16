@@ -1,29 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { SidebarData } from './sidebarData';
+import { SidebarData } from './SidebarData';
 import { IconContext } from 'react-icons';
 import '../css/sidebar.css'
-import axios from 'axios'
+import DashboardAPI from '../apis/DashboardAPI';
+import LogoutButton from './LogoutButton';
 
-function Sidebar( { setAuth } ) {
+function Sidebar ({ setAuth }) {
     const [sidebar, setSidebar] = useState(false);
-
     const showSidebar = () => setSidebar(!sidebar);
 
     const [name, setName] = useState("");
 
     const getProfile = async () => {
         try {
-        const res = await axios({
-            method: 'POST',
-            url: "http://localhost:9001/api/dashboard",
-            headers: { token: localStorage.token }, 
-        });
+        const res = await DashboardAPI.post("/", {}, {
+            headers: { token: localStorage.token }
+          });
 
-        console.log(res)
-        const parseData = await res.data
+        const parseData = await res.data;
         console.log(parseData)
         setName(parseData.name);
         } catch (err) {
@@ -31,28 +28,20 @@ function Sidebar( { setAuth } ) {
         }
     };
   
-    const logout = async e => {
-      e.preventDefault();
-      try {
-        localStorage.removeItem("token");
-        setAuth(false);
-      } catch (err) {
-        console.log(err)
-      }
-    };
-  
     useEffect(() => {
       getProfile();
     }, []);
 
     return (
-    <>
+    <Fragment>
         <IconContext.Provider value={{ color: '#fff' }}>
         <div className='sidebar'>
             <Link to='#' className='menu-bars'>
-            <FaIcons.FaBars onClick={showSidebar} />
+                <FaIcons.FaBars onClick={showSidebar} />
             </Link>
-            <button onClick={e => logout(e)} class="btn btn-primary pull-right RbtnMargin" type="button">Log Out</button>
+            <div className="p-3">
+                <LogoutButton setAuth={setAuth}/>
+            </div>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
             <ul className='nav-menu-items' onClick={showSidebar}>
@@ -73,7 +62,7 @@ function Sidebar( { setAuth } ) {
             </ul>
         </nav>
         </IconContext.Provider>
-    </>
+    </Fragment>
     );
     }
 

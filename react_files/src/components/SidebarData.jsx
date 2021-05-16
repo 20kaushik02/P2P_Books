@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const SidebarData = [
     {
         title: 'Home',
@@ -6,7 +8,7 @@ export const SidebarData = [
     },
     {
         title: 'My Books',
-        path: '/user-books',
+        path: '/',
         cName: 'nav-text'
     },
     {
