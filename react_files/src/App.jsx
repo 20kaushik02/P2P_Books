@@ -8,11 +8,12 @@ import Home from "./routes/Home";
 import NewBook from "./routes/NewBook";
 import SearchResults from "./routes/SearchResults";
 
-import Login from "./components/login";
-import Register from "./components/register";
-import Sidebar from './components/sidebar'
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 import AuthAPI from "./apis/AuthAPI";
+import UserBooks from "./routes/UserBooks";
+import Sidebar from "./components/Sidebar";
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -40,10 +41,10 @@ const App = () => {
     return (
         <BooksContextProvider>
             <CategoriesContextProvider>
-                    <Router>
-                        <Sidebar setAuth={setAuth}/>
+                <Router>
+                    <Sidebar setAuth={setAuth}/>
                         <Switch>
-                        <div className="container">
+                            <div className="container">
                             <Route exact path="/"
                                 component={(props) => isAuthenticated ? (<Home {...props} setAuth={setAuth} />) : (<Redirect to="/login" />)} />
                             <Route exact path="/login"
@@ -54,9 +55,11 @@ const App = () => {
                                 component={(props) => isAuthenticated ? (<NewBook {...props} setAuth={setAuth} />) : (<Redirect to="/login" />)}/>
                             <Route exact path="/search"
                                 component={(props) => isAuthenticated ? (<SearchResults {...props} setAuth={setAuth} />) : (<Redirect to="/login" />)}/>
-                        </div>
+                            <Route exact path="/user-books"
+                                component={(props) => isAuthenticated ? (<UserBooks {...props} setAuth={setAuth} />) : (<Redirect to="/login" />)}/>
+                            </div>
                         </Switch>
-                    </Router>
+                </Router>
             </CategoriesContextProvider>
         </BooksContextProvider>
     );

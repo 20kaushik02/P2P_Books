@@ -1,10 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
-import SearchBox from "../components/SearchBox";
-import AllActiveBooksList from "../components/AllActiveBooksList";
 import Header from "../components/Header";
 import DashboardAPI from "../apis/DashboardAPI";
+import UserBooksList from "../components/UserBooksList";
 
-const Home = ({ setAuth }) => {
+const UserBooks = ({ setAuth }) => {
   const [name, setName] = useState("");
 
   const getProfile = async () => {
@@ -13,11 +12,8 @@ const Home = ({ setAuth }) => {
           headers: { token: localStorage.token }
         });
 
-      console.log("Dashboard response:" + res);
-      if(res)
-        setName(res.data.name);
-      else
-        setName("to P2P Books")
+      const parseData = res.data;
+      setName(parseData.name);
     } catch (err) {
       console.error(err.message);
     }
@@ -30,11 +26,10 @@ const Home = ({ setAuth }) => {
   return (
     <Fragment>
       <Header />
-      <h2>Welcome {name}!</h2>
-      <SearchBox />
-      <AllActiveBooksList />
+      <h2>{name}'s books</h2>
+      <UserBooksList setAuth={setAuth}/>
     </Fragment>
   );
 };
 
-export default Home;
+export default UserBooks;
