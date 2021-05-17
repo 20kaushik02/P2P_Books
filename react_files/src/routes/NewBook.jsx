@@ -2,11 +2,11 @@ import React, { Fragment } from 'react'
 import AddBook from '../components/AddBook'
 import Header from '../components/Header'
 
-const NewBook = ({ setAuth }) => {
+const NewBook = () => {
     return (
         <Fragment>
             <Header/>
-            <AddBook setAuth={setAuth}/>
+            <AddBook/>
         </Fragment>
     )
 }

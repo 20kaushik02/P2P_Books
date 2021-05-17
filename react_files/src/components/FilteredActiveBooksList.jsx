@@ -1,20 +1,9 @@
-import React, {useContext, useEffect} from 'react';
-import BooksActive from "../apis/BooksActiveAPI";
+import React, {useContext, useEffect} from 'react'
 import { BooksContext } from '../context/BooksContext';
 
-const ActiveBooksList = () => {
-    const {books, setBooks} = useContext(BooksContext);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await BooksActive.get("/all");
-                setBooks(response.data.data.Books);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        fetchData();
-    },[]);
+const FilteredActiveBooksList = () => {
+    const { books, setBooks } = useContext(BooksContext);
+    
     return (
         <div className="list-group">
             <table className="table table-hover table-light">
@@ -39,6 +28,6 @@ const ActiveBooksList = () => {
             </table>
         </div>
     )
-}
+}   
 
-export default ActiveBooksList;
+export default FilteredActiveBooksList

@@ -23,6 +23,10 @@ export const SidebarLinks = [
         title: 'Add book',
         path: '/newbook',
         cName: 'nav-text'
+    },
+    {
+        title: 'Share your book',
+        path: '/newactivebook',
+        cName: 'nav-text'
     }
-
 ]

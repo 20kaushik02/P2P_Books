@@ -45,7 +45,7 @@ router.get("/", tokenCheck, async (req,res) => {
 //filter all books based on parameters
 router.get("/filter", tokenCheck, async (req, res) => {
   try {
-    console.log("initiating get request for filtered active books...");
+    console.log("initiating get request for filtered books...");
     const { search_title, search_author, search_category } = req.query;
 
     var search_method = 0;
@@ -115,6 +115,25 @@ router.get("/filter", tokenCheck, async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+});
+
+//get all book categories
+router.get("/category", async (req, res) => {
+  try {
+    console.log("initiating get request for all book categories...");
+    const get_result = await db.query("SELECT DISTINCT category FROM books");
+    console.log(get_result.rows);
+    res.status(201).json({
+      status: "success",
+      data: {
+        Categories: get_result.rows,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "bad request",
+    });
   }
 });
 

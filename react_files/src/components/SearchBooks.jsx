@@ -1,23 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import BooksActive from '../apis/BooksActiveAPI';
+import Books from '../apis/BooksAPI';
 import { BooksContext } from '../context/BooksContext';
 import { CategoriesContext } from '../context/CategoriesContext';
 
-const SearchBox = ({ setAuth }) => {
+const SearchBooks = () => {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState("all");
     const { categories, setCategories } = useContext(CategoriesContext);
     const { books, setBooks } = useContext(BooksContext);
 
-    const handleSearchBook = async (e) => {
+    const handleSearchBook = async () => {
         try {
-            const response = await BooksActive.get("/filter", {
+            const response = await Books.get("/filter", {
                 params: {
                     search_title: title,
                     search_author: author,
                     search_category: category
+                }, headers: {
+                    token: localStorage.getItem("token")
                 }
             });
             setBooks(response.data.data.Books);
@@ -29,13 +31,14 @@ const SearchBox = ({ setAuth }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const categories_response = await BooksActive.get("/category")
+                const categories_response = await Books.get("/category")
                 setCategories(categories_response.data.data.Categories);
             } catch (error) {
                 console.log(error);
             }
         }
         fetchCategories();
+        handleSearchBook();
     },[]);
     return (
         <div className="mb-4">
@@ -63,8 +66,8 @@ const SearchBox = ({ setAuth }) => {
                     </div>
                 </div><br/>
                 <div className="row">
-                    <Link className="col" to="/search">
-                        <button onClick={handleSearchBook} className="btn btn-primary">Search P2P Books</button>
+                    <Link to="/newactivebook2">
+                        <button onClick={handleSearchBook} className="btn btn-primary">Search</button>
                     </Link>
                 </div>
             </form>
@@ -72,4 +75,4 @@ const SearchBox = ({ setAuth }) => {
     )
 }
 
-export default SearchBox;
+export default SearchBooks;

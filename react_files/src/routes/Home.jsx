@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
-import SearchBox from "../components/SearchBox";
 import AllActiveBooksList from "../components/AllActiveBooksList";
 import Header from "../components/Header";
 import DashboardAPI from "../apis/DashboardAPI";
+import SearchActiveBooks from "../components/SearchActiveBooks";
 
-const Home = ({ setAuth }) => {
+const Home = () => {
   const [name, setName] = useState("");
 
   const getProfile = async () => {
@@ -13,7 +13,7 @@ const Home = ({ setAuth }) => {
           headers: { token: localStorage.token }
         });
 
-      console.log("Dashboard response:" + res);
+      console.log("Dashboard");
       if(res)
         setName(res.data.name);
       else
@@ -31,7 +31,7 @@ const Home = ({ setAuth }) => {
     <Fragment>
       <Header />
       <h2>Welcome {name}!</h2>
-      <SearchBox />
+      <SearchActiveBooks />
       <AllActiveBooksList />
     </Fragment>
   );

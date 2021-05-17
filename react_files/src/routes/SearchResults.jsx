@@ -1,17 +1,17 @@
 import React, { Fragment, useContext } from "react";
-import FilteredBooksList from "../components/FilteredBooksList";
+import FilteredActiveBooksList from "../components/FilteredActiveBooksList";
 import Header from "../components/Header";
-import SearchBox from "../components/SearchBox";
+import SearchActiveBooks from "../components/SearchActiveBooks";
 import { BooksContext } from "../context/BooksContext";
 
-const SearchResults = ({ setAuth }) => {
+const SearchResults = () => {
   const { books } = useContext(BooksContext);
   return (
     <Fragment>
       <Header />
-      <h4>Search results:{books.length}</h4>
-      <SearchBox />
-      <FilteredBooksList />
+      <h4>Search results: {books.length}.</h4>
+      <SearchActiveBooks />
+      <FilteredActiveBooksList />
     </Fragment>
   );
 };

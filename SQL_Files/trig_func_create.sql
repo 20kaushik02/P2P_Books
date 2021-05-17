@@ -27,6 +27,7 @@ CREATE OR REPLACE FUNCTION TransactOfferCleanupProc()
         LOOP
             DELETE FROM offers WHERE offer_id = temp_doi;
         END LOOP;
+        RETURN NULL;
     END;
     ';
 
@@ -42,6 +43,6 @@ CREATE OR REPLACE FUNCTION UserReputationUpdateProc()
 
         UPDATE users SET reputation = reputation - 1 WHERE username = 
                 (SELECT renter FROM offers WHERE offer_id = NEW.offer_id);
-
+        RETURN NULL;
     END;
     ';
