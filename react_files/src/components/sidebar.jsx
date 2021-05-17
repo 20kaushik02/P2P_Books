@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { SidebarData } from './SidebarData';
+import { SidebarLinks } from './SidebarLinks';
 import { IconContext } from 'react-icons';
 import '../css/sidebar.css'
 import DashboardAPI from '../apis/DashboardAPI';
@@ -50,7 +50,7 @@ function Sidebar ({ setAuth }) {
                 <AiIcons.AiOutlineClose />
                 </Link>
             </li>
-            {SidebarData.map((item, index) => {
+            {SidebarLinks.map((item, index) => {
                 return (
                 <li key={index} className={item.cName}>
                     <Link to={item.path}>

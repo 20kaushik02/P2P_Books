@@ -1,6 +1,4 @@
-import React from 'react'
-
-export const SidebarData = [
+export const SidebarLinks = [
     {
         title: 'Home',
         path : '/',
@@ -8,7 +6,7 @@ export const SidebarData = [
     },
     {
         title: 'My Books',
-        path: '/',
+        path: '/user-books',
         cName: 'nav-text'
     },
     {
