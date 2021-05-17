@@ -63,43 +63,43 @@ router.get("/filter", tokenCheck, async (req, res) => {
         break;
       case 1:
         get_result = await db.query(
-          "SELECT b.* FROM books b AND LOWER(b.title) ~ LOWER($1))",
+          "SELECT b.* FROM books b WHERE (LOWER(b.title) ~ LOWER($1))",
           [search_title]
         );
         break;
       case 2:
         get_result = await db.query(
-          "SELECT b.* FROM books b AND LOWER(b.author) ~ LOWER($1))",
+          "SELECT b.* FROM books b WHERE (LOWER(b.author) ~ LOWER($1))",
           [search_author]
         );
         break;
       case 3:
         get_result = await db.query(
-          "SELECT b.* FROM books b AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2))",
+          "SELECT b.* FROM books b WHERE (LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2))",
           [search_title, search_author]
         );
         break;
       case 4:
         get_result = await db.query(
-          "SELECT b.* FROM books b AND LOWER(b.category) = LOWER($1))",
+          "SELECT b.* FROM books b WHERE (LOWER(b.category) = LOWER($1))",
           [search_category]
         );
         break;
       case 5:
         get_result = await db.query(
-          "SELECT b.* FROM books b AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
+          "SELECT b.* FROM books b WHERE (LOWER(b.title) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
           [search_title, search_category]
         );
         break;
       case 6:
         get_result = await db.query(
-          "SELECT b.* FROM books b AND LOWER(b.author) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
+          "SELECT b.* FROM books b WHERE (LOWER(b.author) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
           [search_author, search_category]
         );
         break;
       case 7:
         get_result = await db.query(
-          "SELECT b.* FROM books b AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2) AND LOWER(b.category) = LOWER($3))",
+          "SELECT b.* FROM books b WHERE (LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2) AND LOWER(b.category) = LOWER($3))",
           [search_title, search_author, search_category]
         );
         break;
