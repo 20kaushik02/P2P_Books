@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
+const { route } = require("./book");
 
 //get offers MADE TO the user/owner
 router.get("/profile/owner/get", tokenCheck, async (req, res) => {
@@ -76,6 +77,26 @@ router.get("/profile/renter/get", tokenCheck, async (req, res) => {
   }
 });
 
+//get offers for a particular book MADE TO the user
+router.get("/profile/getone", tokenCheck, async (req,res) => {
+  try {
+    const username = req.user;
+    const {books_id} = req.query;
+    const get_result = await db.query("SELECT DISTINCT o.renter from offers o INNER JOIN books_active ba ON \
+    o.book_active_id = ba.book_active_id AND ba.books_id = $1 and ba.owner = $2",
+    [books_id, username]);
+    console.log(get_result.rows);
+    res.status(201).json({
+      status: "success",
+      data: {
+        Offers: get_result.rows,
+      },
+    });
+  }catch (err){
+    console.log(err);
+  }
+});
+
 //remove offer made by user
 router.put("/profile/delete", tokenCheck, async (req, res) => {
   try {
@@ -98,4 +119,5 @@ router.put("/profile/delete", tokenCheck, async (req, res) => {
     console.log(err);
   }
 });
+
 module.exports = router;
