@@ -11,8 +11,8 @@ router.get("/profile/owner/get", tokenCheck, async (req, res) => {
     const username = req.user;
     console.log("initiating get request for all offers...");
     const get_result = await db.query(
-      "SELECT o.renter from offers o INNER JOIN books_active ba ON ba.book_active_id = o.book_active_id AND\
-        ba.owner = $1", [username]);
+      "SELECT o.renter, o.offer_id, b.title from offers o INNER JOIN books_active ba ON ba.book_active_id = o.book_active_id AND\
+      ba.owner = $1 INNER JOIN books b ON ba.books_id = b.books_id", [username]);
 
     console.log(get_result.rows);
     res.status(201).json({
@@ -30,19 +30,24 @@ router.get("/profile/owner/get", tokenCheck, async (req, res) => {
 router.post("/profile/insert", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
-    const { book_name, owner_name } = req.body;
-    const get_books_id = await db.query(
-      "SELECT books_id FROM books WHERE LOWER(title) = LOWER($1)",
-      [book_name]
-    );
-    const get_book_active_id = await db.query(
-      "SELECT ba.book_active_id from books_active ba INNER JOIN books b ON\
-      ba.books_id = $1 AND LOWER(ba.owner) = LOWER($2)",
-      [get_books_id.rows[0].books_id, owner_name]
-    );
+    const book_active_id = req.body.book_active_id;
+    const check_dup = await db.query("SELECT * FROM offers WHERE book_active_id = $1 AND renter = $2",
+    [book_active_id, username]);
+    if(check_dup.rows.length > 0)
+    {
+      return res.status(401).json("Offer already exists!");
+    }
+    const valid_check = await db.query("SELECT * from books_active");
+    for(var i=0;i<valid_check.rows.length;i++)
+    {
+      if(book_active_id === valid_check.rows[i].book_active_id && valid_check.rows[i].owner === username)
+      {
+        return res.status(401).json("Bad GET request, you cannot make an offer to yourself!");
+      }
+    }
     const get_result = await db.query(
       "INSERT INTO offers(book_active_id,renter) values($1,$2) RETURNING *",
-      [get_book_active_id.rows[0].book_active_id, username]
+      [book_active_id, username]
     );
     console.log(get_result.rows);
     res.status(201).json({
@@ -61,7 +66,7 @@ router.get("/profile/renter/get", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const get_result = await db.query(
-      "SELECT b.title,ba.owner from books b INNER JOIN books_active ba ON \
+      "SELECT b.title,ba.owner,o.offer_id from books b INNER JOIN books_active ba ON \
       b.books_id = ba.books_id INNER JOIN offers o ON o.book_active_id = ba.book_active_id AND o.renter = $1",
       [username]
     );
@@ -82,8 +87,8 @@ router.get("/profile/getone", tokenCheck, async (req,res) => {
   try {
     const username = req.user;
     const {books_id} = req.query;
-    const get_result = await db.query("SELECT DISTINCT o.renter from offers o INNER JOIN books_active ba ON \
-    o.book_active_id = ba.book_active_id AND ba.books_id = $1 and ba.owner = $2",
+    const get_result = await db.query("SELECT DISTINCT o.renter, o.offer_id from offers o INNER JOIN books_active ba ON \
+    o.book_active_id = ba.book_active_id AND ba.books_id = $1 AND ba.owner = $2",
     [books_id, username]);
     console.log(get_result.rows);
     res.status(201).json({
@@ -101,13 +106,9 @@ router.get("/profile/getone", tokenCheck, async (req,res) => {
 router.put("/profile/delete", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
-    const { book_name, owner_name } = req.body;
-    const get_result = await db.query(
-      "DELETE FROM offers where renter=$1 AND \
-      book_active_id IN(SELECT ba.book_active_id FROM books_active ba INNER JOIN books b ON \
-      ba.books_id = b.books_id AND ba.owner = $2 and b.title = $3) RETURNING *",
-      [username, owner_name, book_name]
-    );
+    const offer_id = req.body.offer_id;
+    const get_result = await db.query("DELETE FROM offers WHERE offer_id = $1 AND renter = $2 RETURNING *",
+    [offer_id, username]);
     console.log(get_result.rows);
     res.status(201).json({
       status: "success",
