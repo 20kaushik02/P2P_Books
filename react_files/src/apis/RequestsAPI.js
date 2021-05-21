@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
 export default axios.create({
-    baseURL:"http://localhost:9001/api/book",
+    baseURL: "http://localhost:9001/api/requests",
     headers: {
         token: localStorage.getItem("token")
     }
-});
+})
