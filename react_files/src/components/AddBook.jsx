@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
+import { Link } from "react-router-dom";
 import Books from "../apis/BooksAPI";
 
-const AddBook = ({ setAuth }) => {
+const AddBook = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
@@ -21,6 +22,7 @@ const AddBook = ({ setAuth }) => {
     }
   };
   return (
+    <Fragment>
       <div className="mb-4">
       <form action="">
         <div class="row">
@@ -56,6 +58,12 @@ const AddBook = ({ setAuth }) => {
           </div>
           </div>
           <br/>
+          <Link to={{
+            pathname:"/success",
+            state: {
+              msg: "The book has been added to the database."
+            }
+          }}>
             <button
               onClick={handleAddBook}
               type="submit"
@@ -63,8 +71,10 @@ const AddBook = ({ setAuth }) => {
               >
               Add Book
             </button>
-      </form>
-    </div>
+          </Link>
+        </form>
+      </div>
+    </Fragment>
   );
 };
 

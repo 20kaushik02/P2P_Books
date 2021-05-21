@@ -126,4 +126,53 @@ router.get("/all", tokenCheck, async (req,res) => {
     }
 });
 
+router.post("/insert", tokenCheck, async (req, res) => {
+  try {
+    const username = req.user;
+    const { books_id } = req.body;
+
+    const request_check = await db.query(
+      "SELECT * FROM requests WHERE books_id=$1 AND requester=$2", 
+      [books_id, username]
+    );
+
+    if (request_check.rows.length > 0) {
+      return res.json("You have already made this request!");
+    }
+
+    const new_request = await db.query(
+      "INSERT INTO requests (request_date, expiry_date, books_id, requester)\
+      VALUES (CURRENT_DATE, CURRENT_DATE + INTERVAL '7 day', $1, $2) RETURNING *",
+      [books_id, username]
+    );
+
+    console.log(new_request.rows[0]);
+    res.status(201).json({
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.put("/delete", tokenCheck, async (req, res) => {
+  try {
+    const username = req.user;
+    const { books_id } = req.body;
+    const get_result = await db.query(
+      "DELETE FROM requests where books_id=$1 AND requester=$2 RETURNING *",
+      [books_id, username]
+    );
+    console.log(get_result.rows[0]);
+    res.status(201).json({
+      status: "success",
+      data: {
+        Deleted_request: get_result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;

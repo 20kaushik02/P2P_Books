@@ -122,13 +122,29 @@ const Register = ({ setAuth }) => {
           onChange={(e) => onChange(e)}
           className="form-control my-3"
         />
+        Male
         <input
-          type="text"
+          type="radio"
+          value="M"
           name="gender"
-          value={gender}
-          placeholder="gender"
+          style = {{ marginLeft : 10 , marginRight : 30}}
           onChange={(e) => onChange(e)}
-          className="form-control my-3"
+        />
+        Female
+        <input
+          type="radio"
+          value="F"
+          name="gender"
+          style = {{ marginLeft : 10 , marginRight : 30}}
+          onChange={(e) => onChange(e)}
+        />
+        Other
+        <input
+          type="radio"
+          value="O"
+          name="gender"
+          style = {{ marginLeft : 10 , marginRight : 30}}
+          onChange={(e) => onChange(e)}
         />
         <input
           type="text"

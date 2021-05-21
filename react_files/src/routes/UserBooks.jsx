@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import DashboardAPI from "../apis/DashboardAPI";
 import UserBooksList from "../components/UserBooksList";
 
-const UserBooks = ({ setAuth }) => {
+const UserBooks = () => {
   const [name, setName] = useState("");
 
   const getProfile = async () => {
@@ -27,7 +27,7 @@ const UserBooks = ({ setAuth }) => {
     <Fragment>
       <Header />
       <h2>{name}'s books</h2>
-      <UserBooksList setAuth={setAuth}/>
+      <UserBooksList/>
     </Fragment>
   );
 };

@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import BooksActive from "../apis/BooksActiveAPI";
 import { BooksContext } from '../context/BooksContext';
 
-const UserBooksList = (props) => {
+const UserBooksList = () => {
     const {books, setBooks} = useContext(BooksContext);
     useEffect(() => {
         const fetchData = async () => {
