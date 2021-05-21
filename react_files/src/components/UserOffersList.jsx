@@ -7,7 +7,11 @@ const UserOffersList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await Offers.get("/profile/renter/get");
+                const response = await Offers.get("/profile/renter/get", {
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                });
                 console.log(response.data);
                 setBooks(response.data.data.Offer);
             } catch (error) {

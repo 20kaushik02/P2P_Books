@@ -8,7 +8,11 @@ const UserOffers = () => {
 
   const getProfile = async () => {
     try {
-      const res = await DashboardAPI.post("/", {});
+      const res = await DashboardAPI.post("/", {}, {
+        headers: {
+            token: localStorage.getItem("token")
+        }
+      });
 
       const parseData = res.data;
       setName(parseData.name);

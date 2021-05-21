@@ -10,7 +10,11 @@ const SearchResults = () => {
   const [user, setUser] = useState(""); 
   const getProfile = async () => {
     try {
-      const res = await DashboardAPI.post("/", {});
+      const res = await DashboardAPI.post("/", {}, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      });
       console.log(res.data.username);
       setUser(res.data.username)
       } catch (err) {

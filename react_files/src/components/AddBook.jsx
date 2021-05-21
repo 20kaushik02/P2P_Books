@@ -13,6 +13,10 @@ const AddBook = () => {
         title,
         author,
         category,
+      }, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
       });
     } catch (error) {
       console.log(error);

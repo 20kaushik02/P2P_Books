@@ -10,6 +10,10 @@ const FilteredActiveBooksList = ({user}) => {
             console.log(ba_id);
             const response = await Offers.post("/profile/insert", {
                 book_active_id: ba_id
+            }, {
+                headers: {
+                    token: localStorage.getItem("token")
+                }
             });
             console.log(response);
         } catch (error) {

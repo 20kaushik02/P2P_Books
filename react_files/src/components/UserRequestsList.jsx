@@ -7,7 +7,11 @@ const UserRequestsList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await Requests.get("/myrequests");
+                const response = await Requests.get("/myrequests", {
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                });
                 console.log(response.data);
                 setBooks(response.data.data.reqBooks);
             } catch (error) {

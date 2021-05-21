@@ -10,7 +10,11 @@ const ActiveBooksList = ({user}) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await BooksActive.get("/all");
+                const response = await BooksActive.get("/all", {
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                });
                 setBooks(response.data.data.Books);
             } catch (error) {
                 console.error(error);
@@ -23,6 +27,10 @@ const ActiveBooksList = ({user}) => {
             console.log(ba_id);
             const response = await Offers.post("/profile/insert", {
                 book_active_id: ba_id
+            }, {
+                headers: {
+                    token: localStorage.getItem("token")
+                }
             });
             console.log(response);
         } catch (error) {

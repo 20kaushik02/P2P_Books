@@ -10,8 +10,10 @@ const Home = () => {
   const getProfile = async () => {
     try {
       const res = await DashboardAPI.post("/", {}, {
-          headers: { token: localStorage.token }
-        });
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      });
 
       console.log("Dashboard");
       if(res) {

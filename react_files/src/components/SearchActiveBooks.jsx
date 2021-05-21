@@ -18,6 +18,9 @@ const SearchActiveBooks = () => {
                     search_title: title,
                     search_author: author,
                     search_category: category
+                },
+                headers: {
+                    token: localStorage.getItem("token")
                 }
             });
             setBooks(response.data.data.Books);
@@ -29,7 +32,11 @@ const SearchActiveBooks = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const categories_response = await BooksActive.get("/category")
+                const categories_response = await BooksActive.get("/category", {
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                })
                 setCategories(categories_response.data.data.Categories);
             } catch (error) {
                 console.log(error);
