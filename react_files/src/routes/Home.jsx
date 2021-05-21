@@ -6,7 +6,7 @@ import SearchActiveBooks from "../components/SearchActiveBooks";
 
 const Home = () => {
   const [name, setName] = useState("");
-
+  const [user, setUser] = useState(""); 
   const getProfile = async () => {
     try {
       const res = await DashboardAPI.post("/", {}, {
@@ -14,8 +14,10 @@ const Home = () => {
         });
 
       console.log("Dashboard");
-      if(res)
+      if(res) {
+        setUser(res.data.username)
         setName(res.data.name);
+      }
       else
         setName("to P2P Books")
     } catch (err) {
@@ -32,7 +34,7 @@ const Home = () => {
       <Header />
       <h2>Welcome {name}!</h2>
       <SearchActiveBooks />
-      <AllActiveBooksList />
+      <AllActiveBooksList user={user}/>
     </Fragment>
   );
 };

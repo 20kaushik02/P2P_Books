@@ -1,16 +1,14 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Header from "../components/Header";
 import DashboardAPI from "../apis/DashboardAPI";
-import UserBooksList from "../components/UserBooksList";
+import Header from "../components/Header";
+import UserRequestsList from "../components/UserRequestsList";
 
-const UserBooks = () => {
+const UserRequests = () => {
   const [name, setName] = useState("");
 
   const getProfile = async () => {
     try {
-      const res = await DashboardAPI.post("/", {}, {
-        headers: { token: localStorage.token }
-      });
+      const res = await DashboardAPI.post("/", {});
 
       const parseData = res.data;
       setName(parseData.name);
@@ -26,10 +24,10 @@ const UserBooks = () => {
   return (
     <Fragment>
       <Header />
-      <h2>{name}'s books</h2>
-      <UserBooksList/>
+      <h2>{name}'s requests</h2>
+      <UserRequestsList />
     </Fragment>
   );
 };
 
-export default UserBooks;
+export default UserRequests;
