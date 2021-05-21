@@ -8,7 +8,7 @@ router.get("/all", async (req, res) => {
   try {
     console.log("initiating get request for all active books...");
     const get_result = await db.query(
-      "SELECT b.* FROM books b INNER JOIN books_active ba ON ba.books_id = b.books_id"
+      "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON ba.books_id = b.books_id"
     );
     console.log(get_result.rows);
     res.status(201).json({
@@ -60,54 +60,54 @@ router.get("/filter", async (req, res) => {
     switch (search_method) {
       case 0:
         get_result = await db.query(
-          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id)"
+          "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id)"
         );
         break;
       case 1:
         get_result = await db.query(
-          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1))",
           [search_title]
         );
         break;
       case 2:
         get_result = await db.query(
-          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.author) ~ LOWER($1))",
           [search_author]
         );
         break;
       case 3:
         get_result = await db.query(
-          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2))",
           [search_title, search_author]
         );
         break;
       case 4:
         get_result = await db.query(
-          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.category) = LOWER($1))",
           [search_category]
         );
         break;
       case 5:
         get_result = await db.query(
-          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
           [search_title, search_category]
         );
         break;
       case 6:
         get_result = await db.query(
-          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.author) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
           [search_author, search_category]
         );
         break;
       case 7:
         get_result = await db.query(
-          "SELECT ba.book_active_id, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
+          "SELECT ba.book_active_id, ba.owner, b.* FROM books b INNER JOIN books_active ba ON (ba.books_id = b.books_id\
           AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2) AND LOWER(b.category) = LOWER($3))",
           [search_title, search_author, search_category]
         );

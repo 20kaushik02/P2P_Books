@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
-const { route } = require("./book");
 
 //get offers MADE TO the user/owner
 router.get("/profile/owner/get", tokenCheck, async (req, res) => {
@@ -30,27 +29,28 @@ router.get("/profile/owner/get", tokenCheck, async (req, res) => {
 router.post("/profile/insert", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
-    const { book_name, owner_name } = req.body;
-    const get_books_id = await db.query(
-      "SELECT books_id FROM books WHERE LOWER(title) = LOWER($1)",
-      [book_name]
+    const { book_active_id } = req.body;
+    const check_requests = await db.query(
+      "SELECT book_active_id, renter FROM offers WHERE book_active_id=$1 AND renter=$2",
+      [book_active_id, username]
     );
-    const get_book_active_id = await db.query(
-      "SELECT ba.book_active_id from books_active ba INNER JOIN books b ON\
-      ba.books_id = $1 AND LOWER(ba.owner) = LOWER($2)",
-      [get_books_id.rows[0].books_id, owner_name]
-    );
-    const get_result = await db.query(
-      "INSERT INTO offers(book_active_id,renter) values($1,$2) RETURNING *",
-      [get_book_active_id.rows[0].book_active_id, username]
-    );
-    console.log(get_result.rows);
-    res.status(201).json({
-      status: "success",
-      data: {
-        Offer: get_result.rows[0],
-      },
-    });
+    if(check_requests.rows.length > 0)  {
+      res.status(202).json({
+        status: "failure",
+      });
+    } else { 
+      const get_result = await db.query(
+        "INSERT INTO offers (book_active_id, renter) VALUES ($1,$2) RETURNING *",
+        [book_active_id, username]
+      );
+      console.log(get_result.rows);
+      res.status(201).json({
+        status: "success",
+        data: {
+          Offer: get_result.rows,
+        },
+      });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -61,7 +61,7 @@ router.get("/profile/renter/get", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const get_result = await db.query(
-      "SELECT b.title,ba.owner from books b INNER JOIN books_active ba ON \
+      "SELECT o.offer_id, b.*, ba.owner from books b INNER JOIN books_active ba ON \
       b.books_id = ba.books_id INNER JOIN offers o ON o.book_active_id = ba.book_active_id AND o.renter = $1",
       [username]
     );

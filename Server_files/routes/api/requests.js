@@ -8,7 +8,7 @@ router.get("/myrequests", tokenCheck, async (req, res) => {
     try {
       const username = req.user;
       const get_result = await db.query(
-        "SELECT b.* from books b INNER JOIN requests r ON \
+        "SELECT r.request_id, b.* from books b INNER JOIN requests r ON \
         b.books_id = r.books_id AND r.requester = $1",
         [username]
       );
@@ -16,7 +16,7 @@ router.get("/myrequests", tokenCheck, async (req, res) => {
       res.status(201).json({
         status: "success",
         data: {
-          Offer: get_result.rows,
+          reqBooks: get_result.rows,
         },
       });
     } catch (err) {
@@ -99,7 +99,7 @@ router.get("/filter", tokenCheck, async (req, res) => {
         res.status(201).json({
         status: "success",
         data: {
-            Books: get_result.rows,
+            reqBooks: get_result.rows,
         },
         });
     } catch (error) {
@@ -113,12 +113,12 @@ router.get("/all", tokenCheck, async (req,res) => {
       console.log(req.user);
       console.log('initiating get request for all requests...');
       const get_result = await db.query(
-        "SELECT b.*, r.requester FROM books b INNER JOIN requests r ON b.books_id = r.books_id");
+        "SELECT r.request_id, r.requester, b.* FROM books b INNER JOIN requests r ON b.books_id = r.books_id");
         console.log(get_result.rows);
         res.status(201).json({
           status: "success",
           data: {
-            Books: get_result.rows,
+            reqBooks: get_result.rows,
           },
         });
     } catch(err){
@@ -137,7 +137,9 @@ router.post("/insert", tokenCheck, async (req, res) => {
     );
 
     if (request_check.rows.length > 0) {
-      return res.json("You have already made this request!");
+      return res.json({
+        status: "failure",
+      });
     }
 
     const new_request = await db.query(
