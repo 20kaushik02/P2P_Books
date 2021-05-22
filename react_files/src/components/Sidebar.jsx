@@ -12,7 +12,7 @@ function Sidebar ({ setAuth }) {
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
 
-    const [repScore, setRepScore] = useState("");
+    const [repScore, setRepScore] = useState();
     
     const getProfile = async () => {
         try {
@@ -35,11 +35,13 @@ function Sidebar ({ setAuth }) {
     
     let location = useLocation();
     if((location.pathname === "/login") || (location.pathname === "/register")) {
+
         return (<div className='sidebar'>
             <div className='sidebar-text'>Login to continue</div>
         </div>
-    )};
-
+    )}
+    else {
+    getProfile(); 
     return (
     <Fragment>
         <IconContext.Provider value={{ color: '#fff' }}>
@@ -78,5 +80,5 @@ function Sidebar ({ setAuth }) {
     </Fragment>
     );
     }
-
+}
 export default Sidebar;
