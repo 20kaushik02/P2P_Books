@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL: "http://localhost:9001/api/dashboard",
-})
+    baseURL: "http://localhost:9001/api/offers",
+});

@@ -11,12 +11,12 @@ export const SidebarLinks = [
     },
     {
         title: 'My Requests',
-        path: '/',
+        path: '/user-requests',
         cName: 'nav-text'
     },
     {
-        title: 'My offers',
-        path: '/',
+        title: 'My Offers',
+        path: '/user-offers',
         cName: 'nav-text'
     },
     {

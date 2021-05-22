@@ -7,15 +7,16 @@ const AddBook = () => {
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
 
-  const handleAddBook = async (e) => {
-    e.preventDefault();
+  const handleAddBook = async () => {
     try {
       const response = await Books.post("/", {
         title,
         author,
         category,
       }, {
-        headers: { token: localStorage.token }
+        headers: {
+          token: localStorage.getItem("token")
+        }
       });
     } catch (error) {
       console.log(error);
@@ -25,7 +26,7 @@ const AddBook = () => {
     <Fragment>
       <div className="mb-4">
       <form action="">
-        <div class="row">
+        <div className="row">
           <div className="col">
             <p className="fs-4">Title of book:</p>
             <input
@@ -66,8 +67,7 @@ const AddBook = () => {
           }}>
             <button
               onClick={handleAddBook}
-              type="submit"
-              className="btn btn-primary"
+              className="btn btn-success"
               >
               Add Book
             </button>

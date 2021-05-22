@@ -4,19 +4,22 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import { BooksContextProvider } from "./context/BooksContext";
 import { CategoriesContextProvider } from "./context/CategoriesContext";
 
-import Home from "./routes/Home";
-import NewBook from "./routes/NewBook";
-import SearchResults from "./routes/SearchResults";
 
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Sidebar from "./components/Sidebar";
 
 import AuthAPI from "./apis/AuthAPI";
+
+import Home from "./routes/Home";
+import NewBook from "./routes/NewBook";
+import SearchResults from "./routes/SearchResults";
 import UserBooks from "./routes/UserBooks";
-import Sidebar from "./components/Sidebar";
 import NewActiveBook from "./routes/NewActiveBook";
 import NewActiveBook_2 from "./routes/NewActiveBook_2";
 import SuccessPage from "./routes/SuccessPage";
+import UserRequests from "./routes/UserRequests";
+import UserOffers from "./routes/UserOffers";
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -68,6 +71,10 @@ const App = () => {
                                     component={(props) => isAuthenticated ? (<UserBooks/>) : (<Redirect to="/login" />)}/>
                                 <Route exact path="/success"
                                     component={(props) => isAuthenticated ? (<SuccessPage {...props}/>) : (<Redirect to="/login" />)}/>
+                                <Route exact path="/user-requests"
+                                    component={(props) => isAuthenticated ? (<UserRequests/>) : (<Redirect to="/login" />)}/>
+                                <Route exact path="/user-offers"
+                                    component={(props) => isAuthenticated ? (<UserOffers/>) : (<Redirect to="/login" />)}/>
                             </div>
                         </Switch>
                 </Router>

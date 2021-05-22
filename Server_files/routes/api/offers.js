@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
-const { route } = require("./book");
 
 //get offers MADE TO the user/owner
 router.get("/profile/owner/get", tokenCheck, async (req, res) => {
