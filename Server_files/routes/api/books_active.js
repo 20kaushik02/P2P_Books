@@ -4,7 +4,7 @@ const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
 
 //get all active books
-router.get("/all", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     console.log("initiating get request for all active books...");
     const get_result = await db.query(
@@ -256,7 +256,7 @@ router.post("/profile/insert", tokenCheck, async (req, res) => {
 });
 
 //change user's active book status to unavailable
-router.put("/profile/unav", tokenCheck, async (req, res) => {
+router.put("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const { book_active_id } = req.body;

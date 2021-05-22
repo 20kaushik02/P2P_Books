@@ -4,7 +4,7 @@ const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
 
 //get offers MADE TO the user/owner
-router.get("/profile/owner/get", tokenCheck, async (req, res) => {
+router.get("/profile/owner", tokenCheck, async (req, res) => {
   try {
     console.log(req.user);
     const username = req.user;
@@ -61,7 +61,7 @@ router.post("/profile/insert", tokenCheck, async (req, res) => {
 });
 
 //get offers MADE BY the user/renter
-router.get("/profile/renter/get", tokenCheck, async (req, res) => {
+router.get("/profile/renter", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const get_result = await db.query(
@@ -102,7 +102,7 @@ router.get("/profile/getone", tokenCheck, async (req,res) => {
 });
 
 //remove offer made by user
-router.put("/profile/delete", tokenCheck, async (req, res) => {
+router.put("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const offer_id = req.body.offer_id;

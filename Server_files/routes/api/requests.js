@@ -4,7 +4,7 @@ const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
 
 //requests made by an user
-router.get("/myrequests", tokenCheck, async (req, res) => {
+router.get("/profile", tokenCheck, async (req, res) => {
     try {
       const username = req.user;
       const get_result = await db.query(
@@ -108,7 +108,7 @@ router.get("/filter", tokenCheck, async (req, res) => {
 });
 
 //get all requests
-router.get("/all", tokenCheck, async (req,res) => {
+router.get("/", tokenCheck, async (req,res) => {
     try{
       console.log(req.user);
       console.log('initiating get request for all requests...');
@@ -126,7 +126,7 @@ router.get("/all", tokenCheck, async (req,res) => {
     }
 });
 
-router.post("/insert", tokenCheck, async (req, res) => {
+router.post("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const { books_id } = req.body;
@@ -157,7 +157,7 @@ router.post("/insert", tokenCheck, async (req, res) => {
   }
 });
 
-router.put("/delete", tokenCheck, async (req, res) => {
+router.put("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const { books_id } = req.body;

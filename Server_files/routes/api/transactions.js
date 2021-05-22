@@ -4,7 +4,7 @@ const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
 
 //accept an offer/make a transaction
-router.post("/insert", tokenCheck, async (req,res) => {
+router.post("/", tokenCheck, async (req,res) => {
     try {
         const {offer_id, return_date} = req.body;
         let date_ob = new Date();
@@ -24,7 +24,7 @@ router.post("/insert", tokenCheck, async (req,res) => {
 });
 
 //get user transactions
-router.get("/get", tokenCheck, async (req,res) => {
+router.get("/", tokenCheck, async (req,res) => {
   try {
       const username = req.user;
       const get_result = await db.query("SELECT t.transaction_id, t.date_of_transac, t.return_date, o.renter FROM \
@@ -43,7 +43,7 @@ router.get("/get", tokenCheck, async (req,res) => {
 });
 
 //update transaction(i.e. return date of transaction)
-router.put("/change", tokenCheck, async (req,res) => {
+router.put("/", tokenCheck, async (req,res) => {
 try {
     const {transaction_id, return_date} = req.body;
     const get_result = await db.query("UPDATE transactions SET return_date = $1 WHERE transaction_id = $2 RETURNING *",
