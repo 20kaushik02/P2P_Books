@@ -3,6 +3,25 @@ const router = express.Router();
 const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
 
+//get all requests
+router.get("/", tokenCheck, async (req,res) => {
+  try{
+    console.log(req.user);
+    console.log('initiating get request for all requests...');
+    const get_result = await db.query(
+      "SELECT r.request_id, r.requester, b.* FROM books b INNER JOIN requests r ON b.books_id = r.books_id");
+      console.log(get_result.rows);
+      res.status(201).json({
+        status: "success",
+        data: {
+          reqBooks: get_result.rows,
+        },
+      });
+  } catch(err){
+    console.log(err);
+  }
+});
+
 //requests made by an user
 router.get("/profile", tokenCheck, async (req, res) => {
     try {
@@ -107,25 +126,7 @@ router.get("/filter", tokenCheck, async (req, res) => {
     }
 });
 
-//get all requests
-router.get("/", tokenCheck, async (req,res) => {
-    try{
-      console.log(req.user);
-      console.log('initiating get request for all requests...');
-      const get_result = await db.query(
-        "SELECT r.request_id, r.requester, b.* FROM books b INNER JOIN requests r ON b.books_id = r.books_id");
-        console.log(get_result.rows);
-        res.status(201).json({
-          status: "success",
-          data: {
-            reqBooks: get_result.rows,
-          },
-        });
-    } catch(err){
-      console.log(err);
-    }
-});
-
+//make a request
 router.post("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
@@ -157,7 +158,8 @@ router.post("/", tokenCheck, async (req, res) => {
   }
 });
 
-router.put("/", tokenCheck, async (req, res) => {
+//delete a request
+router.delete("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const { books_id } = req.body;

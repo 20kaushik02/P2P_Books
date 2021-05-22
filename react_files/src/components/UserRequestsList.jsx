@@ -7,7 +7,7 @@ const UserRequestsList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await Requests.get("/myrequests", {
+                const response = await Requests.get("/profile", {
                     headers: {
                         token: localStorage.getItem("token")
                     }

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import DashboardAPI from "../apis/DashboardAPI";
+import Dashboard from "../apis/DashboardAPI";
 import Header from "../components/Header";
 import UserRequestsList from "../components/UserRequestsList";
 
@@ -8,7 +8,7 @@ const UserRequests = () => {
 
   const getProfile = async () => {
     try {
-      const res = await DashboardAPI.post("/", {}, {
+      const res = await Dashboard.get("/", {
         headers: {
             token: localStorage.getItem("token")
         }

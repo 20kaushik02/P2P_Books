@@ -1,32 +1,31 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { IconContext } from 'react-icons';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
-import { Link } from 'react-router-dom';
-import { SidebarLinks } from './SidebarLinks';
-import { IconContext } from 'react-icons';
 import '../css/sidebar.css'
-import DashboardAPI from '../apis/DashboardAPI';
+import Dashboard from '../apis/DashboardAPI';
 import LogoutButton from './LogoutButton';
-import { useLocation } from 'react-router-dom'
+import { SidebarLinks } from './SidebarLinks';
 
 function Sidebar ({ setAuth }) {
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
 
-    const [name, setName] = useState("");
     const [repScore, setRepScore] = useState("");
 
     const getProfile = async () => {
         try {
-        const res = await DashboardAPI.post("/", {}, {
-            headers: { token: localStorage.token }
+        const res = await Dashboard.get("/", {
+            headers: {
+                token: localStorage.getItem("token") 
+            }
           });
 
         const parseData = await res.data;
-        setName(parseData.name);
         setRepScore(parseData.reputation);
-        } catch (err) {
-        console.error(err.message);
+        } catch (error) {
+        console.error(error);
         }
     };
   

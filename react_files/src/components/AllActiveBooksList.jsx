@@ -10,7 +10,7 @@ const ActiveBooksList = ({user}) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await BooksActive.get("/all", {
+                const response = await BooksActive.get("/", {
                     headers: {
                         token: localStorage.getItem("token")
                     }
@@ -25,7 +25,7 @@ const ActiveBooksList = ({user}) => {
     const handleMakeOffer = async (ba_id) => {
         try {
             console.log(ba_id);
-            const response = await Offers.post("/profile/insert", {
+            const response = await Offers.post("/", {
                 book_active_id: ba_id
             }, {
                 headers: {

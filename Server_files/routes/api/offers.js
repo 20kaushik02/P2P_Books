@@ -25,41 +25,6 @@ router.get("/profile/owner", tokenCheck, async (req, res) => {
   }
 });
 
-//make an offer
-router.post("/profile/insert", tokenCheck, async (req, res) => {
-  try {
-    const username = req.user;
-    const book_active_id = req.body.book_active_id;
-    const check_dup = await db.query("SELECT * FROM offers WHERE book_active_id = $1 AND renter = $2",
-    [book_active_id, username]);
-    if(check_dup.rows.length > 0)
-    {
-      return res.status(401).json("Offer already exists!");
-    }
-    const valid_check = await db.query("SELECT * from books_active");
-    for(var i=0;i<valid_check.rows.length;i++)
-    {
-      if(book_active_id === valid_check.rows[i].book_active_id && valid_check.rows[i].owner === username)
-      {
-        return res.status(401).json("Bad GET request, you cannot make an offer to yourself!");
-      }
-    }
-    const get_result = await db.query(
-      "INSERT INTO offers(book_active_id,renter) values($1,$2) RETURNING *",
-      [book_active_id, username]
-    );
-    console.log(get_result.rows);
-    res.status(201).json({
-      status: "success",
-      data: {
-        Offer: get_result.rows[0],
-      },
-    });
-  } catch (err) {
-    console.log(err);
-  }
-});
-
 //get offers MADE BY the user/renter
 router.get("/profile/renter", tokenCheck, async (req, res) => {
   try {
@@ -81,6 +46,7 @@ router.get("/profile/renter", tokenCheck, async (req, res) => {
   }
 });
 
+
 //get offers for a particular book MADE TO the user
 router.get("/profile/getone", tokenCheck, async (req,res) => {
   try {
@@ -97,6 +63,34 @@ router.get("/profile/getone", tokenCheck, async (req,res) => {
       },
     });
   }catch (err){
+    console.log(err);
+  }
+});
+
+//make an offer
+router.post("/", tokenCheck, async (req, res) => {
+  try {
+    const username = req.user;
+    const book_active_id = req.body.book_active_id;
+    const check_dup = await db.query("SELECT * FROM offers WHERE book_active_id = $1 AND renter = $2",
+    [book_active_id, username]);
+    if(check_dup.rows.length > 0)
+    {
+      return res.status(401).json("Offer already exists!");
+    }
+    
+    const get_result = await db.query(
+      "INSERT INTO offers(book_active_id,renter) values($1,$2) RETURNING *",
+      [book_active_id, username]
+    );
+    console.log(get_result.rows);
+    res.status(201).json({
+      status: "success",
+      data: {
+        Offer: get_result.rows[0],
+      },
+    });
+  } catch (err) {
     console.log(err);
   }
 });

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import BooksActive from '../apis/BooksActiveAPI';
 import { BooksContext } from '../context/BooksContext';
 import { CategoriesContext } from '../context/CategoriesContext';
+import BooksActive from '../apis/BooksActiveAPI';
 
 const SearchActiveBooks = () => {
     const [title, setTitle] = useState("");
@@ -25,7 +25,7 @@ const SearchActiveBooks = () => {
             });
             setBooks(response.data.data.Books);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
     

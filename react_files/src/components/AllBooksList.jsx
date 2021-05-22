@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import BooksActive from '../apis/BooksActiveAPI';
 import Books from '../apis/BooksAPI';
+import BooksActive from '../apis/BooksActiveAPI';
 import { BooksContext } from '../context/BooksContext';
 
 const AllBooksList = () => {
@@ -16,15 +16,15 @@ const AllBooksList = () => {
                 });
                 setBooks(response.data.data.Books);
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         }
         AllBooks();
     },[]);
     const handleNewActiveBook = async (books_id) => {
         try {
-            const response = await BooksActive.post("/profile/insert", {
-                books_id: books_id
+            const response = await BooksActive.post("/", {
+                books_id
             }, {
                 headers: {
                     token: localStorage.getItem("token")
@@ -32,7 +32,7 @@ const AllBooksList = () => {
             });
             console.log("added book to books_active:", response);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
     return (
@@ -60,7 +60,8 @@ const AllBooksList = () => {
                                         msg:"Your book is now in circulation."
                                     }
                                 }}>
-                                    <button onClick={() => {handleNewActiveBook(book.books_id)}} className="btn btn-success">Put up for sale</button>
+                                    <button onClick={() => {handleNewActiveBook(book.books_id)}} 
+                                    className="btn btn-success">Put up for sale</button>
                                 </Link>
                             </td>
                         </tr>

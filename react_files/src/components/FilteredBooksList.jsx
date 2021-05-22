@@ -8,8 +8,8 @@ const FilteredBooksList = () => {
 
     const handleNewActiveBook = async (books_id) => {
         try {
-            const response = await BooksActiveAPI.post("/profile/insert", {
-                books_id: books_id
+            const response = await BooksActiveAPI.post("/", {
+                books_id
             }, {
                 headers: {
                     token: localStorage.getItem("token")
@@ -17,10 +17,9 @@ const FilteredBooksList = () => {
             });
             console.log("added book to books_active:" + response);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
-
     return (
         <Fragment>
             <Link to="/newbook">
@@ -50,7 +49,8 @@ const FilteredBooksList = () => {
                                             msg:"Your book is now in circulation."
                                         }
                                     }}>
-                                        <button onClick={() => {handleNewActiveBook(book.books_id)}} className="btn btn-success">Put up for sale</button>
+                                        <button onClick={() => {handleNewActiveBook(book.books_id)}} 
+                                        className="btn btn-success">Put up for sale</button>
                                     </Link>
                                 </td>
                             </tr>

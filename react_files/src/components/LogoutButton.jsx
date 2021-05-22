@@ -6,8 +6,8 @@ const LogoutButton = ({ setAuth }) => {
         try {
           localStorage.removeItem("token");
           setAuth(false);
-        } catch (err) {
-          console.log(err);
+        } catch (error) {
+          console.error(error);
         }
       };
     

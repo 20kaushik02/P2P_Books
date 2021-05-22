@@ -1,15 +1,15 @@
 import React, { Fragment, useEffect, useState } from "react";
-import AllActiveBooksList from "../components/AllActiveBooksList";
+import Dashboard from "../apis/DashboardAPI";
 import Header from "../components/Header";
-import DashboardAPI from "../apis/DashboardAPI";
 import SearchActiveBooks from "../components/SearchActiveBooks";
+import AllActiveBooksList from "../components/AllActiveBooksList";
 
 const Home = () => {
   const [name, setName] = useState("");
   const [user, setUser] = useState(""); 
   const getProfile = async () => {
     try {
-      const res = await DashboardAPI.post("/", {}, {
+      const res = await Dashboard.get("/", {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -22,8 +22,8 @@ const Home = () => {
       }
       else
         setName("to P2P Books")
-    } catch (err) {
-      console.error(err.message);
+    } catch (error) {
+      console.error(error);
     }
   };
 

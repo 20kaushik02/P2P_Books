@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import AuthAPI from '../apis/AuthAPI';
+import Auth from '../apis/AuthAPI';
 import Header from "./Header";
 
 const Login = ({ setAuth }) => {
@@ -18,7 +18,7 @@ const Login = ({ setAuth }) => {
         e.preventDefault();
         try {
             const body = { username, password };
-            const response = await AuthAPI.post("/login", body, {
+            const response = await Auth.post("/login", body, {
                 headers: { "Content-type": "application/json" }
             });              
             const parseRes = await response.data
@@ -30,8 +30,8 @@ const Login = ({ setAuth }) => {
             } else {
                 setAuth(false);
             }
-        } catch (err) {
-            console.log(err)
+        } catch (error) {
+            console.error(error)
         }
     };
 

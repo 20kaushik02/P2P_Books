@@ -3,26 +3,6 @@ const router = express.Router();
 const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
 
-//for inserting a book
-router.post("/", tokenCheck, async (req, res) => {
-    try {
-        console.log(req.user);
-        const results = await db.query(
-        "INSERT INTO books(title, author, category) VALUES ($1, $2, $3) RETURNING *",
-        [req.body.title, req.body.author, req.body.category]
-        );
-        console.log(results.rows);
-        res.status(201).json({
-          status: "success",
-          data: {
-            Book: results.rows[0],
-          },
-        });
-    } catch (err) {
-      console.log(err);
-    }
-});
-
 //get all books
 router.get("/", tokenCheck, async (req,res) => {
   try{
@@ -115,6 +95,26 @@ router.get("/filter", tokenCheck, async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+});
+
+//for inserting a book
+router.post("/", tokenCheck, async (req, res) => {
+  try {
+      console.log(req.user);
+      const results = await db.query(
+      "INSERT INTO books(title, author, category) VALUES ($1, $2, $3) RETURNING *",
+      [req.body.title, req.body.author, req.body.category]
+      );
+      console.log(results.rows);
+      res.status(201).json({
+        status: "success",
+        data: {
+          Book: results.rows[0],
+        },
+      });
+  } catch (err) {
+    console.log(err);
   }
 });
 

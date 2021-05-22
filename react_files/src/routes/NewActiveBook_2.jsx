@@ -1,8 +1,8 @@
 import React, { Fragment, useContext } from 'react'
-import FilteredBooksList from '../components/FilteredBooksList'
+import { BooksContext } from '../context/BooksContext'
 import Header from '../components/Header'
 import SearchBooks from '../components/SearchBooks'
-import { BooksContext } from '../context/BooksContext'
+import FilteredBooksList from '../components/FilteredBooksList'
 
 const NewActiveBook_2 = () => {
     const { books } = useContext(BooksContext);

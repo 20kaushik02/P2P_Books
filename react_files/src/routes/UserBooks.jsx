@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
+import Dashboard from "../apis/DashboardAPI";
 import Header from "../components/Header";
-import DashboardAPI from "../apis/DashboardAPI";
 import UserBooksList from "../components/UserBooksList";
 
 const UserBooks = () => {
@@ -8,8 +8,10 @@ const UserBooks = () => {
 
   const getProfile = async () => {
     try {
-      const res = await DashboardAPI.post("/", {}, {
-        headers: { token: localStorage.token }
+      const res = await Dashboard.get("/", {
+        headers: { 
+          token: localStorage.getItem("token") 
+        }
       });
 
       const parseData = res.data;

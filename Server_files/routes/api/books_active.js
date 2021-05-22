@@ -235,7 +235,7 @@ router.get("/category", async (req, res) => {
 });
 
 //insert a particular user's active book
-router.post("/profile/insert", tokenCheck, async (req, res) => {
+router.post("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const { books_id } = req.body;

@@ -8,7 +8,7 @@ const FilteredActiveBooksList = ({user}) => {
     const handleMakeOffer = async (ba_id) => {
         try {
             console.log(ba_id);
-            const response = await Offers.post("/profile/insert", {
+            const response = await Offers.post("/", {
                 book_active_id: ba_id
             }, {
                 headers: {

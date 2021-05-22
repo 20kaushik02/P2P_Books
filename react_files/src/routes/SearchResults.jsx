@@ -1,24 +1,24 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import DashboardAPI from "../apis/DashboardAPI";
-import FilteredActiveBooksList from "../components/FilteredActiveBooksList";
+import { BooksContext } from "../context/BooksContext";
+import Dashboard from "../apis/DashboardAPI";
 import Header from "../components/Header";
 import SearchActiveBooks from "../components/SearchActiveBooks";
-import { BooksContext } from "../context/BooksContext";
+import FilteredActiveBooksList from "../components/FilteredActiveBooksList";
 
 const SearchResults = () => {
   const { books } = useContext(BooksContext);
   const [user, setUser] = useState(""); 
   const getProfile = async () => {
     try {
-      const res = await DashboardAPI.post("/", {}, {
+      const res = await Dashboard.get("/", {
         headers: {
           token: localStorage.getItem("token")
         }
       });
       console.log(res.data.username);
       setUser(res.data.username)
-      } catch (err) {
-      console.error(err.message);
+      } catch (error) {
+      console.error(error);
     }
   };
 

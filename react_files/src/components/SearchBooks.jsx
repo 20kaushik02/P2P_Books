@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Books from '../apis/BooksAPI';
 import { BooksContext } from '../context/BooksContext';
 import { CategoriesContext } from '../context/CategoriesContext';
+import Books from '../apis/BooksAPI';
 
 const SearchBooks = () => {
     const [title, setTitle] = useState("");
@@ -24,7 +24,7 @@ const SearchBooks = () => {
             });
             setBooks(response.data.data.Books);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
     
@@ -34,7 +34,7 @@ const SearchBooks = () => {
                 const categories_response = await Books.get("/category")
                 setCategories(categories_response.data.data.Categories);
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         }
         fetchCategories();
