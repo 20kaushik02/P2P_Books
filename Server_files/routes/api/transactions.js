@@ -6,11 +6,16 @@ const tokenCheck = require("../../middleware/tokenCheck");
 //accept an offer/make a transaction
 router.post("/", tokenCheck, async (req,res) => {
     try {
+        const username = req.user;
         const {offer_id, return_date} = req.body;
         let date_ob = new Date();
-        let curr_date = date_ob.toISOString().split('T')[0]
+        let curr_date = date_ob.toISOString().split('T')[0];
         const get_result = await db.query("INSERT INTO transactions(date_of_transac, return_date, offer_id)\
         values($1,$2,$3) RETURNING *", [curr_date, return_date, offer_id]);
+        const update_book_status = await db.query("UPDATE books_active SET book_status = 'R' WHERE book_active_id IN\
+        (SELECT book_active_id from books_active WHERE owner = $1 AND book_active_id IN\
+          (SELECT ba.book_active_id FROM books_active ba INNER JOIN offers o ON o.book_active_id=ba.book_active_id\
+            AND o.offer_id = $2))",[username, offer_id]);
         console.log(get_result.rows);
         res.status(201).json({
         status: "success",
