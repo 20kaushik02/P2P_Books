@@ -66,6 +66,27 @@ router.post('/login', credCheck, async (req, res) => {
     }
 });
 
+router.put("/", tokenCheck, async (req, res) => {
+    try {
+      const username = req.user;
+      const {name, phone, mail, state, city, area, street} = req.body;
+  
+      let updatedLoc = await db.query(
+        "UPDATE location SET state=$1, city=$2, area=$3, street=$4 WHERE\
+         location_id = (SELECT location_id FROM users WHERE username=$5)", [state, city, area, street, username]);
+      
+      let updatedUser = await db.query(
+        "UPDATE users SET name=$1, phone=$2, mail=$3 WHERE username = $4",
+        [name, phone, mail, username]);
+
+      res.status(201).json({
+        status: "success",
+      });
+    } catch (err) {
+      console.log(err);
+    }
+});
+
 router.post("/verify", tokenCheck, (req, res) => {
     try {
       res.json(true);

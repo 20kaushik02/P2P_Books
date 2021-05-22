@@ -13,7 +13,7 @@ function Sidebar ({ setAuth }) {
     const showSidebar = () => setSidebar(!sidebar);
 
     const [repScore, setRepScore] = useState("");
-
+    
     const getProfile = async () => {
         try {
         const res = await Dashboard.get("/", {
@@ -21,7 +21,7 @@ function Sidebar ({ setAuth }) {
                 token: localStorage.getItem("token") 
             }
           });
-
+       
         const parseData = await res.data;
         setRepScore(parseData.reputation);
         } catch (error) {
@@ -48,7 +48,7 @@ function Sidebar ({ setAuth }) {
                 <FaIcons.FaBars onClick={showSidebar} />
             </Link>
             <div className='sidebar-text'>Score: {repScore}</div>
-            <Link to='/mydetails' className='menu-bars'>
+            <Link to='/my-details' className='menu-bars'>
                 <FaIcons.FaUserCircle/>
             </Link>
             <div className="p-3">

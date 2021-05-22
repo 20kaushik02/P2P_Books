@@ -7,6 +7,7 @@ import { CategoriesContextProvider } from "./context/CategoriesContext";
 
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Update from "./components/UserDetails";
 import Sidebar from "./components/Sidebar";
 
 import AuthAPI from "./apis/AuthAPI";
@@ -75,6 +76,8 @@ const App = () => {
                                     component={(props) => isAuthenticated ? (<UserRequests/>) : (<Redirect to="/login" />)}/>
                                 <Route exact path="/user-offers"
                                     component={(props) => isAuthenticated ? (<UserOffers/>) : (<Redirect to="/login" />)}/>
+                                <Route exact path="/my-details"
+                                    component={(props) => isAuthenticated ? (<Update/>) : (<Redirect to="/login" />)}/>
                             </div>
                         </Switch>
                 </Router>
