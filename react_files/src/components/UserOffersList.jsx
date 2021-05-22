@@ -27,8 +27,6 @@ const UserOffersList = () => {
                     <tr className="bg-primary">
                         <th scope="col">Owner</th>
                         <th scope="col">Title</th>
-                        <th scope="col">Author</th>
-                        <th scope="col">Category</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,8 +35,6 @@ const UserOffersList = () => {
                         <tr key={book.offer_id}>
                             <td>{book.owner}</td>
                             <td>{book.title}</td>
-                            <td>{book.author}</td>
-                            <td>{book.category}</td>
                         </tr>
                         )
                     })}
