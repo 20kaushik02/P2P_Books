@@ -7,12 +7,14 @@ import { IconContext } from 'react-icons';
 import '../css/sidebar.css'
 import DashboardAPI from '../apis/DashboardAPI';
 import LogoutButton from './LogoutButton';
+import { useLocation } from 'react-router-dom'
 
 function Sidebar ({ setAuth }) {
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
 
     const [name, setName] = useState("");
+    const [repScore, setRepScore] = useState("");
 
     const getProfile = async () => {
         try {
@@ -21,8 +23,8 @@ function Sidebar ({ setAuth }) {
           });
 
         const parseData = await res.data;
-        console.log(parseData)
         setName(parseData.name);
+        setRepScore(parseData.reputation);
         } catch (err) {
         console.error(err.message);
         }
@@ -31,6 +33,13 @@ function Sidebar ({ setAuth }) {
     useEffect(() => {
       getProfile();
     }, []);
+    
+    let location = useLocation();
+    if((location.pathname === "/login") || (location.pathname === "/register")) {
+        return (<div className='sidebar'>
+            <div className='sidebar-text'>Login to continue</div>
+        </div>
+    )};
 
     return (
     <Fragment>
@@ -39,10 +48,15 @@ function Sidebar ({ setAuth }) {
             <Link to='#' className='menu-bars'>
                 <FaIcons.FaBars onClick={showSidebar} />
             </Link>
+            <div className='sidebar-text'>Score: {repScore}</div>
+            <Link to='/mydetails' className='menu-bars'>
+                <FaIcons.FaUserCircle/>
+            </Link>
             <div className="p-3">
                 <LogoutButton setAuth={setAuth}/>
             </div>
         </div>
+
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
             <ul className='nav-menu-items' onClick={showSidebar}>
             <li className='sidebar-toggle'>

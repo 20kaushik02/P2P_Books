@@ -34,7 +34,7 @@ const Login = ({ setAuth }) => {
             console.log(err)
         }
     };
-  
+
     return (
     <Fragment>
         <Header/>
