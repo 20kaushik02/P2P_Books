@@ -54,16 +54,15 @@ const App = () => {
             <CategoriesContextProvider>
             <FiltersContextProvider>
                 <Router>
-                    <Sidebar setAuth={setAuth}/>
+                    <Sidebar auth={isAuthenticated} setAuth={setAuth}/>
                         <Switch>
                             <div className="container">
-                                <Route exact path="/" component={HomeNL} />
-                                <Route exact path="/Home"
-                                    component={(props) => isAuthenticated ? (<Home/>) : (<Redirect to="/" />)} />
+                                <Route exact path="/"
+                                    component={(props) => isAuthenticated ? (<Home/>) : (<HomeNL/>)}/>
                                 <Route exact path="/login"
-                                    component={(props) => !isAuthenticated ? (<Login {...props} setAuth={setAuth}/>) : (<Redirect to="/Home" />)} />
+                                    component={(props) => !isAuthenticated ? (<Login {...props} setAuth={setAuth}/>) : (<Redirect to="/" />)} />
                                 <Route exact path="/register"
-                                    component={(props) => !isAuthenticated ? (<Register {...props} setAuth={setAuth}/>) : (<Redirect to="/Home" />)}/>
+                                    component={(props) => !isAuthenticated ? (<Register {...props} setAuth={setAuth}/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/newbook"
                                     component={(props) => isAuthenticated ? (<NewBook/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/newactivebook"

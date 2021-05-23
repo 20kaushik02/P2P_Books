@@ -1,7 +1,7 @@
 export const SidebarLinks = [
     {
         title: 'Home',
-        path : '/home',
+        path : '/',
         cName : 'nav-text'
     },
     {
