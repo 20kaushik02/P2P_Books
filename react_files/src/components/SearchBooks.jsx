@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BooksContext } from '../context/BooksContext';
-import { FiltersContext } from '../context/FiltersContext';
+import { CategoriesContext } from '../context/CategoriesContext';
 import Books from '../apis/BooksAPI';
 
 const SearchBooks = () => {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [category, setCategory] = useState("all");
-    const { filters, setFilters } = useContext(FiltersContext);
+    const { categories, setCategories } = useContext(CategoriesContext);
     const { books, setBooks } = useContext(BooksContext);
 
     const handleSearchBook = async () => {
@@ -29,15 +29,15 @@ const SearchBooks = () => {
     }
     
     useEffect(() => {
-        const fetchFilters = async () => {
+        const fetchCategories = async () => {
             try {
-                const filters_response = await Books.get("/sorting")
-                setFilters(filters_response.data.data);
+                const categories_response = await Books.get("/category")
+                setCategories(categories_response.data.data.Categories);
             } catch (error) {
                 console.error(error);
             }
         }
-        fetchFilters();
+        fetchCategories();
         handleSearchBook();
     },[]);
     return (
@@ -56,11 +56,11 @@ const SearchBooks = () => {
                         <select value={category} onChange={(e) => setCategory(e.target.value)}
                         className="custom-select my-1 mr-sm-4 fs-5">
                                     <option value="all">All categories</option>
-                                { filters["Categories"] && filters["Categories"].map((filter_option) => {
-                                    return(
-                                        <option key = {filter_option.books_id} 
-                                        value={filter_option.category}>{filter_option.category}</option>
-                                    )  
+                            { categories && categories.map((category_option) => {
+                                return(
+                                    <option key = {category_option.books_id} 
+                                    value={category_option.category}>{category_option.category}</option>
+                                )  
                             })}
                         </select>
                     </div>
