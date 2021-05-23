@@ -69,7 +69,7 @@ try {
 router.get("/profile", tokenCheck, async (req,res) => {
 try {
     const username = req.user;
-    const renter = req.body.renter;
+    const {renter} = req.query;
     const get_result = await db.query("SELECT t.transaction_id, t.date_of_transac, t.return_date FROM transactions t\
     INNER JOIN offers o ON t.offer_id = o.offer_id AND o.renter = $1 INNER JOIN books_active ba ON\
     ba.book_active_id = o.book_active_id AND ba.owner = $2", [renter, username]);
@@ -88,7 +88,7 @@ try {
 //get transactions involving a particular book
 router.get("/filter", tokenCheck, async(req,res) => {
 try {
-    const books_id = req.body.books_id;
+    const {books_id} = req.query
     const username = req.user;
     const get_result = await db.query("SELECT t.transaction_id, t.date_of_transac, t.return_date FROM transactions t\
     INNER JOIN offers o ON t.offer_id = o.offer_id INNER JOIN books_active ba ON ba.book_active_id = o.book_active_id AND\
