@@ -1,6 +1,7 @@
 import React, {Fragment, useContext} from 'react'
 import { Link } from 'react-router-dom';
 import BooksActiveAPI from '../apis/BooksActiveAPI';
+import Requests from '../apis/RequestsAPI';
 import { BooksContext } from '../context/BooksContext';
 
 const FilteredBooksList = () => {
@@ -15,7 +16,23 @@ const FilteredBooksList = () => {
                     token: localStorage.getItem("token")
                 }
             });
-            console.log("added book to books_active:" + response);
+            console.log("added book to books_active:")
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    const handleNewRequest = async (books_id) => {
+        try {
+            const req_response = await Requests.post("/", {
+                books_id
+            }, {
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            });
+            console.log("request made:")
+            console.log(req_response);
         } catch (error) {
             console.error(error);
         }
@@ -32,6 +49,7 @@ const FilteredBooksList = () => {
                             <th scope="col">Title</th>
                             <th scope="col">Author</th>
                             <th scope="col">Category</th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -50,7 +68,18 @@ const FilteredBooksList = () => {
                                         }
                                     }}>
                                         <button onClick={() => {handleNewActiveBook(book.books_id)}} 
-                                        className="btn btn-success">Put up for sale</button>
+                                        className="btn btn-success">Share this book!</button>
+                                    </Link>
+                                </td>
+                                <td>
+                                    <Link to={{
+                                        pathname:"/success",
+                                        state:{
+                                            msg:"Your request for this book to be put into circulation has been recorded."
+                                        }
+                                    }}>
+                                        <button onClick={() => {handleNewRequest(book.books_id)}} 
+                                        className="btn btn-primary">Want this book?</button>
                                     </Link>
                                 </td>
                             </tr>
