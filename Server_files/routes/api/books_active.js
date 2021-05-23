@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
-const book_active_filter = require("../../middleware/filter")
 //get all active books
 router.get("/", async (req, res) => {
   try {
@@ -268,16 +267,6 @@ router.get("/sorting", async (req, res) => {
     res.status(400).json({
       status: "bad request",
     });
-  }
-});
-
-//filter active books based on location
-router.get("/loc", tokenCheck, book_active_filter, (req,res) => {
-  try {
-    const {location} = req.query;
-    
-  } catch(error){
-    console.log(error);
   }
 });
 
