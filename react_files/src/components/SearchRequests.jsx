@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { BooksContext } from '../context/BooksContext';
 import { FiltersContext } from '../context/FiltersContext';
 import Requests from '../apis/RequestsAPI';
+import Books from '../apis/BooksAPI';
 
 const SearchRequests = () => {
     const [title, setTitle] = useState("");
