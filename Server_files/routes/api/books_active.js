@@ -62,55 +62,55 @@ router.get("/filter", async (req, res) => {
     switch (search_method) {
       case 0:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc\
+          "SELECT * FROM books_active_loc\
           WHERE book_status='A'"
         );
         break;
       case 1:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc\
+          "SELECT * FROM books_active_loc\
           WHERE LOWER(title) ~ LOWER($1) AND book_status='A'",
           [search_title]
         );
         break;
       case 2:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc\
+          "SELECT * FROM books_active_loc\
           WHERE LOWER(author) ~ LOWER($1) AND book_status='A'",
           [search_author]
         );
         break;
       case 3:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc\
+          "SELECT * FROM books_active_loc\
           WHERE LOWER(title) ~ LOWER($1) AND LOWER(author) ~ LOWER($2) AND book_status='A'",
           [search_title, search_author]
         );
         break;
       case 4:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc\
+          "SELECT * FROM books_active_loc\
           WHERE LOWER(category) ~ LOWER($1) AND book_status='A'",
           [search_category]
         );
         break;
       case 5:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc\
+          "SELECT * FROM books_active_loc\
           WHERE LOWER(title) ~ LOWER($1) AND LOWER(category) = LOWER($2) AND book_status='A'",
           [search_title, search_category]
         );
         break;
       case 6:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc\
+          "SELECT * FROM books_active_loc\
           WHERE LOWER(author) ~ LOWER($1) AND LOWER(category) = LOWER($2) AND book_status='A'",
           [search_author, search_category]
         );
         break;
       case 7:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc\
+          "SELECT * FROM books_active_loc\
           WHERE LOWER(title) ~ LOWER($1) AND LOWER(author) ~ LOWER($2) AND LOWER(category) = LOWER($3) AND book_status='A'",
           [search_title, search_author, search_category]
         );
@@ -118,11 +118,20 @@ router.get("/filter", async (req, res) => {
       default:
         throw "Bad GET request parameters";
     }
-    console.log(get_result.rows);
+    var result_obj = { data: get_result.rows};
+    var filtered_res = result_obj.data.filter(function (book)
+    {
+      return ((search_state === "all") ? true : (book.state == search_state)) &&
+             ((search_city === "all") ? true : (book.city == search_city)) &&
+             ((search_area === "all") ? true : (book.area == search_area)) &&
+             ((search_street === "all") ? true : (book.street == search_street));
+    }
+    );
+    console.log(filtered_res);
     res.status(201).json({
       status: "success",
       data: {
-        Books: get_result.rows,
+        Books: filtered_res,
       },
     });
   } catch (error) {
