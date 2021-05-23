@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import Books from "../apis/BooksAPI";
 
 const AddBook = () => {
@@ -18,6 +19,8 @@ const AddBook = () => {
           token: localStorage.getItem("token")
         }
       });
+      if(response.data.status === "success")
+        toast.success("Added book successfully");
     } catch (error) {
       console.error(error);
     }
@@ -59,12 +62,7 @@ const AddBook = () => {
           </div>
           </div>
           <br/>
-          <Link to={{
-            pathname:"/success",
-            state: {
-              msg: "The book has been added to the database."
-            }
-          }}>
+          <Link to="/">
             <button
               onClick={handleAddBook}
               className="btn btn-success"
