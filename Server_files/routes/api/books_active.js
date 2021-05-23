@@ -48,7 +48,8 @@ router.get("/profile", tokenCheck, async (req, res) => {
 router.get("/filter", async (req, res) => {
   try {
     console.log("initiating get request for filtered active books...");
-    const { search_title, search_author, search_category } = req.query;
+    const { search_title, search_author, search_category, search_state, search_city, search_area,
+    search_street} = req.query;
 
     var search_method = 0;
     if (search_title) search_method = search_method + 1;
@@ -60,52 +61,52 @@ router.get("/filter", async (req, res) => {
     switch (search_method) {
       case 0:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author FROM books_active_loc"
+          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc"
         );
         break;
       case 1:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author FROM books_active_loc WHERE LOWER(title) = LOWER($1)",
+          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc WHERE LOWER(title) ~ LOWER($1)",
           [search_title]
         );
         break;
       case 2:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author FROM books_active_loc WHERE LOWER(author) = LOWER($1)",
+          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc WHERE LOWER(author) ~ LOWER($1)",
           [search_author]
         );
         break;
       case 3:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author FROM books_active_loc WHERE LOWER(title) = LOWER($1)\
-          AND LOWER(author) = LOWER($2)",
+          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc WHERE LOWER(title) ~ LOWER($1)\
+          AND LOWER(author) ~ LOWER($2)",
           [search_title, search_author]
         );
         break;
       case 4:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author FROM books_active_loc WHERE LOWER(category) = LOWER($1)",
+          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc WHERE LOWER(category) ~ LOWER($1)",
           [search_category]
         );
         break;
       case 5:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author FROM books_active_loc WHERE LOWER(title) = LOWER($1)\
+          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc WHERE LOWER(title) ~ LOWER($1)\
           AND LOWER(category) = LOWER($2)",
           [search_title, search_category]
         );
         break;
       case 6:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author FROM books_active_loc WHERE LOWER(author) = LOWER($1)\
+          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc WHERE LOWER(author) ~ LOWER($1)\
           AND LOWER(category) = LOWER($2)",
           [search_author, search_category]
         );
         break;
       case 7:
         get_result = await db.query(
-          "SELECT book_active_id, owner, books_id, title, author FROM books_active_loc WHERE LOWER(title) = LOWER($1)\
-          AND LOWER(author) = LOWER($2) AND LOWER(category) = LOWER($3)",
+          "SELECT book_active_id, owner, books_id, title, author, category FROM books_active_loc WHERE LOWER(title) ~ LOWER($1)\
+          AND LOWER(author) ~ LOWER($2) AND LOWER(category) = LOWER($3)",
           [search_title, search_author, search_category]
         );
         break;
