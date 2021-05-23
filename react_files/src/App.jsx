@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 import { BooksContextProvider } from "./context/BooksContext";
-import { CategoriesContextProvider } from "./context/CategoriesContext";
 import { FiltersContextProvider } from "./context/FiltersContext";
 
 
@@ -50,7 +49,6 @@ const App = () => {
 
     return (
         <BooksContextProvider>
-            <CategoriesContextProvider>
             <FiltersContextProvider>
                 <Router>
                     <Sidebar setAuth={setAuth}/>
@@ -84,7 +82,6 @@ const App = () => {
                         </Switch>
                 </Router>
             </FiltersContextProvider>
-            </CategoriesContextProvider>
         </BooksContextProvider>
     );
 };
