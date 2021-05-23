@@ -40,7 +40,7 @@ function Sidebar ({ auth, setAuth }) {
         </div>
     )}
     
-    else if ((location.pathname === "/") && (!auth)) {
+    else if (((location.pathname === "/requests") || (location.pathname === "/search") || (location.pathname === "/")) && (!auth)) {
         console.log(auth);
         console.log("test");
         return (
@@ -49,8 +49,12 @@ function Sidebar ({ auth, setAuth }) {
                     <Link to="/login" className="btn btn-lg btn-success">Login</Link>
                 </div>
                 <div style = {{ marginLeft : 10 , marginRight : 30}}>
-                    <Link to="/register" className="btn btn-lg btn-success">Register</Link>
+                    <Link to="/register" className="btn btn-lg btn-warning">Register</Link>
                 </div>
+                <div style = {{ marginLeft : 10 , marginRight : 30}}>
+                    <Link to="/requests" className="btn btn-lg btn-primary">Requests</Link>
+                </div>
+                
             </div>
         )
     }

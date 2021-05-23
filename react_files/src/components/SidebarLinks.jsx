@@ -1,8 +1,13 @@
 export const SidebarLinks = [
     {
         title: 'Home',
-        path : '/',
-        cName : 'nav-text'
+        path: '/',
+        cName: 'nav-text'
+    },
+    {
+        title: 'P2P Requests',
+        path: '/requests',
+        cName: 'nav-text'
     },
     {
         title: 'My Books',
