@@ -78,10 +78,12 @@ const SearchActiveBooks = () => {
                             })}
                         </select>
                     </div>
+                </div><br/>
+                <div className="row">
                     <div className="col">
                         <select value={state} onChange={(e) => setState(e.target.value)}
                         className="custom-select my-1 mr-sm-4 fs-5">
-                                    <option value="all">Any States</option>
+                                    <option value="all">All states</option>
                             { filters["States"] && filters["States"].map((filter_option) => {
                                     return(
                                         <option key = {filter_option.books_id} 
@@ -93,7 +95,7 @@ const SearchActiveBooks = () => {
                     <div className="col">
                         <select value={city} onChange={(e) => setCity(e.target.value)}
                         className="custom-select my-1 mr-sm-4 fs-5">
-                                    <option value="all">Any City</option>
+                                    <option value="all">All cities</option>
                             {filters["Cities"] && filters["Cities"].map((filter_option) => {
                                 return(
                                     <option key = {filter_option.books_id} 
@@ -106,7 +108,7 @@ const SearchActiveBooks = () => {
                     <div className="col">
                         <select value={area} onChange={(e) => setArea(e.target.value)}
                         className="custom-select my-1 mr-sm-4 fs-5">
-                                    <option value="all">Any Area</option>
+                                    <option value="all">All areas</option>
                             { filters["Areas"] && filters["Areas"].map((filter_option) => {
                                 return(
                                     <option key = {filter_option.books_id} 
@@ -119,7 +121,7 @@ const SearchActiveBooks = () => {
                     <div className="col">
                         <select value={street} onChange={(e) => setStreet(e.target.value)}
                         className="custom-select my-1 mr-sm-4 fs-5">
-                                    <option value="all">Any Street</option>
+                                    <option value="all">All streets</option>
                             { filters["Streets"] && filters["Streets"].map((filter_option) => {
                                 return(
                                     <option key = {filter_option.books_id} 
@@ -128,7 +130,7 @@ const SearchActiveBooks = () => {
                             })}
                         </select>
                     </div>
-                </div>
+                </div><br/>
                 <div className="row">
                     <Link className="col" to="/search">
                         <button onClick={handleSearchBook} className="btn btn-primary">Search P2P Books</button>

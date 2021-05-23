@@ -23,6 +23,7 @@ import NewActiveBook_2 from "./routes/NewActiveBook_2";
 import SuccessPage from "./routes/SuccessPage";
 import UserRequests from "./routes/UserRequests";
 import UserOffers from "./routes/UserOffers";
+import Requests from "./routes/Requests";
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -63,18 +64,19 @@ const App = () => {
                                     component={(props) => !isAuthenticated ? (<Login {...props} setAuth={setAuth}/>) : (<Redirect to="/" />)} />
                                 <Route exact path="/register"
                                     component={(props) => !isAuthenticated ? (<Register {...props} setAuth={setAuth}/>) : (<Redirect to="/" />)}/>
+                                <Route exact path="/search"
+                                    component={SearchResults}/>
                                 <Route exact path="/newbook"
                                     component={(props) => isAuthenticated ? (<NewBook/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/newactivebook"
                                     component={(props) => isAuthenticated ? (<NewActiveBook/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/newactivebook2"
                                     component={(props) => isAuthenticated ? (<NewActiveBook_2/>) : (<Redirect to="/" />)}/>
-                                <Route exact path="/search"
-                                    component={(props) => isAuthenticated ? (<SearchResults/>) : (<Redirect to="/" />)}/>
-                                <Route exact path="/user-books"
-                                    component={(props) => isAuthenticated ? (<UserBooks/>) : (<Redirect to="/" />)}/>
+                                <Route exact path="/requests" component={Requests}/>
                                 <Route exact path="/success"
                                     component={(props) => isAuthenticated ? (<SuccessPage {...props}/>) : (<Redirect to="/" />)}/>
+                                <Route exact path="/user-books"
+                                    component={(props) => isAuthenticated ? (<UserBooks/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/user-requests"
                                     component={(props) => isAuthenticated ? (<UserRequests/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/user-offers"

@@ -4,9 +4,8 @@ const db = require("../../DB_files");
 const tokenCheck = require("../../middleware/tokenCheck");
 
 //get all requests
-router.get("/", tokenCheck, async (req,res) => {
+router.get("/", async (req,res) => {
   try{
-    console.log(req.user);
     console.log('initiating get request for all requests...');
     const get_result = await db.query(
       "SELECT r.request_id, r.requester, b.* FROM books b INNER JOIN requests r ON b.books_id = r.books_id");
@@ -44,7 +43,7 @@ router.get("/profile", tokenCheck, async (req, res) => {
 });
 
 //filter all requests
-router.get("/filter", tokenCheck, async (req, res) => {
+router.get("/filter", async (req, res) => {
     try {
         console.log("initiating get request for filtered requests...");
         const { search_title, search_author, search_category } = req.query;
