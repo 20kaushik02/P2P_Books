@@ -1,14 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BooksContext } from '../context/BooksContext';
-import { CategoriesContext } from '../context/CategoriesContext';
+import { FiltersContext } from '../context/FiltersContext';
 import BooksActive from '../apis/BooksActiveAPI';
 
 const SearchActiveBooks = () => {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [category, setCategory] = useState("all");
-    const { categories, setCategories } = useContext(CategoriesContext);
+    const [state, setState] = useState("all");
+    const [city, setCity] = useState("all");
+    const [area, setArea] = useState("all");
+    const [street, setStreet] = useState("all");
+    const { filters, setFilters } = useContext(FiltersContext);
     const { books, setBooks } = useContext(BooksContext);
 
     const handleSearchBook = async () => {
@@ -17,7 +21,11 @@ const SearchActiveBooks = () => {
                 params: {
                     search_title: title,
                     search_author: author,
-                    search_category: category
+                    search_category: category,
+                    search_state: state,
+                    search_city: city,
+                    search_area: area,
+                    search_street: street
                 },
                 headers: {
                     token: localStorage.getItem("token")
@@ -30,19 +38,20 @@ const SearchActiveBooks = () => {
     }
     
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchFilters = async () => {
             try {
-                const categories_response = await BooksActive.get("/category", {
+                const filters_response = await BooksActive.get("/sorting", {
                     headers: {
                         token: localStorage.getItem("token")
                     }
                 })
-                setCategories(categories_response.data.data.Categories);
+                setFilters(filters_response.data.data);
+                console.log(filters["Categories"]);
             } catch (error) {
                 console.log(error);
             }
         }
-        fetchCategories();
+        fetchFilters();
     },[]);
     return (
         <div className="mb-4">
@@ -56,19 +65,70 @@ const SearchActiveBooks = () => {
                         <input value={author} onChange={(e) => setAuthor(e.target.value)}
                         type="text" className="form-control" placeholder="Author"/>
                     </div>
+
                     <div className="col">
                         <select value={category} onChange={(e) => setCategory(e.target.value)}
                         className="custom-select my-1 mr-sm-4 fs-5">
                                     <option value="all">All categories</option>
-                            { categories && categories.map((category_option) => {
+                            { filters["Categories"] && filters["Categories"].map((filter_option) => {
                                 return(
-                                    <option key = {category_option.books_id} 
-                                    value={category_option.category}>{category_option.category}</option>
-                                )  
+                                    <option key = {filter_option.books_id} 
+                                    value={filter_option.category}>{filter_option.category}</option>
+                                )
                             })}
                         </select>
                     </div>
-                </div><br/>
+                    <div className="col">
+                        <select value={state} onChange={(e) => setState(e.target.value)}
+                        className="custom-select my-1 mr-sm-4 fs-5">
+                                    <option value="all">Any States</option>
+                            { filters["States"] && filters["States"].map((filter_option) => {
+                                    return(
+                                        <option key = {filter_option.books_id} 
+                                        value={filter_option.state}>{filter_option.state}</option>
+                                    )
+                            })}
+                        </select>
+                    </div>
+                    <div className="col">
+                        <select value={city} onChange={(e) => setCity(e.target.value)}
+                        className="custom-select my-1 mr-sm-4 fs-5">
+                                    <option value="all">Any City</option>
+                            {filters["Cities"] && filters["Cities"].map((filter_option) => {
+                                return(
+                                    <option key = {filter_option.books_id} 
+                                    value={filter_option.city}>{filter_option.city}</option>
+                                )
+                            })}
+                        </select>
+                    </div>
+
+                    <div className="col">
+                        <select value={area} onChange={(e) => setArea(e.target.value)}
+                        className="custom-select my-1 mr-sm-4 fs-5">
+                                    <option value="all">Any Area</option>
+                            { filters["Areas"] && filters["Areas"].map((filter_option) => {
+                                return(
+                                    <option key = {filter_option.books_id} 
+                                    value={filter_option.area}>{filter_option.area}</option>
+                                )
+                            })}
+                        </select>
+                    </div>
+
+                    <div className="col">
+                        <select value={street} onChange={(e) => setStreet(e.target.value)}
+                        className="custom-select my-1 mr-sm-4 fs-5">
+                                    <option value="all">Any Street</option>
+                            { filters["Streets"] && filters["Streets"].map((filter_option) => {
+                                return(
+                                    <option key = {filter_option.books_id} 
+                                    value={filter_option.street}>{filter_option.street}</option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                </div>
                 <div className="row">
                     <Link className="col" to="/search">
                         <button onClick={handleSearchBook} className="btn btn-primary">Search P2P Books</button>

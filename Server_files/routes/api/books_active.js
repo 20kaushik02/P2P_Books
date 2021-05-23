@@ -234,6 +234,45 @@ router.get("/category", async (req, res) => {
   }
 });
 
+router.get("/sorting", async (req, res) => {
+  try {
+    const get_category = await db.query(
+      "SELECT DISTINCT b.category FROM books b INNER JOIN books_active ba ON ba.books_id = b.books_id"
+    );
+    const get_state = await db.query(
+      "select distinct l.state from location l inner join users u on u.location_id=l.location_id\
+       inner join books_active ba on ba.owner = u.username"
+    );
+    const get_city = await db.query(
+      "select distinct l.city from location l inner join users u on u.location_id=l.location_id\
+       inner join books_active ba on ba.owner = u.username"
+    );
+    const get_area = await db.query(
+      "select distinct l.area from location l inner join users u on u.location_id=l.location_id\
+       inner join books_active ba on ba.owner = u.username"
+    );
+    const get_street = await db.query(
+      "select distinct l.street from location l inner join users u on u.location_id=l.location_id\
+       inner join books_active ba on ba.owner = u.username"
+    );
+
+    res.status(201).json({
+      status: "success",
+      data: {
+        Categories: get_category.rows,
+        States: get_state.rows,
+        Cities: get_city.rows,
+        Areas: get_area.rows,
+        Streets: get_street.rows
+      },
+    });
+  } catch(err) {
+    res.status(400).json({
+      status: "bad request",
+    });
+  }
+});
+
 //insert a particular user's active book
 router.post("/", tokenCheck, async (req, res) => {
   try {
