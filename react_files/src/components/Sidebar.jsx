@@ -40,6 +40,19 @@ function Sidebar ({ setAuth }) {
             <div className='sidebar-text'>Login to continue</div>
         </div>
     )}
+    
+    else if (location.pathname === "/") {
+        return (
+        <div className='sidebar'>
+        <div style = {{ marginLeft : 10 , marginRight : 30}}>
+            <Link to="/login" className="btn btn-lg btn-success">Login</Link>
+        </div>
+        <div style = {{ marginLeft : 10 , marginRight : 30}}>
+            <Link to="/register" className="btn btn-lg btn-success">Register</Link>
+        </div>
+        </div>
+    )}
+
     else {
     getProfile(); 
     return (

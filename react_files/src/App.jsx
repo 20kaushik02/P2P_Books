@@ -14,6 +14,7 @@ import Sidebar from "./components/Sidebar";
 import AuthAPI from "./apis/AuthAPI";
 
 import Home from "./routes/Home";
+import HomeNL from "./routes/HomeNL";
 import NewBook from "./routes/NewBook";
 import SearchResults from "./routes/SearchResults";
 import UserBooks from "./routes/UserBooks";
@@ -56,30 +57,31 @@ const App = () => {
                     <Sidebar setAuth={setAuth}/>
                         <Switch>
                             <div className="container">
-                                <Route exact path="/"
-                                    component={(props) => isAuthenticated ? (<Home/>) : (<Redirect to="/login" />)} />
+                                <Route exact path="/" component={HomeNL} />
+                                <Route exact path="/Home"
+                                    component={(props) => isAuthenticated ? (<Home/>) : (<Redirect to="/" />)} />
                                 <Route exact path="/login"
-                                    component={(props) => !isAuthenticated ? (<Login {...props} setAuth={setAuth}/>) : (<Redirect to="/" />)} />
+                                    component={(props) => !isAuthenticated ? (<Login {...props} setAuth={setAuth}/>) : (<Redirect to="/Home" />)} />
                                 <Route exact path="/register"
-                                    component={(props) => !isAuthenticated ? (<Register {...props} setAuth={setAuth}/>) : (<Redirect to="/" />)}/>
+                                    component={(props) => !isAuthenticated ? (<Register {...props} setAuth={setAuth}/>) : (<Redirect to="/Home" />)}/>
                                 <Route exact path="/newbook"
-                                    component={(props) => isAuthenticated ? (<NewBook/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<NewBook/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/newactivebook"
-                                    component={(props) => isAuthenticated ? (<NewActiveBook/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<NewActiveBook/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/newactivebook2"
-                                    component={(props) => isAuthenticated ? (<NewActiveBook_2/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<NewActiveBook_2/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/search"
-                                    component={(props) => isAuthenticated ? (<SearchResults/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<SearchResults/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/user-books"
-                                    component={(props) => isAuthenticated ? (<UserBooks/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<UserBooks/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/success"
-                                    component={(props) => isAuthenticated ? (<SuccessPage {...props}/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<SuccessPage {...props}/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/user-requests"
-                                    component={(props) => isAuthenticated ? (<UserRequests/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<UserRequests/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/user-offers"
-                                    component={(props) => isAuthenticated ? (<UserOffers/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<UserOffers/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/my-details"
-                                    component={(props) => isAuthenticated ? (<Update/>) : (<Redirect to="/login" />)}/>
+                                    component={(props) => isAuthenticated ? (<Update/>) : (<Redirect to="/" />)}/>
                             </div>
                         </Switch>
                 </Router>
