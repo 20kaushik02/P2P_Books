@@ -64,4 +64,44 @@ try {
   console.log(err);
 }
 });
+
+//get transactions made with a particular user
+router.get("/profile", tokenCheck, async (req,res) => {
+try {
+    const username = req.user;
+    const renter = req.body.renter;
+    const get_result = await db.query("SELECT t.transaction_id, t.date_of_transac, t.return_date FROM transactions t\
+    INNER JOIN offers o ON t.offer_id = o.offer_id AND o.renter = $1 INNER JOIN books_active ba ON\
+    ba.book_active_id = o.book_active_id AND ba.owner = $2", [renter, username]);
+    console.log(get_result.rows);
+      res.status(201).json({
+      status: "success",
+      data:{
+        transaction_details: get_result.rows,
+       },
+    });
+}catch(err){
+ console.log(err); 
+}
+});
+
+//get transactions involving a particular book
+router.get("/filter", tokenCheck, async(req,res) => {
+try {
+    const books_id = req.body.books_id;
+    const username = req.user;
+    const get_result = await db.query("SELECT t.transaction_id, t.date_of_transac, t.return_date FROM transactions t\
+    INNER JOIN offers o ON t.offer_id = o.offer_id INNER JOIN books_active ba ON ba.book_active_id = o.book_active_id AND\
+    ba.owner = $1 INNER JOIN books b ON b.books_id = ba.books_id AND b.books_id = $2", [username, books_id]);
+    console.log(get_result.rows);
+      res.status(201).json({
+      status: "success",
+      data:{
+        transaction_details: get_result.rows,
+       },
+    });
+}catch(err){
+  console.log(err);
+}
+});
 module.exports = router;
