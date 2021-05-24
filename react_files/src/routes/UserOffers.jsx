@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import Dashboard from '../apis/DashboardAPI';
 import Header from '../components/Header';
+import OwnerOffersList from '../components/OwnerOffersList';
 import UserOffersList from '../components/UserOffersList';
 
 const UserOffers = () => {
@@ -30,6 +31,8 @@ const UserOffers = () => {
       <Header />
       <h2>{name}'s offers</h2>
       <UserOffersList />
+      <h2>Offers made to {name}</h2>
+      <OwnerOffersList/>
     </Fragment>
   )
 }
