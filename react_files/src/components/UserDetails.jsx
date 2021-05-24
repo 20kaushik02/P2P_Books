@@ -5,9 +5,9 @@ import Dashboard from '../apis/DashboardAPI';
 import 'react-toastify/dist/ReactToastify.css';
 
 toast.configure();
+
 const Update = () => {
   const getProfile = async () => {
-
     try {
     const res = await Dashboard.get("/", {
         headers: {
@@ -28,8 +28,9 @@ const Update = () => {
     } catch (error) {
     console.error(error);
     }
-};
+  };
 
+  const [disable, setDisable] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     phone: "",
@@ -53,11 +54,19 @@ const Update = () => {
     area,
     street,
   } = inputs;
-
-  const onChange = (e) =>
-    setInputs({ ...inputs, [e.target.name]: e.target.value });
-  console.log(name);
   
+  const checkInput = () => {
+    setDisable(!(Object.values(inputs).every( val => val.length !== 0)));
+  };
+
+  const onChange = (e) => {
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    checkInput();
+  });
+
   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
@@ -141,7 +150,7 @@ const Update = () => {
           onChange={(e) => onChange(e)}
           className="form-control my-3"
         />
-        <button className="btn btn-success btn-block">Update</button>
+        <button disabled={disable} className="btn btn-success btn-block">Update</button>
       </form>
       <br/><br/>
     </Fragment>
