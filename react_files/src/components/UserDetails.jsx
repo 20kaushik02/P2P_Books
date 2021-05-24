@@ -86,6 +86,7 @@ const Update = () => {
       if(response.status === 201)
         toast.success("Updated Successfully");
     } catch (error) {
+      toast.error("Something went wrong, try again")
       console.error(error);
     }
   };

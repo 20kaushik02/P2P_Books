@@ -7,6 +7,7 @@ import AllActiveBooksList from "../components/AllActiveBooksList";
 const Home = () => {
   const [name, setName] = useState("");
   const [user, setUser] = useState(""); 
+  const [rep, setRep] = useState();
   const getProfile = async () => {
     try {
       const res = await Dashboard.get("/", {
@@ -16,12 +17,9 @@ const Home = () => {
       });
 
       console.log("Dashboard");
-      if(res) {
-        setUser(res.data.username)
-        setName(res.data.name);
-      }
-      else
-        setName("to P2P Books")
+      setUser(res.data.username)
+      setName(res.data.name);
+      setRep(res.data.reputation)
     } catch (error) {
       console.error(error);
     }
@@ -36,7 +34,7 @@ const Home = () => {
       <Header />
       <h2>Welcome {name}!</h2>
       <SearchActiveBooks />
-      <AllActiveBooksList user={user}/>
+      <AllActiveBooksList rep={rep} user={user}/>
     </Fragment>
   );
 };
