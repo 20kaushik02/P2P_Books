@@ -29,8 +29,9 @@ router.get("/profile", tokenCheck, async (req, res) => {
     console.log("initiating get request for user's active books...");
     const user = req.user;
     const get_result = await db.query(
-      "SELECT b.* FROM books b INNER JOIN books_active ba ON ba.books_id = b.books_id AND ba.book_status='A'\
-      AND ba.owner = $1",
+      "SELECT ba.book_active_id, ba.book_status, o.renter, b.* FROM books b\
+      INNER JOIN books_active ba ON ba.books_id = b.books_id AND ba.owner = $1\
+      LEFT JOIN offers o ON o.book_active_id = ba.book_active_id",
       [user]
     );
     console.log(get_result.rows);
@@ -42,6 +43,30 @@ router.get("/profile", tokenCheck, async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+  }
+});
+
+//get all books borrowed by the user
+router.get("/profile/borrowed", tokenCheck, async (req, res) => {
+  try {
+    console.log("initiating request for user's borrowed books...");
+    const user = req.user;
+    const get_result = await db.query(
+      "SELECT ba.book_active_id, ba.owner, b.title, u.name, u.phone, u.mail FROM books b\
+      INNER JOIN books_active ba ON ba.books_id = b.books_id AND ba.book_status='R'\
+      INNER JOIN offers o ON o.book_active_id = ba.book_active_id AND o.renter = $1\
+      INNER JOIN users u ON u.username = ba.owner",
+      [user]
+    );
+    console.log(get_result);
+    res.status(201).json({
+      status: "success",
+      data: {
+        Books: get_result.rows
+      },
+    });
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -285,16 +310,6 @@ router.get("/sorting", async (req, res) => {
   }
 });
 
-//filter active books based on location
-/*router.get("/loc", tokenCheck, book_active_filter, (req,res) => {
-  try {
-    const {location} = req.query;
-    
-  } catch(error){
-    console.log(error);
-  }
-});*/
-
 //insert a particular user's active book
 router.post("/", tokenCheck, async (req, res) => {
   try {
@@ -316,15 +331,14 @@ router.post("/", tokenCheck, async (req, res) => {
   }
 });
 
-//change user's active book status to unavailable
+//change user's active book status to not in circulation
 router.put("/", tokenCheck, async (req, res) => {
   try {
-    const username = req.user;
-    const { book_active_id } = req.body;
-
+    const { book_active_id, new_status } = req.body;
+    console.log(req.body);
     const unav_book = await db.query(
-      "UPDATE books_active SET book_status = 'N' WHERE book_active_id = $1",
-      [book_active_id]
+      "UPDATE books_active SET book_status = $1 WHERE book_active_id = $2",
+      [new_status, book_active_id]
     );
     console.log(unav_book.rows[0]);
     res.status(201).json({
