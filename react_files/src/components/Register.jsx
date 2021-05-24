@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Auth from "../apis/AuthAPI";
 
 const Register = ({ setAuth }) => {
+  const [disable, setDisable] = useState(true);
   const [inputs, setInputs] = useState({
     username: "",
     password: "",
@@ -31,8 +32,16 @@ const Register = ({ setAuth }) => {
     street,
   } = inputs;
 
+  const checkInput = () => {
+    setDisable(!(Object.values(inputs).every( val => val.length !== 0)));
+  };
+
   const onChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
+
+  useEffect(() => {
+      checkInput();
+  });
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -178,7 +187,7 @@ const Register = ({ setAuth }) => {
           onChange={(e) => onChange(e)}
           className="form-control my-3"
         />
-        <button className="btn btn-success btn-block">Submit</button>
+        <button disabled={disable} className="btn btn-success btn-block">Submit</button>
       </form>
       <br/><br/>
       <Link to="/login">

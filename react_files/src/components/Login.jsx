@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Auth from '../apis/AuthAPI';
 import Header from "./Header";
@@ -10,10 +10,20 @@ const Login = ({ setAuth }) => {
     });
   
     const { username, password } = inputs;
+    const [disable, setDisable] = useState(true);
 
-    const onChange = async e =>
+    const checkInput = () => {
+        setDisable(!(Object.values(inputs).every( val => val.length !== 0)));
+    };
+
+    const onChange = async e => {
         setInputs({ ...inputs, [e.target.name]: e.target.value });
-    
+    };
+
+    useEffect(() => {
+        checkInput();
+    });
+
     const onSubmitForm = async e => {
         e.preventDefault();
         try {
@@ -42,7 +52,7 @@ const Login = ({ setAuth }) => {
         <form className="form-group" action="">
             <input type="text" name="username" value={username} placeholder="username" onChange={e => onChange(e)} className="form-control my-3"/>
             <input type="password" name="password" value={password} placeholder="password" onChange={e => onChange(e)} className="form-control my-3"/>
-            <button onClick={(e) => onSubmitForm(e)} className="btn btn-success btn-block">Submit</button>
+            <button disabled={disable} onClick={(e) => onSubmitForm(e)} className="btn btn-success btn-block">Submit</button>
         </form>
         <br/><br/>
         <Link to="/register">
