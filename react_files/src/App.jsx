@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import { BooksContextProvider } from "./context/BooksContext";
 import { CategoriesContextProvider } from "./context/CategoriesContext";
 import { FiltersContextProvider } from "./context/FiltersContext";
+import { OffersContextProvider } from "./context/OffersContext";
 
 
 import Login from "./components/Login";
@@ -24,6 +25,7 @@ import SuccessPage from "./routes/SuccessPage";
 import UserRequests from "./routes/UserRequests";
 import UserOffers from "./routes/UserOffers";
 import Requests from "./routes/Requests";
+import RequestsNL from "./routes/RequestsNL";
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,6 +55,7 @@ const App = () => {
     return (
         <BooksContextProvider>
             <CategoriesContextProvider>
+            <OffersContextProvider>    
             <FiltersContextProvider>
                 <Router>
                     <Sidebar auth={isAuthenticated} setAuth={setAuth}/>
@@ -72,7 +75,8 @@ const App = () => {
                                     component={(props) => isAuthenticated ? (<NewActiveBook/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/newactivebook2"
                                     component={(props) => isAuthenticated ? (<NewActiveBook_2/>) : (<Redirect to="/" />)}/>
-                                <Route exact path="/requests" component={Requests}/>
+                                <Route exact path="/requests" 
+                                    component={(props) => isAuthenticated ? (<Requests/>) : (<RequestsNL/>)}/>
                                 <Route exact path="/success"
                                     component={(props) => isAuthenticated ? (<SuccessPage {...props}/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/user-books"
@@ -87,6 +91,7 @@ const App = () => {
                         </Switch>
                 </Router>
             </FiltersContextProvider>
+            </OffersContextProvider>
             </CategoriesContextProvider>
         </BooksContextProvider>
     );
