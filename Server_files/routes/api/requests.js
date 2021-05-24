@@ -160,11 +160,10 @@ router.post("/", tokenCheck, async (req, res) => {
 //delete a request
 router.delete("/", tokenCheck, async (req, res) => {
   try {
-    const username = req.user;
-    const { books_id } = req.body;
+    const { request_id } = req.query;
     const get_result = await db.query(
-      "DELETE FROM requests where books_id=$1 AND requester=$2 RETURNING *",
-      [books_id, username]
+      "DELETE FROM requests WHERE request_id=$1 RETURNING *",
+      [request_id]
     );
     console.log(get_result.rows[0]);
     res.status(201).json({
