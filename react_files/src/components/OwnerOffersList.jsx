@@ -6,6 +6,7 @@ import Transactions from '../apis/TransactionsAPI';
 import { Link } from 'react-router-dom';
 
 toast.configure();
+
 const OwnerOffersList = () => {
     const { offers, setOffers } = useContext(OffersContext);
     var min_ret_date = new Date();
@@ -26,10 +27,8 @@ const OwnerOffersList = () => {
         }
     }
     
-    const handleAcceptOffer = async (e) => {
+    const handleAcceptOffer = async () => {
         try {
-            console.log(rdate);
-            console.log(offerId);
             const response = await Transactions.post("/", {
                 offer_id: offerId,
                 return_date: rdate
@@ -70,6 +69,7 @@ const OwnerOffersList = () => {
                     <tr className="bg-primary">
                         <th scope="col">Title</th>
                         <th scope="col">Requester</th>
+                        <th scope="col">Requester's reputation</th>
                         <th scope="col"></th>
                         {clicks ? (<th scope="col">Set Return Date</th>) : (null)}
                     </tr>
@@ -81,10 +81,11 @@ const OwnerOffersList = () => {
                         <tr key={offer.offer_id}>
                             <td>{offer.title}</td>
                             <td>{offer.renter}</td>
+                            <td>{offer.reputation}</td>
                             <td>
                                 {(clicks && (offer.offer_id === offerId)) ?
                                     (<Link to="/">
-                                        <button onClick={(e)=> handleAcceptOffer(e)} 
+                                        <button onClick={()=> handleAcceptOffer()} 
                                         className="btn btn-lg btn-success">Accept Offer?</button>
                                     </Link>) :
                                     (<button onClick={(e)=> handleSelectOffer(e, offer.offer_id)} 

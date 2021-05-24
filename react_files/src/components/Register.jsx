@@ -1,9 +1,17 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import Auth from "../apis/AuthAPI";
+
+toast.configure();
 
 const Register = ({ setAuth }) => {
   const [disable, setDisable] = useState(true);
+  
+  var min_dob = new Date();
+  var max_dob = new Date();
+  min_dob.setDate(min_dob.getDate() - 150*365);
+  max_dob.setDate(max_dob.getDate() - 18*365);
   const [inputs, setInputs] = useState({
     username: "",
     password: "",
@@ -71,10 +79,12 @@ const Register = ({ setAuth }) => {
       if (parseRes.jwtToken) {
         localStorage.setItem("token", parseRes.jwtToken);
         setAuth(true);
+        toast.success("Welcome to P2P Books!");
       } else {
         setAuth(false);
       }
     } catch (error) {
+      toast.error("Something went wrong, try again");
       console.error(error);
     }
   };
@@ -127,6 +137,8 @@ const Register = ({ setAuth }) => {
           type="date"
           name="dob"
           value={dob}
+          min={min_dob.toISOString().split('T')[0]}
+          max={max_dob.toISOString().split('T')[0]}
           placeholder="dob"
           onChange={(e) => onChange(e)}
           className="form-control my-3"
@@ -189,10 +201,10 @@ const Register = ({ setAuth }) => {
         />
         <button disabled={disable} className="btn btn-success btn-block">Submit</button>
       </form>
-      <br/><br/>
+      <br/>
       <Link to="/login">
           <button className="btn btn-warning">Go to Login page</button>
-      </Link>
+      </Link><br/><br/>
     </Fragment>
   );
 };
