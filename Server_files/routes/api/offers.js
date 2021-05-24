@@ -10,14 +10,17 @@ router.get("/profile/owner", tokenCheck, async (req, res) => {
     const username = req.user;
     console.log("initiating get request for all offers...");
     const get_result = await db.query(
-      "SELECT o.renter, o.offer_id, b.title from offers o INNER JOIN books_active ba ON ba.book_active_id = o.book_active_id AND\
-      ba.owner = $1 INNER JOIN books b ON ba.books_id = b.books_id", [username]);
+      "SELECT o.renter, o.offer_id, b.title from offers o\
+      INNER JOIN books_active ba ON ba.book_active_id = o.book_active_id AND ba.owner = $1\
+      INNER JOIN books b ON ba.books_id = b.books_id\
+      WHERE o.offer_id NOT IN (SELECT t.offer_id FROM transactions t)\
+      ORDER BY b.title", [username]);
 
     console.log(get_result.rows);
     res.status(201).json({
       status: "success",
       data: {
-        Books: get_result.rows,
+        Offer: get_result.rows,
       },
     });
   } catch (err) {
@@ -30,8 +33,10 @@ router.get("/profile/renter", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const get_result = await db.query(
-      "SELECT b.title,ba.owner,o.offer_id from books b INNER JOIN books_active ba ON \
-      b.books_id = ba.books_id INNER JOIN offers o ON o.book_active_id = ba.book_active_id AND o.renter = $1",
+      "SELECT b.title, ba.owner, o.offer_id from books b\
+      INNER JOIN books_active ba ON b.books_id = ba.books_id\
+      INNER JOIN offers o ON o.book_active_id = ba.book_active_id AND o.renter = $1\
+      WHERE o.offer_id NOT IN (SELECT t.offer_id FROM transactions t)",
       [username]
     );
     console.log(get_result.rows);
@@ -59,7 +64,7 @@ router.get("/profile/getone", tokenCheck, async (req,res) => {
     res.status(201).json({
       status: "success",
       data: {
-        Offers: get_result.rows,
+        Offer: get_result.rows,
       },
     });
   }catch (err){
