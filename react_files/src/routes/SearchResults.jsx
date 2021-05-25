@@ -8,6 +8,7 @@ import FilteredActiveBooksList from "../components/FilteredActiveBooksList";
 const SearchResults = () => {
   const { books } = useContext(BooksContext);
   const [user, setUser] = useState(""); 
+  const [rep, setRep] = useState();
   const getProfile = async () => {
     try {
       const res = await Dashboard.get("/", {
@@ -16,7 +17,8 @@ const SearchResults = () => {
         }
       });
       console.log(res.data.username);
-      setUser(res.data.username)
+      setUser(res.data.username);
+      setRep(res.data.reputation);
       } catch (error) {
       console.error(error);
     }
@@ -30,7 +32,7 @@ const SearchResults = () => {
       <Header />
       <h4>Search results: {books.length}.</h4>
       <SearchActiveBooks />
-      <FilteredActiveBooksList user={user}/>
+      <FilteredActiveBooksList rep={rep} user={user}/>
     </Fragment>
   );
 };

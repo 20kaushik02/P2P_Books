@@ -1,9 +1,32 @@
 import React, { useContext, useEffect } from 'react'
 import { BooksContext } from '../context/BooksContext'
 import Requests from '../apis/RequestsAPI'
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+
+toast.configure();
 
 const UserRequestsList = () => {
     const { books, setBooks } = useContext(BooksContext);
+
+    const handleRemoveRequest = async (request_id) => {
+        try {
+            console.log(request_id);
+            const response = await Requests.delete("/", {
+                params: {
+                    request_id
+                }, headers: {
+                    token: localStorage.getItem("token")
+                }
+            });
+            console.log(response);
+            toast.success("Removed request!");
+        } catch (error) {
+            toast.error("Something went wrong, try again")
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -28,6 +51,7 @@ const UserRequestsList = () => {
                         <th scope="col">Title</th>
                         <th scope="col">Author</th>
                         <th scope="col">Category</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +61,12 @@ const UserRequestsList = () => {
                             <td>{book.title}</td>
                             <td>{book.author}</td>
                             <td>{book.category}</td>
+                            <td>
+                                <Link to="/">
+                                    <button onClick={()=>handleRemoveRequest(book.request_id)}
+                                    className="btn btn-warning">Remove request</button>
+                                </Link>
+                            </td>
                         </tr>
                         )
                     })}

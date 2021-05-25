@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Dashboard from "../apis/DashboardAPI";
+import BorrowedBooksList from "../components/BorrowedBooksList";
 import Header from "../components/Header";
 import UserBooksList from "../components/UserBooksList";
 
@@ -30,6 +31,8 @@ const UserBooks = () => {
       <Header />
       <h2>{name}'s books</h2>
       <UserBooksList/>
+      <h2>{name}'s borrowed books</h2>
+      <BorrowedBooksList/>
     </Fragment>
   );
 };

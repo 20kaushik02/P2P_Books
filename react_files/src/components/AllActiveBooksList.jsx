@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { BooksContext } from '../context/BooksContext';
 import BooksActive from "../apis/BooksActiveAPI";
 import Offers from '../apis/OffersAPI';
+import { toast } from 'react-toastify';
 
-const ActiveBooksList = ({user}) => {
-    console.log(user);
+toast.configure();
+
+const ActiveBooksList = ({rep, user}) => {
     const {books, setBooks} = useContext(BooksContext);
     useEffect(() => {
         const fetchData = async () => {
@@ -24,7 +26,6 @@ const ActiveBooksList = ({user}) => {
     },[]);
     const handleMakeOffer = async (ba_id) => {
         try {
-            console.log(ba_id);
             const response = await Offers.post("/", {
                 book_active_id: ba_id
             }, {
@@ -33,7 +34,9 @@ const ActiveBooksList = ({user}) => {
                 }
             });
             console.log(response);
+            toast.success("Offer made!")
         } catch (error) {
+            toast.error("Something went wrong, try again")
             console.error(error);
         }
     }
@@ -57,15 +60,18 @@ const ActiveBooksList = ({user}) => {
                             <td>{book.category}</td>
                             <td>
                                 { (book.owner!==user) ? 
-                                    (<Link to={{
-                                        pathname: "/success",
-                                        state: {
-                                            msg: "Offer recorded."
-                                        }
-                                    }}>
-                                        <button onClick={() => {handleMakeOffer(book.book_active_id)}} 
-                                        className="btn btn-lg btn-success">Get this book!</button>
-                                    </Link>) : (<button className="btn btn-secondary" disabled>You own this book.</button>)}
+                                    ((rep<=0) ? 
+                                        (<button className="btn btn-secondary" disabled>Not enough reputation</button>) : 
+                                        (<Link to={{
+                                            pathname: "/success",
+                                            state: {
+                                                msg: "Offer recorded."
+                                            }
+                                        }}>
+                                            <button onClick={() => {handleMakeOffer(book.book_active_id)}} 
+                                            className="btn btn-lg btn-success">Get this book!</button>
+                                        </Link>)
+                                    ) : (<button className="btn btn-secondary" disabled>You own this book.</button>)}
                             </td>
                         </tr>
                         )

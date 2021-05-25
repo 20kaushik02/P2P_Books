@@ -21,7 +21,11 @@ router.post("/register", credCheck, async (req, res) => {
         if (user.rows.length > 0) {
             return res.status(401).json("User already exists!");
         }
-        
+
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!re.test(mail))
+          return res.status(401).json("Invalid email!");
+
         const salt = await bcrypt.genSalt(10);
         const bcryptPassword = await bcrypt.hash(password, salt);
 
@@ -75,6 +79,10 @@ router.put("/", tokenCheck, async (req, res) => {
         "UPDATE location SET state=$1, city=$2, area=$3, street=$4 WHERE\
          location_id = (SELECT location_id FROM users WHERE username=$5)", [state, city, area, street, username]);
       
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!re.test(mail))
+        return res.status(401).json("Invalid email!");
+           
       let updatedUser = await db.query(
         "UPDATE users SET name=$1, phone=$2, mail=$3 WHERE username = $4",
         [name, phone, mail, username]);

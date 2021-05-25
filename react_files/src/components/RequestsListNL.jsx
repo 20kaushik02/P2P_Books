@@ -1,29 +1,10 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import BooksActive from '../apis/BooksActiveAPI';
 import { BooksContext } from '../context/BooksContext';
 
-const RequestsList = () => {
+const RequestsListNL = () => {
     const { books, setBooks } = useContext(BooksContext);
     
-    const handleNewActiveBook = async (books_id) => {
-        try {
-            const response = await BooksActive.post("/", {
-                books_id
-            }, {
-                headers: {
-                    token: localStorage.getItem("token")
-                }
-            });
-            console.log("added book to books_active:");
-            console.log(response);
-            toast.success("Book is now in circulation!");
-        } catch (error) {
-            toast.error("Something went wrong, try again");
-            console.error(error);
-        }
-    }    
     return (
         <div className="list-group">
             <table className="table table-hover table-light">
@@ -43,9 +24,8 @@ const RequestsList = () => {
                             <td>{book.author}</td>
                             <td>{book.category}</td>
                             <td>
-                                <Link to="/">
-                                    <button onClick={()=>{handleNewActiveBook(book.books_id)}}
-                                    className="btn btn-success">Share this book!</button>
+                                <Link to="/login">
+                                    <button className="btn btn-success">Share this book!</button>
                                 </Link>
                             </td>
                         </tr>
@@ -54,7 +34,7 @@ const RequestsList = () => {
                 </tbody>
             </table>
         </div>
-    );
+    )
 }
 
-export default RequestsList;
+export default RequestsListNL
