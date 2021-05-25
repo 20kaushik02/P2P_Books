@@ -22,7 +22,7 @@ const UserRequestsList = () => {
             console.log(response);
             toast.success("Removed request!");
         } catch (error) {
-            toast.error("Something went wrong, try again")
+            toast.error("Could not remove request, try again")
             console.error(error);
         }
     }
@@ -62,7 +62,7 @@ const UserRequestsList = () => {
                             <td>{book.author}</td>
                             <td>{book.category}</td>
                             <td>
-                                <Link to="/">
+                                <Link to="#">
                                     <button onClick={()=>handleRemoveRequest(book.request_id)}
                                     className="btn btn-warning">Remove request</button>
                                 </Link>

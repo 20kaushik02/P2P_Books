@@ -84,7 +84,7 @@ const OwnerOffersList = () => {
                             <td>{offer.reputation}</td>
                             <td>
                                 {(clicks && (offer.offer_id === offerId)) ?
-                                    (<Link to="/">
+                                    (<Link to='#'>
                                         <button onClick={()=> handleAcceptOffer()} 
                                         className="btn btn-lg btn-success">Accept Offer?</button>
                                     </Link>) :

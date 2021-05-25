@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import Auth from "../apis/AuthAPI";
 import Dashboard from '../apis/DashboardAPI';
 import 'react-toastify/dist/ReactToastify.css';
+import Header from "./Header";
 
 toast.configure();
 
@@ -84,15 +85,16 @@ const Update = () => {
         }
       });
       if(response.status === 201)
-        toast.success("Updated Successfully");
+        toast.success("Details updated successfully");
     } catch (error) {
-      toast.error("Something went wrong, try again")
+      toast.error("Could not update details, try again")
       console.error(error);
     }
   };
 
   return (
     <Fragment>
+      <Header/>
       <h1 className="mt-5 text-center">Update your information</h1>
       <form onSubmit={onSubmitForm}>
         <input

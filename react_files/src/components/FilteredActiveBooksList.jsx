@@ -1,7 +1,10 @@
 import React, {useContext} from 'react'
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { BooksContext } from '../context/BooksContext';
 import Offers from '../apis/OffersAPI';
+
+toast.configure();
 
 const FilteredActiveBooksList = ({user}) => {
     const { books, setBooks } = useContext(BooksContext);
@@ -16,7 +19,9 @@ const FilteredActiveBooksList = ({user}) => {
                 }
             });
             console.log(response);
+            toast.success("Offer made for book!");
         } catch (error) {
+            toast.error("Could not make offer, try again");
             console.error(error);
         }
     }
@@ -40,12 +45,7 @@ const FilteredActiveBooksList = ({user}) => {
                             <td>{book.category}</td>
                             <td>
                                 { (book.owner!==user) ?  
-                                    (<Link to={{
-                                        pathname: "/success",
-                                        state: {
-                                            msg: "Offer recorded."
-                                        }
-                                    }}>
+                                    (<Link to='#'>
                                         <button onClick={() => {handleMakeOffer(book.book_active_id)}} 
                                         className="btn btn-lg btn-success">Get this book!</button>
                                     </Link>) : (<button className="btn btn-secondary" disabled>You own this book.</button>)}

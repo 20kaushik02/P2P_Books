@@ -21,7 +21,7 @@ const UserOffersList = () => {
             console.log(response);
             toast.success("Offer removed");
         } catch (error) {
-            toast.error("Something went wrong, try again");
+            toast.error("Could not remove offer, try again");
             console.error(error);
         }
     }
@@ -58,7 +58,7 @@ const UserOffersList = () => {
                             <td>{book.owner}</td>
                             <td>{book.title}</td>
                             <td>
-                                <Link to="/">
+                                <Link to="#">
                                     <button onClick={()=>handleRemoveOffer(book.offer_id)}
                                     className="btn btn-danger">Remove offer</button>
                                 </Link>

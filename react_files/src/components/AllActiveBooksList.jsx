@@ -36,7 +36,7 @@ const ActiveBooksList = ({rep, user}) => {
             console.log(response);
             toast.success("Offer made!")
         } catch (error) {
-            toast.error("Something went wrong, try again")
+            toast.error("Could not make offer, try again")
             console.error(error);
         }
     }
@@ -62,12 +62,7 @@ const ActiveBooksList = ({rep, user}) => {
                                 { (book.owner!==user) ? 
                                     ((rep<=0) ? 
                                         (<button className="btn btn-secondary" disabled>Not enough reputation</button>) : 
-                                        (<Link to={{
-                                            pathname: "/success",
-                                            state: {
-                                                msg: "Offer recorded."
-                                            }
-                                        }}>
+                                        (<Link to='#'>
                                             <button onClick={() => {handleMakeOffer(book.book_active_id)}} 
                                             className="btn btn-lg btn-success">Get this book!</button>
                                         </Link>)

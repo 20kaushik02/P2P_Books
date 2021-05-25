@@ -20,8 +20,9 @@ const AddBook = () => {
         }
       });
       if(response.data.status === "success")
-        toast.success("Added book successfully");
+        toast.success("Added book successfully!");
     } catch (error) {
+      toast.error("Could not add book, try again")
       console.error(error);
     }
   };
@@ -62,7 +63,7 @@ const AddBook = () => {
           </div>
           </div>
           <br/>
-          <Link to="/">
+          <Link to="#">
             <button
               onClick={handleAddBook}
               className="btn btn-success"

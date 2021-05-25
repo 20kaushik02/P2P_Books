@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import BooksActive from '../apis/BooksActiveAPI';
 import { BooksContext } from '../context/BooksContext';
 
+toast.configure();
+
 const RequestsList = () => {
     const { books, setBooks } = useContext(BooksContext);
     
@@ -20,7 +22,7 @@ const RequestsList = () => {
             console.log(response);
             toast.success("Book is now in circulation!");
         } catch (error) {
-            toast.error("Something went wrong, try again");
+            toast.error("Could not put up book for circulation, try again");
             console.error(error);
         }
     }    
@@ -43,7 +45,7 @@ const RequestsList = () => {
                             <td>{book.author}</td>
                             <td>{book.category}</td>
                             <td>
-                                <Link to="/">
+                                <Link to="#">
                                     <button onClick={()=>{handleNewActiveBook(book.books_id)}}
                                     className="btn btn-success">Share this book!</button>
                                 </Link>

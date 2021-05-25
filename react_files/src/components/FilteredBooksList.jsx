@@ -1,15 +1,18 @@
 import React, {Fragment, useContext} from 'react'
 import { Link } from 'react-router-dom';
-import BooksActiveAPI from '../apis/BooksActiveAPI';
+import { toast } from 'react-toastify';
+import BooksActive from '../apis/BooksActiveAPI';
 import Requests from '../apis/RequestsAPI';
 import { BooksContext } from '../context/BooksContext';
+
+toast.configure();
 
 const FilteredBooksList = () => {
     const { books, setBooks } = useContext(BooksContext);
 
     const handleNewActiveBook = async (books_id) => {
         try {
-            const response = await BooksActiveAPI.post("/", {
+            const response = await BooksActive.post("/", {
                 books_id
             }, {
                 headers: {
@@ -18,7 +21,9 @@ const FilteredBooksList = () => {
             });
             console.log("added book to books_active:")
             console.log(response);
+            toast.success("Book is in circulation!")
         } catch (error) {
+            toast.error("Could not put up book for circulation, try again")
             console.error(error);
         }
     }
@@ -33,7 +38,9 @@ const FilteredBooksList = () => {
             });
             console.log("request made:")
             console.log(req_response);
+            toast.success("Request made for book!");
         } catch (error) {
+            toast.error("Could not make request, try again");
             console.error(error);
         }
     }
@@ -61,23 +68,13 @@ const FilteredBooksList = () => {
                                 <td>{book.author}</td>
                                 <td>{book.category}</td>
                                 <td>
-                                    <Link to={{
-                                        pathname:"/success",
-                                        state:{
-                                            msg:"Your book is now in circulation."
-                                        }
-                                    }}>
+                                    <Link to='#'>
                                         <button onClick={() => {handleNewActiveBook(book.books_id)}} 
                                         className="btn btn-success">Share this book!</button>
                                     </Link>
                                 </td>
                                 <td>
-                                    <Link to={{
-                                        pathname:"/success",
-                                        state:{
-                                            msg:"Your request for this book to be put into circulation has been recorded."
-                                        }
-                                    }}>
+                                    <Link to='#'>
                                         <button onClick={() => {handleNewRequest(book.books_id)}} 
                                         className="btn btn-primary">Want this book?</button>
                                     </Link>
@@ -87,9 +84,6 @@ const FilteredBooksList = () => {
                         })}
                     </tbody>
                 </table>
-                <Link to="/newbook">
-                    <button className="btn btn-warning">Can't find the book you're looking for?</button>
-                </Link><br/><br/>
             </div>
         </Fragment>
     )

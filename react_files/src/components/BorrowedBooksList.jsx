@@ -7,7 +7,7 @@ toast.configure();
 
 const BorrowedBooksList = () => {
     const { offers, setOffers } = useContext(OffersContext);
-
+    const cur_date = new Date().toISOString().split('T')[0];
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -30,15 +30,18 @@ const BorrowedBooksList = () => {
                     <tr className="bg-primary">
                         <th scope="col">Owner</th>
                         <th scope="col">Title</th>
+                        <th scope="col">Return date</th>
                         <th scope="col">Contact details</th>
                     </tr>
                 </thead>
                 <tbody>
                     {offers && offers.map((offer) => {
                         return(
-                            <tr key={offer.book_active_id}>
+                            <tr className={(offer.return_date.split('T')[0] < cur_date) ? "table-danger":null}
+                            key={offer.book_active_id}>
                                 <td>{offer.owner}</td>
                                 <td>{offer.title}</td>
+                                <td>{offer.return_date.split('T')[0]}</td>
                                 <td><p>Phone: {offer.phone}<br/>Mail: {offer.mail}</p></td>
                             </tr>
                         )
