@@ -65,7 +65,7 @@ const Update = () => {
 
   useEffect(() => {
     checkInput();
-  });
+  }, [inputs]);
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
