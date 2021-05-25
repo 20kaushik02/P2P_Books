@@ -4,6 +4,7 @@ CREATE SEQUENCE IF NOT EXISTS books_act_pk_seq START 30000;
 CREATE SEQUENCE IF NOT EXISTS offers_pk_seq START 40000;
 CREATE SEQUENCE IF NOT EXISTS requests_pk_seq START 50000;
 CREATE SEQUENCE IF NOT EXISTS transacs_pk_seq START 60000;
+CREATE SEQUENCE IF NOT EXISTS notif_pk_seq START 70000;
 
 CREATE TABLE IF NOT EXISTS location (
     location_id INT NOT NULL DEFAULT nextval('location_pk_seq'),
@@ -73,4 +74,13 @@ CREATE TABLE IF NOT EXISTS transactions (
     offer_id INT NOT NULL,
     PRIMARY KEY (transaction_id),
     FOREIGN KEY (offer_id) REFERENCES offers(offer_id)
+);
+
+CREATE TABLE IF NOT EXISTS notification (
+    notif_id INT NOT NULL DEFAULT nextval('notif_pk_seq'),
+    username VARCHAR(255) NOT NULL,
+    message VARCHAR(300) NOT NULL,
+    message_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    PRIMARY KEY(notif_id),
+    FOREIGN KEY (username) REFERENCES users(username)
 );
