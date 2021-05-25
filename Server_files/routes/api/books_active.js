@@ -28,9 +28,10 @@ router.get("/profile", tokenCheck, async (req, res) => {
     console.log("initiating get request for user's active books...");
     const user = req.user;
     const get_result = await db.query(
-      "SELECT ba.book_active_id, ba.book_status, o.renter, b.* FROM books b\
+      "SELECT t.transaction_id, t.return_date, ba.book_active_id, ba.book_status, o.renter, b.* FROM books b\
       INNER JOIN books_active ba ON ba.books_id = b.books_id AND ba.owner = $1\
-      LEFT JOIN offers o ON o.book_active_id = ba.book_active_id",
+      LEFT JOIN offers o ON o.book_active_id = ba.book_active_id\
+      LEFT JOIN transactions t ON t.offer_id = o.offer_id",
       [user]
     );
     console.log(get_result.rows);
@@ -51,13 +52,14 @@ router.get("/profile/borrowed", tokenCheck, async (req, res) => {
     console.log("initiating request for user's borrowed books...");
     const user = req.user;
     const get_result = await db.query(
-      "SELECT ba.book_active_id, ba.owner, b.title, u.name, u.phone, u.mail FROM books b\
+      "SELECT t.return_date, ba.book_active_id, ba.owner, b.title, u.name, u.phone, u.mail FROM books b\
       INNER JOIN books_active ba ON ba.books_id = b.books_id AND ba.book_status='R'\
       INNER JOIN offers o ON o.book_active_id = ba.book_active_id AND o.renter = $1\
-      INNER JOIN users u ON u.username = ba.owner",
+      INNER JOIN users u ON u.username = ba.owner\
+      INNER JOIN transactions t ON t.offer_id = o.offer_id",
       [user]
     );
-    console.log(get_result);
+    console.log(get_result.rows);
     res.status(201).json({
       status: "success",
       data: {

@@ -29,7 +29,7 @@ router.get("/notif-count", tokenCheck, async (req, res) => {
             "SELECT COUNT(notif_id) FROM notification WHERE username=$1",
             [username]
         );
-        console.log(get_result);
+        console.log(get_result.rows);
         res.status(201).json({
             status: "success",
             data: {
