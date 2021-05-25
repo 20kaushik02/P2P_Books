@@ -5,6 +5,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import '../css/sidebar.css'
 import Dashboard from '../apis/DashboardAPI';
+import Notifications from '../apis/NotificationsAPI';
 import LogoutButton from './LogoutButton';
 import { SidebarLinks } from './SidebarLinks';
 
@@ -13,26 +14,41 @@ function Sidebar ({ auth, setAuth }) {
     const showSidebar = () => setSidebar(!sidebar);
 
     const [repScore, setRepScore] = useState();
-    
+    const [notifCount, setNotifCount] = useState(0);
+
     const getProfile = async () => {
         try {
-        const res = await Dashboard.get("/", {
-            headers: {
-                token: localStorage.getItem("token") 
-            }
-          });
-       
-        const parseData = await res.data;
-        setRepScore(parseData.reputation);
+            const res = await Dashboard.get("/", {
+                headers: {
+                    token: localStorage.getItem("token") 
+                }
+            });
+        
+            const parseData = await res.data;
+            setRepScore(parseData.reputation);
         } catch (error) {
         console.error(error);
         }
     };
   
+    const getNotifCount = async () => {
+        try {
+            const res = await Notifications.get("/notif-count", {
+                headers: {
+                    token: localStorage.getItem("token") 
+                }
+            });
+            setNotifCount(res.data.data["Count"]);
+            console.log(notifCount);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
       getProfile();
     }, []);
-    
+    getNotifCount();
     let location = useLocation();
     if((location.pathname === "/login") || (location.pathname === "/register")) {
         return (<div className='sidebar'>
@@ -69,9 +85,19 @@ function Sidebar ({ auth, setAuth }) {
                             <FaIcons.FaBars onClick={showSidebar} />
                         </Link>
                         <div className='sidebar-text'>Score: {repScore}</div>
+                        <div>
                             <Link to='/my-details' className='menu-bars'>
                                 <FaIcons.FaUserCircle/>
                             </Link>
+                        </div>
+                        <div>
+                            <Link to='/my-messages' className='menu-bars'>
+                                <FaIcons.FaEnvelope/>
+                            </Link>
+                        </div>
+                        <div className='notif-icon'>
+                            {((notifCount != 0) ? <FaIcons.FaExclamationCircle />: null)}
+                        </div>
                         <div className="p-3">
                             <LogoutButton setAuth={setAuth}/>
                         </div>

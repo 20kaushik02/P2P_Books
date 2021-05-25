@@ -49,7 +49,7 @@ const Register = ({ setAuth }) => {
 
   useEffect(() => {
       checkInput();
-  });
+  }, [inputs]);
 
   const onSubmitForm = async (e) => {
     e.preventDefault();

@@ -15,6 +15,8 @@ app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/dashboard", require("./routes/api/dashboard"));
 app.use("/api/transactions", require("./routes/api/transactions"));
 app.use("/api/requests", require("./routes/api/requests"));
+app.use("/api/notifications", require("./routes/api/notifications"));
+
 const port = process.env.PORT || 9000;
 app.listen(port, () => {
   console.log(`Server started - ${port}`);
