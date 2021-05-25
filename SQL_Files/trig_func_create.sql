@@ -12,12 +12,12 @@ owner rep +3, renter rep -1
 */
 
 CREATE OR REPLACE FUNCTION TransactOfferCleanupProc()
-    RETURNS TRIGGER
-    LANGUAGE plpgsql
-    AS '
+    RETURNS TRIGGER AS $TransactOfferCleanupTrig_ai$
+    
         DECLARE final_bai books_active.book_active_id%TYPE;
         DECLARE final_renter users.username%TYPE;
         DECLARE temp_doi offers.offer_id%TYPE;
+        DECLARE user_name offers.renter%TYPE;
     BEGIN
         SELECT book_active_id, renter INTO final_bai, final_renter FROM offers 
             WHERE offer_id = NEW.offer_id;
@@ -25,11 +25,15 @@ CREATE OR REPLACE FUNCTION TransactOfferCleanupProc()
         FOR temp_doi IN (SELECT offer_id FROM offers 
             WHERE book_active_id = final_bai AND renter != final_renter) 
         LOOP
+            SELECT renter INTO user_name FROM offers
+                WHERE offer_id = temp_doi;
+
+            INSERT INTO notification(username,message) VALUES(user_name, 'your offer has been rejected');
             DELETE FROM offers WHERE offer_id = temp_doi;
         END LOOP;
         RETURN NULL;
     END;
-    ';
+    $TransactOfferCleanupTrig_ai$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION UserReputationUpdateProc()
     RETURNS TRIGGER
