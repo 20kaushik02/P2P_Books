@@ -76,3 +76,9 @@ span {
   color: #ffffff;
   font-size: 18px;
 }
+
+.notif-icon {
+  position: relative;
+  margin-bottom: 20px;
+}
+

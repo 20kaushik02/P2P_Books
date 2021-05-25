@@ -11,6 +11,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Update from "./components/UserDetails";
 import Sidebar from "./components/Sidebar";
+import UserNotifications from "./components/UserNotifications";
 
 import AuthAPI from "./apis/AuthAPI";
 
@@ -87,6 +88,8 @@ const App = () => {
                                     component={(props) => isAuthenticated ? (<UserOffers/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/my-details"
                                     component={(props) => isAuthenticated ? (<Update/>) : (<Redirect to="/" />)}/>
+                                <Route exact path="/my-messages"
+                                    component={(props) => isAuthenticated ? (<UserNotifications/>) : (<Redirect to="/" />)}/>
                             </div>
                         </Switch>
                 </Router>
