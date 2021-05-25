@@ -22,7 +22,6 @@ import SearchResults from "./routes/SearchResults";
 import UserBooks from "./routes/UserBooks";
 import NewActiveBook from "./routes/NewActiveBook";
 import NewActiveBook_2 from "./routes/NewActiveBook_2";
-import SuccessPage from "./routes/SuccessPage";
 import UserRequests from "./routes/UserRequests";
 import UserOffers from "./routes/UserOffers";
 import Requests from "./routes/Requests";
@@ -78,8 +77,6 @@ const App = () => {
                                     component={(props) => isAuthenticated ? (<NewActiveBook_2/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/requests" 
                                     component={(props) => isAuthenticated ? (<Requests/>) : (<RequestsNL/>)}/>
-                                <Route exact path="/success"
-                                    component={(props) => isAuthenticated ? (<SuccessPage {...props}/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/user-books"
                                     component={(props) => isAuthenticated ? (<UserBooks/>) : (<Redirect to="/" />)}/>
                                 <Route exact path="/user-requests"
