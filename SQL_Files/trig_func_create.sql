@@ -31,10 +31,10 @@ CREATE OR REPLACE FUNCTION TransactOfferCleanupProc()
         LOOP
             SELECT renter INTO user_name FROM offers
                 WHERE offer_id = temp_doi;
-
-            INSERT INTO notification(username,message) VALUES(user_name, 'Your offer for "' ||b_title|| '" was rejected');
+            INSERT INTO notification (username, message) VALUES (user_name, 'Your offer for "' ||b_title|| '" was rejected.');
             DELETE FROM offers WHERE offer_id = temp_doi;
         END LOOP;
+        INSERT INTO notification (username, message) VALUES (final_renter, 'Your offer for "' ||b_title|| '" was accepted.');
         RETURN NULL;
     END;
     $TransactOfferCleanupTrig_ai$ LANGUAGE plpgsql;
@@ -53,7 +53,7 @@ CREATE OR REPLACE FUNCTION RequestFulfilMessage()
                 ON b.books_id = ba.books_id AND ba.books_id = temp_bid;
                 
                 INSERT INTO notification(username,message) 
-                VALUES(requester_name, 'Your request for "' ||req_book|| '" has been fulfilled. Head to the home page to make an offer');
+                VALUES(requester_name, 'Your request for "' ||req_book|| '" has been fulfilled. Head to the home page to make an offer.');
             END IF;
         END LOOP;
         RETURN NULL;
@@ -71,17 +71,15 @@ CREATE OR REPLACE FUNCTION OwnerOfferMessage()
         INNER JOIN books b ON ba.books_id = b.books_id;
 
         INSERT INTO notification(username,message) 
-        VALUES(owner_name, 'New offer for your book,"' ||owner_book|| '"');
+        VALUES(owner_name, 'New offer for your book, "' ||owner_book|| '"');
         RETURN NULL;
     END;
     $OwnerOfferMessageTrig_ai$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION UserReputationUpdateProc()
-    RETURNS TRIGGER
-    LANGUAGE plpgsql
-    AS '
+    RETURNS TRIGGER AS $UserReputationUpdateTrig_ai$
     BEGIN
-        UPDATE users SET reputation = reputation + 3 WHERE username = 
+        UPDATE users SET reputation = reputation + 2 WHERE username = 
             (SELECT owner FROM books_active WHERE book_active_id = 
                 (SELECT book_active_id FROM offers WHERE offer_id = NEW.offer_id)
             );
@@ -90,4 +88,4 @@ CREATE OR REPLACE FUNCTION UserReputationUpdateProc()
                 (SELECT renter FROM offers WHERE offer_id = NEW.offer_id);
         RETURN NULL;
     END;
-    ';
+    $UserReputationUpdateTrig_ai$ LANGUAGE plpgsql;

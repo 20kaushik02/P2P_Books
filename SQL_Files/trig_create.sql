@@ -10,11 +10,6 @@ AFTER INSERT ON transactions
 FOR EACH ROW
 EXECUTE PROCEDURE TransactOfferCleanupProc();
 
-CREATE TRIGGER UserReputationUpdateTrig_ai
-AFTER INSERT ON transactions
-FOR EACH ROW
-EXECUTE PROCEDURE UserReputationUpdateProc();
-
 CREATE TRIGGER RequestFulfilMessageTrig_ai
 AFTER INSERT OR UPDATE ON books_active
 FOR EACH ROW
@@ -24,3 +19,8 @@ CREATE TRIGGER OwnerOfferMessageTrig_ai
 AFTER INSERT ON offers
 FOR EACH ROW
 EXECUTE PROCEDURE OwnerOfferMessage();
+
+CREATE TRIGGER UserReputationUpdateTrig_ai
+AFTER INSERT ON transactions
+FOR EACH ROW
+EXECUTE PROCEDURE UserReputationUpdateProc();
