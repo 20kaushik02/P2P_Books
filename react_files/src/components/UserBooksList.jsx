@@ -12,6 +12,18 @@ const UserBooksList = () => {
     const { books, setBooks } = useContext(BooksContext);
     const [rdate, setRdate] = useState();
 
+    const fetchData = async () => {
+        try {
+            const response = await BooksActive.get("/profile", {
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            });
+            setBooks(response.data.data.Books);
+        } catch (error) {
+            console.error(error);
+        }
+    }
     const handleChangeReturnDate = async (transaction_id, old_ret_date) => {
         try {
             console.log(rdate);
@@ -26,6 +38,7 @@ const UserBooksList = () => {
                 });
                 console.log(response.data);
                 toast.success("Return date updated!")
+                fetchData();
             }
         } catch (error) {
             toast.error("Could not update return date, try again")
@@ -44,6 +57,7 @@ const UserBooksList = () => {
                 }
             })
             console.log(response);
+            fetchData();
             toast.success("Book status updated successfully!")
         } catch (error) {
             toast.error("Could not update book status, try again")
@@ -51,20 +65,8 @@ const UserBooksList = () => {
         }
     }
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await BooksActive.get("/profile", {
-                    headers: {
-                        token: localStorage.getItem("token")
-                    }
-                });
-                setBooks(response.data.data.Books);
-            } catch (error) {
-                console.error(error);
-            }
-        }
         fetchData();
-    },[books]);
+    },[]);
 
     return (
         <div className="list-group">
@@ -109,11 +111,11 @@ const UserBooksList = () => {
                                 {book.book_status === 'R' ? 
                                     (<Fragment>
                                         <input type="date" name="ret_date"
-                                        min={(book.return_date + 1).split('T')[0]} value={undefined} 
+                                        min={book.return_date} value={undefined} 
                                         onChange={(e)=>setRdate(e.target.value)} 
                                         className="form-control"/><br/>
                                         <Link to='#'>
-                                            <button onClick={()=>handleChangeReturnDate(book.transaction_id, book.return_date+1)}
+                                            <button onClick={()=>handleChangeReturnDate(book.transaction_id, book.return_date)}
                                             className="btn btn-primary">Change return date</button>
                                         </Link>                                   
                                     </Fragment>)
