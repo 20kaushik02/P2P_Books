@@ -1,4 +1,4 @@
--- PLpgSQL script to set up database schema, relations, sequences, triggers and procedures
+-- PL/pgSQL script to set up database schema, relations, sequences, triggers and procedures
 
 \i db_schema_create.sql
 \i rel_create.sql
