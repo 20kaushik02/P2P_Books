@@ -37,6 +37,7 @@ const OwnerOffersList = () => {
                     token: localStorage.getItem("token")
                 }
             });
+            setOffers(offers.filter(offer => offer.offer_id !== offerId));
             if(response.data.data.transaction_details)
                 toast.success("Offer accepted!");
         } catch (error) {

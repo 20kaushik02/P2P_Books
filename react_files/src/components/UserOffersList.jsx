@@ -19,6 +19,7 @@ const UserOffersList = () => {
                 }
             });
             console.log(response);
+            setBooks(books.filter(offer => offer.offer_id !== offer_id));
             toast.success("Offer removed");
         } catch (error) {
             toast.error("Could not remove offer, try again");

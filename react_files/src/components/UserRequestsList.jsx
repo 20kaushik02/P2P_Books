@@ -19,6 +19,7 @@ const UserRequestsList = () => {
                     token: localStorage.getItem("token")
                 }
             });
+            setBooks(books.filter(request=> request.request_id !== request_id));
             console.log(response);
             toast.success("Removed request!");
         } catch (error) {

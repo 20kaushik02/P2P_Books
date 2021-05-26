@@ -64,7 +64,8 @@ const UserBooksList = () => {
             }
         }
         fetchData();
-    },[]);
+    },[books]);
+
     return (
         <div className="list-group">
             <table className="table table-hover table-light">
