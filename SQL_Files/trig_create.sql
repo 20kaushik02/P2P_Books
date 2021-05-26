@@ -1,7 +1,7 @@
 -- Create the triggers after creating the trigger functions
 
 DROP TRIGGER IF EXISTS NewUserGreetTrig_ai ON users;
-DROP TRIGGER IF EXISTS RequestFulfilMessageTrig_ai ON books_active;
+DROP TRIGGER IF EXISTS RequestFulfilMessageTrig_aiu ON books_active;
 DROP TRIGGER IF EXISTS OwnerOfferMessageTrig_ai ON offers;
 DROP TRIGGER IF EXISTS TransactOfferCleanupTrig_ai ON transactions;
 DROP TRIGGER IF EXISTS UserReputationUpdateTrig_ai ON transactions;
