@@ -1,8 +1,10 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import Dashboard from '../apis/DashboardAPI';
-import Header from '../components/Header';
-import OwnerOffersList from '../components/OwnerOffersList';
-import UserOffersList from '../components/UserOffersList';
+import React, { Fragment, useEffect, useState } from "react";
+
+import Dashboard from "../apis/DashboardAPI";
+
+import Header from "../components/Header";
+import UserOffersList from "../components/UserOffersList";
+import OwnerOffersList from "../components/OwnerOffersList";
 
 const UserOffers = () => {
   const [name, setName] = useState("");
@@ -11,8 +13,8 @@ const UserOffers = () => {
     try {
       const res = await Dashboard.get("/", {
         headers: {
-            token: localStorage.getItem("token")
-        }
+          token: localStorage.getItem("token"),
+        },
       });
 
       const parseData = res.data;
@@ -25,16 +27,16 @@ const UserOffers = () => {
   useEffect(() => {
     getProfile();
   }, []);
-    
+
   return (
     <Fragment>
       <Header />
       <h2>{name}'s offers</h2>
       <UserOffersList />
       <h2>Offers made to {name}</h2>
-      <OwnerOffersList/>
+      <OwnerOffersList />
     </Fragment>
-  )
-}
+  );
+};
 
-export default UserOffers
+export default UserOffers;

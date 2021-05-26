@@ -1,20 +1,24 @@
 /*
 .env should contain the following:
 
-PORT = your_port
+PORT = 9001
 PGHOST = 'localhost'
-PGUSER = postgres
-PGDATABASE = p2p_books
-PGPASSWORD = your_password
 PGPORT = 5432
-
+PGUSER = your postgres username
+PGPASSWORD = your postgres password
+PGDATABASE = p2p_books
+jwtSecret = 'this is a secret phrase for JWT token encryption'
 */
 
 const { Pool, types } = require("pg");
 
-types.setTypeParser(1082, function(stringValue) {
-  return stringValue; 
+// Parse dates in database as a string
+
+types.setTypeParser(1082, function (stringValue) {
+  return stringValue;
 });
+
+//Connect to the database
 
 const pool = new Pool();
 module.exports = {

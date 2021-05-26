@@ -1,28 +1,31 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+
 const db = require("../../DB_files");
+
 const tokenCheck = require("../../middleware/tokenCheck");
 
-//get all books
-router.get("/", tokenCheck, async (req,res) => {
-  try{
+// Get all books
+
+router.get("/", tokenCheck, async (req, res) => {
+  try {
     console.log(req.user);
-    console.log('initiating get request for all books...');
-    const get_result = await db.query(
-      "SELECT * FROM books");
-      console.log(get_result.rows);
-      res.status(201).json({
-        status: "success",
-        data: {
-          Books: get_result.rows,
-        },
-      });
-  } catch(err){
+    console.log("initiating get request for all books...");
+    const get_result = await db.query("SELECT * FROM books");
+    console.log(get_result.rows);
+    res.status(201).json({
+      status: "success",
+      data: {
+        Books: get_result.rows,
+      },
+    });
+  } catch (err) {
     console.log(err);
   }
 });
 
-//filter all books based on parameters
+// Filter all books based on parameters
+
 router.get("/filter", tokenCheck, async (req, res) => {
   try {
     console.log("initiating get request for filtered books...");
@@ -37,9 +40,7 @@ router.get("/filter", tokenCheck, async (req, res) => {
     var get_result;
     switch (search_method) {
       case 0:
-        get_result = await db.query(
-          "SELECT b.* FROM books b"
-        );
+        get_result = await db.query("SELECT b.* FROM books b");
         break;
       case 1:
         get_result = await db.query(
@@ -98,27 +99,28 @@ router.get("/filter", tokenCheck, async (req, res) => {
   }
 });
 
-//for inserting a book
+// Add a new book
+
 router.post("/", tokenCheck, async (req, res) => {
   try {
-      console.log(req.user);
-      const results = await db.query(
+    console.log(req.user);
+    const results = await db.query(
       "INSERT INTO books(title, author, category) VALUES ($1, $2, $3) RETURNING *",
       [req.body.title, req.body.author, req.body.category]
-      );
-      console.log(results.rows);
-      res.status(201).json({
-        status: "success",
-        data: {
-          Book: results.rows[0],
-        },
-      });
+    );
+    console.log(results.rows);
+    res.status(201).json({
+      status: "success",
+      data: {
+        Book: results.rows[0],
+      },
+    });
   } catch (err) {
     console.log(err);
   }
 });
 
-//get all book categories
+// Get all book categories
 router.get("/category", async (req, res) => {
   try {
     console.log("initiating get request for all book categories...");

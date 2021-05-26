@@ -1,8 +1,12 @@
 const express = require("express");
 const router = express.Router();
+
 const db = require("../../DB_files");
+
 const tokenCheck = require("../../middleware/tokenCheck");
-//get all active books
+
+// Get all active books
+
 router.get("/", async (req, res) => {
   try {
     console.log("initiating get request for all active books...");
@@ -22,7 +26,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-//get all active books of the user
+// Get user's active books
+
 router.get("/profile", tokenCheck, async (req, res) => {
   try {
     console.log("initiating get request for user's active books...");
@@ -46,7 +51,8 @@ router.get("/profile", tokenCheck, async (req, res) => {
   }
 });
 
-//get all books borrowed by the user
+// Get books borrowed by the user
+
 router.get("/profile/borrowed", tokenCheck, async (req, res) => {
   try {
     console.log("initiating request for user's borrowed books...");
@@ -63,7 +69,7 @@ router.get("/profile/borrowed", tokenCheck, async (req, res) => {
     res.status(201).json({
       status: "success",
       data: {
-        Books: get_result.rows
+        Books: get_result.rows,
       },
     });
   } catch (error) {
@@ -71,12 +77,19 @@ router.get("/profile/borrowed", tokenCheck, async (req, res) => {
   }
 });
 
-//filter all active books based on parameters
+// Filter all active books based on parameters
 router.get("/filter", async (req, res) => {
   try {
     console.log("initiating get request for filtered active books...");
-    const { search_title, search_author, search_category, search_state, search_city, search_area,
-    search_street} = req.query;
+    const {
+      search_title,
+      search_author,
+      search_category,
+      search_state,
+      search_city,
+      search_area,
+      search_street,
+    } = req.query;
 
     var search_method = 0;
     if (search_title) search_method = search_method + 1;
@@ -144,15 +157,15 @@ router.get("/filter", async (req, res) => {
       default:
         throw "Bad GET request parameters";
     }
-    var result_obj = { data: get_result.rows};
-    var filtered_res = result_obj.data.filter(function (book)
-    {
-      return ((search_state === "all") ? true : (book.state == search_state)) &&
-             ((search_city === "all") ? true : (book.city == search_city)) &&
-             ((search_area === "all") ? true : (book.area == search_area)) &&
-             ((search_street === "all") ? true : (book.street == search_street));
-    }
-    );
+    var result_obj = { data: get_result.rows };
+    var filtered_res = result_obj.data.filter(function (book) {
+      return (
+        (search_state === "all" ? true : book.state == search_state) &&
+        (search_city === "all" ? true : book.city == search_city) &&
+        (search_area === "all" ? true : book.area == search_area) &&
+        (search_street === "all" ? true : book.street == search_street)
+      );
+    });
     console.log(filtered_res);
     res.status(201).json({
       status: "success",
@@ -165,7 +178,8 @@ router.get("/filter", async (req, res) => {
   }
 });
 
-//filter user's active books based on parameters
+// Filter user's active books based on parameters
+
 router.get("/profile/filter", tokenCheck, async (req, res) => {
   try {
     console.log("initiating get request for filtered user's active books...");
@@ -251,7 +265,7 @@ router.get("/profile/filter", tokenCheck, async (req, res) => {
   }
 });
 
-//get all active book categories
+// Get all active book categories
 router.get("/category", async (req, res) => {
   try {
     console.log("initiating get request for all active book categories...");
@@ -271,6 +285,8 @@ router.get("/category", async (req, res) => {
     });
   }
 });
+
+// Get locations and categories of active books
 
 router.get("/sorting", async (req, res) => {
   try {
@@ -301,17 +317,17 @@ router.get("/sorting", async (req, res) => {
         States: get_state.rows,
         Cities: get_city.rows,
         Areas: get_area.rows,
-        Streets: get_street.rows
+        Streets: get_street.rows,
       },
     });
-  } catch(err) {
+  } catch (err) {
     res.status(400).json({
       status: "bad request",
     });
   }
 });
 
-//insert a particular user's active book
+// Put book into circulation
 router.post("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
@@ -332,7 +348,7 @@ router.post("/", tokenCheck, async (req, res) => {
   }
 });
 
-//change user's active book status to not in circulation
+// Change user's active book's status
 router.put("/", tokenCheck, async (req, res) => {
   try {
     const { book_active_id, new_status } = req.body;
@@ -349,4 +365,5 @@ router.put("/", tokenCheck, async (req, res) => {
     console.log(err);
   }
 });
+
 module.exports = router;

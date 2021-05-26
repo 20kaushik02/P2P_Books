@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
+
 const db = require("../../DB_files");
+
 const tokenCheck = require("../../middleware/tokenCheck");
 
-//get offers MADE TO the user/owner
+// Get offers made to the user(owner)
+
 router.get("/profile/owner", tokenCheck, async (req, res) => {
   try {
     console.log(req.user);
@@ -15,7 +18,9 @@ router.get("/profile/owner", tokenCheck, async (req, res) => {
       INNER JOIN books b ON ba.books_id = b.books_id\
       INNER JOIN users u ON u.username=o.renter\
       WHERE o.offer_id NOT IN (SELECT t.offer_id FROM transactions t)\
-      ORDER BY b.title", [username]);
+      ORDER BY b.title",
+      [username]
+    );
 
     console.log(get_result.rows);
     res.status(201).json({
@@ -29,7 +34,8 @@ router.get("/profile/owner", tokenCheck, async (req, res) => {
   }
 });
 
-//get offers MADE BY the user/renter
+// Get offers made by the user(renter)
+
 router.get("/profile/renter", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
@@ -52,15 +58,17 @@ router.get("/profile/renter", tokenCheck, async (req, res) => {
   }
 });
 
+// Get offers for a particular book made to the user
 
-//get offers for a particular book MADE TO the user
-router.get("/profile/getone", tokenCheck, async (req,res) => {
+router.get("/profile/getone", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
-    const {books_id} = req.query;
-    const get_result = await db.query("SELECT DISTINCT o.renter, o.offer_id from offers o INNER JOIN books_active ba ON \
+    const { books_id } = req.query;
+    const get_result = await db.query(
+      "SELECT DISTINCT o.renter, o.offer_id from offers o INNER JOIN books_active ba ON \
     o.book_active_id = ba.book_active_id AND ba.books_id = $1 AND ba.owner = $2",
-    [books_id, username]);
+      [books_id, username]
+    );
     console.log(get_result.rows);
     res.status(201).json({
       status: "success",
@@ -68,23 +76,25 @@ router.get("/profile/getone", tokenCheck, async (req,res) => {
         Offer: get_result.rows,
       },
     });
-  }catch (err){
+  } catch (err) {
     console.log(err);
   }
 });
 
-//make an offer
+// Make an offer
+
 router.post("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const book_active_id = req.body.book_active_id;
-    const check_dup = await db.query("SELECT * FROM offers WHERE book_active_id = $1 AND renter = $2",
-    [book_active_id, username]);
-    if(check_dup.rows.length > 0)
-    {
+    const check_dup = await db.query(
+      "SELECT * FROM offers WHERE book_active_id = $1 AND renter = $2",
+      [book_active_id, username]
+    );
+    if (check_dup.rows.length > 0) {
       return res.status(401).json("Offer already exists!");
     }
-    
+
     const get_result = await db.query(
       "INSERT INTO offers(book_active_id,renter) values($1,$2) RETURNING *",
       [book_active_id, username]
@@ -101,12 +111,15 @@ router.post("/", tokenCheck, async (req, res) => {
   }
 });
 
-//remove offer made by user
+// Remove offer made by user
+
 router.delete("/", tokenCheck, async (req, res) => {
   try {
     const { offer_id } = req.query;
-    const get_result = await db.query("DELETE FROM offers WHERE offer_id = $1 RETURNING *",
-    [offer_id]);
+    const get_result = await db.query(
+      "DELETE FROM offers WHERE offer_id = $1 RETURNING *",
+      [offer_id]
+    );
     console.log(get_result.rows);
     res.status(201).json({
       status: "success",

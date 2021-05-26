@@ -1,17 +1,18 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import Auth from "../apis/AuthAPI";
 
 toast.configure();
 
 const Register = ({ setAuth }) => {
-  const [disable, setDisable] = useState(true);
-  
   var min_dob = new Date();
   var max_dob = new Date();
-  min_dob.setDate(min_dob.getDate() - 150*365);
-  max_dob.setDate(max_dob.getDate() - 18*365);
+  min_dob.setDate(min_dob.getDate() - 150 * 365);
+  max_dob.setDate(max_dob.getDate() - 18 * 365);
+  
+  const [disable, setDisable] = useState(true);
   const [inputs, setInputs] = useState({
     username: "",
     password: "",
@@ -41,14 +42,14 @@ const Register = ({ setAuth }) => {
   } = inputs;
 
   const checkInput = () => {
-    setDisable(!(Object.values(inputs).every( val => val.length !== 0)));
+    setDisable(!Object.values(inputs).every((val) => val.length !== 0));
   };
 
   const onChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
   useEffect(() => {
-      checkInput();
+    checkInput();
   }, [inputs]);
 
   const onSubmitForm = async (e) => {
@@ -137,8 +138,8 @@ const Register = ({ setAuth }) => {
           type="date"
           name="dob"
           value={dob}
-          min={min_dob.toISOString().split('T')[0]}
-          max={max_dob.toISOString().split('T')[0]}
+          min={min_dob.toISOString().split("T")[0]}
+          max={max_dob.toISOString().split("T")[0]}
           placeholder="dob"
           onChange={(e) => onChange(e)}
           className="form-control my-3"
@@ -148,7 +149,7 @@ const Register = ({ setAuth }) => {
           type="radio"
           value="M"
           name="gender"
-          style = {{ marginLeft : 10 , marginRight : 30}}
+          style={{ marginLeft: 10, marginRight: 30 }}
           onChange={(e) => onChange(e)}
         />
         Female
@@ -156,7 +157,7 @@ const Register = ({ setAuth }) => {
           type="radio"
           value="F"
           name="gender"
-          style = {{ marginLeft : 10 , marginRight : 30}}
+          style={{ marginLeft: 10, marginRight: 30 }}
           onChange={(e) => onChange(e)}
         />
         Other
@@ -164,7 +165,7 @@ const Register = ({ setAuth }) => {
           type="radio"
           value="O"
           name="gender"
-          style = {{ marginLeft : 10 , marginRight : 30}}
+          style={{ marginLeft: 10, marginRight: 30 }}
           onChange={(e) => onChange(e)}
         />
         <input
@@ -199,12 +200,16 @@ const Register = ({ setAuth }) => {
           onChange={(e) => onChange(e)}
           className="form-control my-3"
         />
-        <button disabled={disable} className="btn btn-success btn-block">Submit</button>
+        <button disabled={disable} className="btn btn-success btn-block">
+          Submit
+        </button>
       </form>
-      <br/>
+      <br />
       <Link to="/login">
-          <button className="btn btn-warning">Go to Login page</button>
-      </Link><br/><br/>
+        <button className="btn btn-warning">Go to Login page</button>
+      </Link>
+      <br />
+      <br />
     </Fragment>
   );
 };

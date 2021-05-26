@@ -1,8 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
+
 import Dashboard from "../apis/DashboardAPI";
-import BorrowedBooksList from "../components/BorrowedBooksList";
+
 import Header from "../components/Header";
 import UserBooksList from "../components/UserBooksList";
+import BorrowedBooksList from "../components/BorrowedBooksList";
 
 const UserBooks = () => {
   const [name, setName] = useState("");
@@ -10,9 +12,9 @@ const UserBooks = () => {
   const getProfile = async () => {
     try {
       const res = await Dashboard.get("/", {
-        headers: { 
-          token: localStorage.getItem("token") 
-        }
+        headers: {
+          token: localStorage.getItem("token"),
+        },
       });
 
       const parseData = res.data;
@@ -30,9 +32,9 @@ const UserBooks = () => {
     <Fragment>
       <Header />
       <h2>{name}'s books</h2>
-      <UserBooksList/>
+      <UserBooksList />
       <h2>{name}'s borrowed books</h2>
-      <BorrowedBooksList/>
+      <BorrowedBooksList />
     </Fragment>
   );
 };

@@ -1,5 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
+
 import Dashboard from "../apis/DashboardAPI";
+
 import Header from "../components/Header";
 import UserRequestsList from "../components/UserRequestsList";
 
@@ -10,8 +12,8 @@ const UserRequests = () => {
     try {
       const res = await Dashboard.get("/", {
         headers: {
-            token: localStorage.getItem("token")
-        }
+          token: localStorage.getItem("token"),
+        },
       });
 
       const parseData = res.data;

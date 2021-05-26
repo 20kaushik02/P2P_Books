@@ -1,138 +1,145 @@
 const express = require("express");
 const router = express.Router();
+
 const db = require("../../DB_files");
+
 const tokenCheck = require("../../middleware/tokenCheck");
 
-//get all requests
-router.get("/", async (req,res) => {
-  try{
-    console.log('initiating get request for all requests...');
+// Get all requests
+
+router.get("/", async (req, res) => {
+  try {
+    console.log("initiating get request for all requests...");
     const get_result = await db.query(
-      "SELECT r.request_id, r.requester, b.* FROM books b INNER JOIN requests r ON b.books_id = r.books_id");
-      console.log(get_result.rows);
-      res.status(201).json({
-        status: "success",
-        data: {
-          reqBooks: get_result.rows,
-        },
-      });
-  } catch(err){
+      "SELECT r.request_id, r.requester, b.* FROM books b INNER JOIN requests r ON b.books_id = r.books_id"
+    );
+    console.log(get_result.rows);
+    res.status(201).json({
+      status: "success",
+      data: {
+        reqBooks: get_result.rows,
+      },
+    });
+  } catch (err) {
     console.log(err);
   }
 });
 
-//requests made by an user
+// Get requests made by the user
+
 router.get("/profile", tokenCheck, async (req, res) => {
-    try {
-      const username = req.user;
-      const get_result = await db.query(
-        "SELECT r.request_id, b.* from books b INNER JOIN requests r ON \
+  try {
+    const username = req.user;
+    const get_result = await db.query(
+      "SELECT r.request_id, b.* from books b INNER JOIN requests r ON \
         b.books_id = r.books_id AND r.requester = $1",
-        [username]
-      );
-      console.log(get_result.rows);
-      res.status(201).json({
-        status: "success",
-        data: {
-          reqBooks: get_result.rows,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-    }
+      [username]
+    );
+    console.log(get_result.rows);
+    res.status(201).json({
+      status: "success",
+      data: {
+        reqBooks: get_result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
-//filter all requests
+// Filter all requests
+
 router.get("/filter", async (req, res) => {
-    try {
-        console.log("initiating get request for filtered requests...");
-        const { search_title, search_author, search_category } = req.query;
-        console.log(search_title)
-        var search_method = 0;
-        if (search_title) search_method = search_method + 1;
-        if (search_author) search_method = search_method + 2;
-        if (search_category && search_category != "all")
-        search_method = search_method + 4;
+  try {
+    console.log("initiating get request for filtered requests...");
+    const { search_title, search_author, search_category } = req.query;
+    console.log(search_title);
+    var search_method = 0;
+    if (search_title) search_method = search_method + 1;
+    if (search_author) search_method = search_method + 2;
+    if (search_category && search_category != "all")
+      search_method = search_method + 4;
 
-        var get_result;
-        switch (search_method) {
-        case 0:
-            get_result = await db.query(
-            "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id)"
-            );
-            break;
-        case 1:
-            get_result = await db.query(
-            "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
+    var get_result;
+    switch (search_method) {
+      case 0:
+        get_result = await db.query(
+          "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id)"
+        );
+        break;
+      case 1:
+        get_result = await db.query(
+          "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
             AND LOWER(b.title) ~ LOWER($1))",
-            [search_title]
-            );
-            break;
-        case 2:
-            get_result = await db.query(
-            "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
+          [search_title]
+        );
+        break;
+      case 2:
+        get_result = await db.query(
+          "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
             AND LOWER(b.author) ~ LOWER($1))",
-            [search_author]
-            );
-            break;
-        case 3:
-            get_result = await db.query(
-            "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
+          [search_author]
+        );
+        break;
+      case 3:
+        get_result = await db.query(
+          "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
             AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2))",
-            [search_title, search_author]
-            );
-            break;
-        case 4:
-            get_result = await db.query(
-            "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
+          [search_title, search_author]
+        );
+        break;
+      case 4:
+        get_result = await db.query(
+          "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
             AND LOWER(b.category) = LOWER($1))",
-            [search_category]
-            );
-            break;
-        case 5:
-            get_result = await db.query(
-            "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
+          [search_category]
+        );
+        break;
+      case 5:
+        get_result = await db.query(
+          "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
             AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
-            [search_title, search_category]
-            );
-            break;
-        case 6:
-            get_result = await db.query(
-            "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
+          [search_title, search_category]
+        );
+        break;
+      case 6:
+        get_result = await db.query(
+          "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
             AND LOWER(b.author) ~ LOWER($1) AND LOWER(b.category) = LOWER($2))",
-            [search_author, search_category]
-            );
-            break;
-        case 7:
-            get_result = await db.query(
-            "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
+          [search_author, search_category]
+        );
+        break;
+      case 7:
+        get_result = await db.query(
+          "SELECT r.request_id, b.* FROM books b INNER JOIN requests r ON (r.books_id = b.books_id\
             AND LOWER(b.title) ~ LOWER($1) AND LOWER(b.author) ~ LOWER($2) AND LOWER(b.category) = LOWER($3))",
-            [search_title, search_author, search_category]
-            );
-            break;
-        default:
-            throw "Bad GET request parameters";
-        }
-        console.log(get_result.rows);
-        res.status(201).json({
-        status: "success",
-        data: {
-            reqBooks: get_result.rows,
-        },
-        });
-    } catch (error) {
-        console.log(error);
+          [search_title, search_author, search_category]
+        );
+        break;
+      default:
+        throw "Bad GET request parameters";
     }
+    console.log(get_result.rows);
+    res.status(201).json({
+      status: "success",
+      data: {
+        reqBooks: get_result.rows,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-//make a request
+// Make a request
+
 router.post("/", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const { books_id } = req.body;
 
     const request_check = await db.query(
-      "SELECT * FROM requests WHERE books_id=$1 AND requester=$2", 
+      "SELECT * FROM requests WHERE books_id=$1 AND requester=$2",
       [books_id, username]
     );
 
@@ -157,7 +164,8 @@ router.post("/", tokenCheck, async (req, res) => {
   }
 });
 
-//delete a request
+// Delete a request
+
 router.delete("/", tokenCheck, async (req, res) => {
   try {
     const { request_id } = req.query;

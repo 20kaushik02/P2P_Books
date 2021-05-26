@@ -1,9 +1,9 @@
 .sidebar {
-    background-color: #060b26;
-    height: 80px;
-    align-items: center;
-    display: flex;
-    justify-content: flex-start;
+  background-color: #081144;
+  height: 80px;
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .menu-bars {
@@ -13,8 +13,8 @@
 }
 
 .nav-menu {
-  background-color: #060b26;
-  width: 250px;
+  background-color: #081144;
+  width: 350px;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -51,7 +51,7 @@
 }
 
 .nav-text a:hover {
-  background-color: #1a83ff;
+  background-color: #479af8;
 }
 
 .nav-menu-items {
@@ -59,7 +59,7 @@
 }
 
 .sidebar-toggle {
-  background-color: #060b26;
+  background-color: #081144;
   width: 100%;
   height: 80px;
   display: flex;
@@ -81,4 +81,3 @@ span {
   position: relative;
   margin-bottom: 20px;
 }
-

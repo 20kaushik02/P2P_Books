@@ -1,36 +1,15 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Auth from "../apis/AuthAPI";
-import Dashboard from '../apis/DashboardAPI';
-import 'react-toastify/dist/ReactToastify.css';
+import Dashboard from "../apis/DashboardAPI";
+
 import Header from "./Header";
 
 toast.configure();
 
 const Update = () => {
-  const getProfile = async () => {
-    try {
-    const res = await Dashboard.get("/", {
-        headers: {
-            token: localStorage.getItem("token") 
-        }
-      });
-
-    const parseData = await res.data;
-    setInputs({
-      name: parseData.name, 
-      phone: parseData.phone, 
-      mail: parseData.mail,
-      state: parseData.state,
-      city: parseData.city,
-      area: parseData.area,
-      street: parseData.street,
-    });   
-    } catch (error) {
-    console.error(error);
-    }
-  };
-
   const [disable, setDisable] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
@@ -41,23 +20,38 @@ const Update = () => {
     area: "",
     street: "",
   });
+  
+  const getProfile = async () => {
+    try {
+      const res = await Dashboard.get("/", {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      });
+
+      const parseData = await res.data;
+      setInputs({
+        name: parseData.name,
+        phone: parseData.phone,
+        mail: parseData.mail,
+        state: parseData.state,
+        city: parseData.city,
+        area: parseData.area,
+        street: parseData.street,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getProfile();
-  }, []);  
+  }, []);
 
-  const {
-    name,
-    phone,
-    mail,
-    state,
-    city,
-    area,
-    street,
-  } = inputs;
-  
+  const { name, phone, mail, state, city, area, street } = inputs;
+
   const checkInput = () => {
-    setDisable(!(Object.values(inputs).every( val => val.length !== 0)));
+    setDisable(!Object.values(inputs).every((val) => val.length !== 0));
   };
 
   const onChange = (e) => {
@@ -71,7 +65,9 @@ const Update = () => {
   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await Auth.put("/", {
+      const response = await Auth.put(
+        "/",
+        {
           name,
           phone,
           mail,
@@ -79,22 +75,24 @@ const Update = () => {
           city,
           area,
           street,
-        },{
+        },
+        {
           headers: {
-            token: localStorage.getItem("token")
+            token: localStorage.getItem("token"),
+          },
         }
-      });
-      if(response.status === 201)
+      );
+      if (response.status === 201)
         toast.success("Details updated successfully");
     } catch (error) {
-      toast.error("Could not update details, try again")
+      toast.error("Could not update details, try again");
       console.error(error);
     }
   };
 
   return (
     <Fragment>
-      <Header/>
+      <Header />
       <h1 className="mt-5 text-center">Update your information</h1>
       <form onSubmit={onSubmitForm}>
         <input
@@ -153,9 +151,12 @@ const Update = () => {
           onChange={(e) => onChange(e)}
           className="form-control my-3"
         />
-        <button disabled={disable} className="btn btn-success btn-block">Update</button>
+        <button disabled={disable} className="btn btn-success btn-block">
+          Update
+        </button>
       </form>
-      <br/><br/>
+      <br />
+      <br />
     </Fragment>
   );
 };

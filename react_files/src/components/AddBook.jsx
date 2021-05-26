@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import Books from "../apis/BooksAPI";
+
+toast.configure();
 
 const AddBook = () => {
   const [title, setTitle] = useState("");
@@ -10,25 +13,29 @@ const AddBook = () => {
 
   const handleAddBook = async () => {
     try {
-      const response = await Books.post("/", {
-        title,
-        author,
-        category,
-      }, {
-        headers: {
-          token: localStorage.getItem("token")
+      const response = await Books.post(
+        "/",
+        {
+          title,
+          author,
+          category,
+        },
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
         }
-      });
-      if(response.data.status === "success")
+      );
+      if (response.data.status === "success")
         toast.success("Added book successfully!");
     } catch (error) {
-      toast.error("Could not add book, try again")
+      toast.error("Could not add book, try again");
       console.error(error);
     }
   };
+
   return (
-    <Fragment>
-      <div className="mb-4">
+    <div className="mb-4">
       <form action="">
         <div className="row">
           <div className="col">
@@ -39,7 +46,7 @@ const AddBook = () => {
               type="text"
               className="form-control"
               placeholder="Title"
-              />
+            />
           </div>
           <div className="col">
             <p className="fs-4">Author of book:</p>
@@ -49,7 +56,7 @@ const AddBook = () => {
               type="text"
               className="form-control"
               placeholder="Author"
-              />
+            />
           </div>
           <div className="col">
             <p className="fs-4">Category of book (only one):</p>
@@ -59,21 +66,17 @@ const AddBook = () => {
               type="text"
               className="form-control"
               placeholder="Category"
-              />
+            />
           </div>
-          </div>
-          <br/>
-          <Link to="#">
-            <button
-              onClick={handleAddBook}
-              className="btn btn-success"
-              >
-              Add Book
-            </button>
-          </Link>
-        </form>
-      </div>
-    </Fragment>
+        </div>
+        <br />
+        <Link to="#">
+          <button onClick={handleAddBook} className="btn btn-success">
+            Add Book
+          </button>
+        </Link>
+      </form>
+    </div>
   );
 };
 

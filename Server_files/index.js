@@ -1,7 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-const db = require("./DB_files");
 const cors = require("cors");
+
+const db = require("./DB_files");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/requests", require("./routes/api/requests"));
 app.use("/api/notifications", require("./routes/api/notifications"));
 
 const port = process.env.PORT || 9000;
+
 app.listen(port, () => {
   console.log(`Server started - ${port}`);
 });
