@@ -11,6 +11,9 @@ toast.configure();
 const UserRequestsList = () => {
   const { books, setBooks } = useContext(BooksContext);
 
+  var cur_date = new Date();
+  console.log(cur_date.toISOString().split('T')[0]);
+
   const handleRemoveRequest = async (request_id) => {
     try {
       console.log(request_id);
@@ -47,7 +50,7 @@ const UserRequestsList = () => {
     };
     fetchData();
   }, []);
-  
+
   return (
     <div className="list-group">
       <table className="table table-hover table-light">
@@ -56,6 +59,7 @@ const UserRequestsList = () => {
             <th scope="col">Title</th>
             <th scope="col">Author</th>
             <th scope="col">Category</th>
+            <th scope="col">Expiry Date</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -63,10 +67,12 @@ const UserRequestsList = () => {
           {books &&
             books.map((book) => {
               return (
-                <tr key={book.request_id}>
+                  <tr key={book.request_id}
+                  className={(book.expiry_date === cur_date.toISOString().split('T')[0]) ? "table-danger" : null}>
                   <td>{book.title}</td>
                   <td>{book.author}</td>
                   <td>{book.category}</td>
+                  <td>{book.expiry_date}</td>
                   <td>
                     <Link to="#">
                       <button

@@ -31,7 +31,7 @@ router.get("/profile", tokenCheck, async (req, res) => {
   try {
     const username = req.user;
     const get_result = await db.query(
-      "SELECT r.request_id, b.* from books b INNER JOIN requests r ON \
+      "SELECT r.request_id, r.expiry_date, b.* from books b INNER JOIN requests r ON \
         b.books_id = r.books_id AND r.requester = $1",
       [username]
     );
