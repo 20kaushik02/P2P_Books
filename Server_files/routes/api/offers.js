@@ -18,15 +18,25 @@ router.get("/profile/owner", tokenCheck, async (req, res) => {
       INNER JOIN books b ON ba.books_id = b.books_id\
       INNER JOIN users u ON u.username=o.renter\
       WHERE o.offer_id NOT IN (SELECT t.offer_id FROM transactions t)\
-      ORDER BY b.title",
-      [username]
-    );
-
-    console.log(get_result.rows);
+      ORDER BY b.title", [username]);
+    
+    const bookwise_res = get_result.rows.reduce((acc, d) => {
+      const found = acc.find(a => a.title === d.title);
+      const offer = { offer_id: d.offer_id, renter: d.renter, reputation: d.reputation };
+      if (!found) {
+        acc.push({title:d.title, offers: [offer]})
+      }
+      else {
+        found.offers.push(offer)
+      }
+      return acc;
+    }, []);
+    console.log(bookwise_res);
+      
     res.status(201).json({
       status: "success",
       data: {
-        Offer: get_result.rows,
+        Offer: bookwise_res,
       },
     });
   } catch (err) {

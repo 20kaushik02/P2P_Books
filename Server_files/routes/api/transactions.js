@@ -17,7 +17,13 @@ router.post("/", tokenCheck, async (req, res) => {
       "SELECT * FROM offers WHERE offer_id = $1",
       [offer_id]
     );
-    if(check_offers) {
+    console.log(check_offers.rows);
+    if(check_offers.rows.length == 0) {
+      console.log("Deleted offer");
+      return res.status(400);
+    }
+    else {
+      console.log("Offer exists");
       const get_result = await db.query(
         "INSERT INTO transactions(date_of_transac, return_date, offer_id)\
           values($1,$2,$3) RETURNING *",
