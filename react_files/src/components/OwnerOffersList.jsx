@@ -47,6 +47,8 @@ const OwnerOffersList = () => {
       setOffers(offers.filter((offer) => offer.offer_id !== offerId));
       if (response.data.data.transaction_details)
         toast.success("Offer accepted!");
+      else
+        throw "Offer does not exist, or something went wrong";
     } catch (error) {
       toast.error("Could not accept offer, try again");
       console.error(error);
