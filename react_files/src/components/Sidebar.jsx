@@ -48,7 +48,7 @@ function Sidebar ({ auth, setAuth }) {
     useEffect(() => {
       getProfile();
     }, []);
-    getNotifCount();
+    
     let location = useLocation();
     if((location.pathname === "/login") || (location.pathname === "/register")) {
         return (<div className='sidebar'>
@@ -77,6 +77,7 @@ function Sidebar ({ auth, setAuth }) {
 
     else {
         getProfile(); 
+        getNotifCount();
         return (
             <Fragment>
                 <IconContext.Provider value={{ color: '#fff' }}>

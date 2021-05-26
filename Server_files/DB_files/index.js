@@ -10,7 +10,11 @@ PGPORT = 5432
 
 */
 
-const { Pool } = require("pg");
+const { Pool, types } = require("pg");
+
+types.setTypeParser(1082, function(stringValue) {
+  return stringValue; 
+});
 
 const pool = new Pool();
 module.exports = {

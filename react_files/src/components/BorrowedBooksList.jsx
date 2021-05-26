@@ -37,11 +37,11 @@ const BorrowedBooksList = () => {
                 <tbody>
                     {offers && offers.map((offer) => {
                         return(
-                            <tr className={(offer.return_date.split('T')[0] < cur_date) ? "table-danger":null}
+                            <tr className={(offer.return_date < cur_date) ? "table-danger":null}
                             key={offer.book_active_id}>
                                 <td>{offer.owner}</td>
                                 <td>{offer.title}</td>
-                                <td>{offer.return_date.split('T')[0]}</td>
+                                <td>{offer.return_date}</td>
                                 <td><p>Phone: {offer.phone}<br/>Mail: {offer.mail}</p></td>
                             </tr>
                         )
