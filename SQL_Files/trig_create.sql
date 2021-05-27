@@ -5,6 +5,7 @@ DROP TRIGGER IF EXISTS RequestFulfilMessageTrig_aiu ON books_active;
 DROP TRIGGER IF EXISTS OwnerOfferMessageTrig_ai ON offers;
 DROP TRIGGER IF EXISTS TransactOfferCleanupTrig_ai ON transactions;
 DROP TRIGGER IF EXISTS UserReputationUpdateTrig_ai ON transactions;
+DROP TRIGGER IF EXISTS TransactOverCleanupTrig_au ON books_active;
 
 CREATE TRIGGER NewUserGreetTrig_ai
 AFTER INSERT ON users
@@ -30,3 +31,8 @@ CREATE TRIGGER UserReputationUpdateTrig_ai
 AFTER INSERT ON transactions
 FOR EACH ROW
 EXECUTE PROCEDURE UserReputationUpdateProc();
+
+CREATE TRIGGER TransactOverCleanupTrig_au
+AFTER UPDATE ON books_active
+FOR EACH ROW
+EXECUTE PROCEDURE TransactOverCleanupProc();

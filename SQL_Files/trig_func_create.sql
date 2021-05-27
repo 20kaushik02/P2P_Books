@@ -5,6 +5,7 @@
 3. Alert book owner when an offer is made for their book
 4. Remove rejected offers once transaction is made, alert all rejected offerers and the accepted offerer
 5. Update reputation of owner and renter when a transaction is made
+6. Delete offer and transaction once book is returned
 
 */
 
@@ -95,5 +96,23 @@ CREATE OR REPLACE FUNCTION UserReputationUpdateProc()
         UPDATE users SET reputation = reputation - 1 WHERE username = 
                 (SELECT renter FROM offers WHERE offer_id = NEW.offer_id);
         RETURN NULL;
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION TransactOverCleanupProc()
+    RETURNS TRIGGER AS $$
+
+        DECLARE returned_ti transactions.transaction_id%TYPE;
+        DECLARE returned_oi offers.offer_id%TYPE;
+
+    BEGIN
+        IF (OLD.book_status = 'R') AND (NEW.book_status != 'R') THEN
+            SELECT transaction_id INTO returned_ti FROM transactions WHERE offer_id = 
+                (SELECT offer_id FROM offers WHERE book_active_id = OLD.book_active_id);
+            SELECT offer_id INTO returned_oi FROM offers WHERE book_active_id = OLD.book_active_id;
+
+            DELETE FROM transactions WHERE transaction_id = returned_ti;
+            DELETE FROM offers WHERE offer_id = returned_oi;
+        END IF;
     END;
     $$ LANGUAGE plpgsql;
