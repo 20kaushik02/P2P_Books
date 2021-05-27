@@ -17,6 +17,7 @@ const SearchActiveBooks = () => {
   const [city, setCity] = useState("all");
   const [area, setArea] = useState("all");
   const [street, setStreet] = useState("all");
+  const [locDisable, setLocDisable] = useState(false);
 
   const handleSearchBook = async () => {
     try {
@@ -49,13 +50,29 @@ const SearchActiveBooks = () => {
           },
         });
         setFilters(filters_response.data.data);
-        console.log(filters["Categories"]);
       } catch (error) {
         console.log(error);
       }
     };
     fetchFilters();
   }, []);
+
+  const universityChecked = (e) => {
+    if(!locDisable) { 
+      setState("Tamil Nadu");
+      setCity("Chennai");
+      setArea("Guindy");
+      setStreet("Anna University, Sardar Patel Road");
+    setLocDisable(true);
+  } else {
+      setState("all");
+      setCity("all");
+      setArea("all");
+      setStreet("all");
+      setLocDisable(false);
+    }
+  }
+
   return (
     <div className="mb-4">
       <form action="">
@@ -183,6 +200,15 @@ const SearchActiveBooks = () => {
                   );
                 })}
             </select>
+          </div>
+          <div className="col">
+          <input 
+          type="checkbox" 
+          className="university"
+          style={{ marginLeft: 10, marginRight: 30 }}
+          onChange={(e) => universityChecked(e)}
+          />
+          Anna University Student
           </div>
         </div>
         <br />

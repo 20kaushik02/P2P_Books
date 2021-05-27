@@ -310,6 +310,16 @@ router.get("/sorting", async (req, res) => {
        INNER JOIN books_active ba ON ba.owner = u.username"
     );
 
+    (get_state.rows.findIndex(x => x.state=="Tamil Nadu")) == -1 ? get_state.rows.push({ state : "Tamil Nadu"}) : console.log("State exists");
+    (get_city.rows.findIndex(x => x.city=="Chennai")) == -1 ? get_city.rows.push({ city : "Chennai"}) : console.log("City exists");  
+    (get_area.rows.findIndex(x => x.area=="Guindy")) == -1 ? get_area.rows.push({ area : "Guindy"}) : console.log("Area exists"); 
+    (get_street.rows.findIndex(x => x.street=="Anna University, Sardar Patel Road")) == -1 ? 
+      get_street.rows.push({ street : "Anna University, Sardar Patel Road"}) : console.log("Street exists"); 
+
+    console.log(get_state.rows);
+    console.log(get_city.rows);
+    console.log(get_street.rows);
+    console.log(get_area.rows);
     res.status(201).json({
       status: "success",
       data: {

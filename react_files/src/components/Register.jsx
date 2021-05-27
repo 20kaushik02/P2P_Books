@@ -13,6 +13,7 @@ const Register = ({ setAuth }) => {
   max_dob.setDate(max_dob.getDate() - 18 * 365);
   
   const [disable, setDisable] = useState(true);
+  const [locDisable, setLocDisable] = useState(false);
   const [inputs, setInputs] = useState({
     username: "",
     password: "",
@@ -41,13 +42,50 @@ const Register = ({ setAuth }) => {
     street,
   } = inputs;
 
+  const universityChecked = (e) => {
+    if(!locDisable) {
+    setInputs({   
+      username: inputs.username,
+      password: inputs.password,
+      name: inputs.name,
+      phone: inputs.phone,
+      mail: inputs.mail,
+      dob: inputs.dob,
+      gender: inputs.gender, 
+      state: "Tamil Nadu",
+      city: "Chennai",
+      area: "Guindy",
+      street: "Anna University, Sardar Patel Road",
+    });
+    setLocDisable(true);
+  } else {
+    setInputs({
+      username: inputs.username,
+      password: inputs.password,
+      name: inputs.name,
+      phone: inputs.phone,
+      mail: inputs.mail,
+      dob: inputs.dob,
+      gender: inputs.gender, 
+      state: "",
+      city: "",
+      area: "",
+      street: "",
+    });
+      setLocDisable(false);
+    }
+  }
+  useEffect(() => {
+    checkInput();
+  }, [inputs]);
+
   const checkInput = () => {
-    setDisable(!Object.values(inputs).every((val) => val.length !== 0));
+    setDisable(!Object.values(inputs).every((val) => val !== ""));
   };
 
   const onChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
-
+  
   useEffect(() => {
     checkInput();
   }, [inputs]);
@@ -168,6 +206,16 @@ const Register = ({ setAuth }) => {
           style={{ marginLeft: 10, marginRight: 30 }}
           onChange={(e) => onChange(e)}
         />
+        <br />
+        <hr />
+        <input 
+          type="checkbox" 
+          className="university"
+          style={{ marginLeft: 10, marginRight: 30 }}
+          onChange={(e) => universityChecked(e)}
+        />
+        Anna University Student
+        <fieldset disabled={locDisable}>
         <input
           type="text"
           name="state"
@@ -200,6 +248,7 @@ const Register = ({ setAuth }) => {
           onChange={(e) => onChange(e)}
           className="form-control my-3"
         />
+        </fieldset>
         <button disabled={disable} className="btn btn-success btn-block">
           Submit
         </button>
