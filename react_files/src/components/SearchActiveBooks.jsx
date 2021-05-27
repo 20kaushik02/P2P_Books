@@ -208,7 +208,7 @@ const SearchActiveBooks = () => {
           style={{ marginLeft: 10, marginRight: 30 }}
           onChange={(e) => universityChecked(e)}
           />
-          Anna University Student
+          Anna University
           </div>
         </div>
         <br />
