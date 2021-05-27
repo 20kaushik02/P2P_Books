@@ -111,7 +111,10 @@ const Register = ({ setAuth }) => {
         {
           headers: { "Content-type": "application/json" },
         }
-      );
+      ).catch(error => {
+        toast.warning(error.response.data.msg);
+        console.error(error.response);
+      });
 
       const parseRes = response.data;
       console.log(parseRes);

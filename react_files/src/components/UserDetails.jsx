@@ -81,7 +81,10 @@ const Update = () => {
             token: localStorage.getItem("token"),
           },
         }
-      );
+      ).catch(error => {
+        toast.warning(error.response.data.msg);
+        console.error(error.response);
+      });
       if (response.status === 201)
         toast.success("Details updated successfully");
     } catch (error) {

@@ -29,25 +29,28 @@ const SearchRequests = () => {
       console.error(error);
     }
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await Requests.get("/");
+      console.log(response.data);
+      setBooks(response.data.data.reqBooks);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  const fetchFilters = async () => {
+    try {
+      const filters_response = await Books.get("/category");
+      setFilters(filters_response.data.data);
+      console.log(filters["Categories"]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await Requests.get("/");
-        console.log(response.data);
-        setBooks(response.data.data.reqBooks);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    const fetchFilters = async () => {
-      try {
-        const filters_response = await Books.get("/category");
-        setFilters(filters_response.data.data);
-        console.log(filters["Categories"]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchData();
     fetchFilters();
   }, []);

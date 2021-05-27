@@ -34,8 +34,11 @@ const AddBook = () => {
             token: localStorage.getItem("token"),
           },
         }
-      );
-      if (response.data.status === "success")
+      ).catch(error => {
+        toast.warning(error.response.data.msg);
+        console.error(error.response);
+      });
+      if (response && response.data.status === "success")
         toast.success("Added book successfully!");
     } catch (error) {
       toast.error("Could not add book, try again");

@@ -34,7 +34,11 @@ const Login = ({ setAuth }) => {
       const body = { username, password };
       const response = await Auth.post("/login", body, {
         headers: { "Content-type": "application/json" },
+      }).catch(error => {
+        toast.warning(error.response.data.msg);
+        console.error(error.response);
       });
+      
       const parseRes = await response.data;
 
       console.log(parseRes);
@@ -46,7 +50,7 @@ const Login = ({ setAuth }) => {
         setAuth(false);
       }
     } catch (error) {
-      toast.error("Invalid username/password");
+      toast.error("Could not login, try again");
       console.error(error);
     }
   };

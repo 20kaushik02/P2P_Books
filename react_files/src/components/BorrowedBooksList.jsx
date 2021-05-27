@@ -11,19 +11,21 @@ const BorrowedBooksList = () => {
   const { offers, setOffers } = useContext(OffersContext);
   const cur_date = new Date().toISOString().split("T")[0];
 
+  const fetchData = async () => {
+    try {
+      const response = await BooksActive.get("/profile/borrowed", {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      });
+      setOffers(response.data.data.Books);
+    } catch (error) {
+      console.error(error);
+      toast.error("Could not load page properly, try again");
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await BooksActive.get("/profile/borrowed", {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        });
-        setOffers(response.data.data.Books);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchData();
   }, []);
   

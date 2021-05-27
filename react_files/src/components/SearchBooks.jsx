@@ -32,15 +32,16 @@ const SearchBooks = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const categories_response = await Books.get("/category");
+      setCategories(categories_response.data.data.Categories);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categories_response = await Books.get("/category");
-        setCategories(categories_response.data.data.Categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchCategories();
     handleSearchBook();
   }, []);

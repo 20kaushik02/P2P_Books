@@ -43,16 +43,19 @@ const OwnerOffersList = () => {
             token: localStorage.getItem("token"),
           },
         }
-      );
-      console.log(response.status);
+      ).catch(error => {
+        console.error(error.response);
+        toast.warning(error.response.data.msg);
+      });
+      
+      console.log("Response" + response.status);
       if (response.status == 201)
         toast.success("Offer accepted!");
-      else if (response.status == 400)
-        toast.warning("Offer does not exist");
       fetchData();
       } catch (error) {
-      toast.error("Could not accept offer, try again");
-      console.error(error);
+        toast.error("Could not accept offer, try again");
+        console.error(error);
+        fetchData();
     }
   };
 

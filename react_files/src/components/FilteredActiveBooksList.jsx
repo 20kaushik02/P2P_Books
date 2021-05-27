@@ -24,9 +24,14 @@ const FilteredActiveBooksList = ({ user }) => {
             token: localStorage.getItem("token"),
           },
         }
-      );
-      console.log(response);
-      toast.success("Offer made for book!");
+      ).catch(error => {
+        console.error(error.response);
+        toast.warning(error.response.data.msg);
+      });
+      if(response) {
+        console.log("Response" + response);
+        toast.success("Offer made!");
+      }
     } catch (error) {
       toast.error("Could not make offer, try again");
       console.error(error);

@@ -5,6 +5,9 @@ import { BooksContext } from "../context/BooksContext";
 import { FiltersContext } from "../context/FiltersContext";
 
 import BooksActive from "../apis/BooksActiveAPI";
+import { toast } from "react-toastify";
+
+toast.configure();
 
 const SearchActiveBooks = () => {
   const { filters, setFilters } = useContext(FiltersContext);
@@ -41,19 +44,21 @@ const SearchActiveBooks = () => {
     }
   };
 
+  const fetchFilters = async () => {
+    try {
+      const filters_response = await BooksActive.get("/sorting", {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      });
+      setFilters(filters_response.data.data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Could not load page properly, try again")
+    }
+  };
+
   useEffect(() => {
-    const fetchFilters = async () => {
-      try {
-        const filters_response = await BooksActive.get("/sorting", {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        });
-        setFilters(filters_response.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchFilters();
   }, []);
 

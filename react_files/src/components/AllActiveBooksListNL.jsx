@@ -8,15 +8,17 @@ import BooksActive from "../apis/BooksActiveAPI";
 const ActiveBooksListNL = () => {
   const { books, setBooks } = useContext(BooksContext);
 
+  const fetchData = async () => {
+    try {
+      const response = await BooksActive.get("/");
+      setBooks(response.data.data.Books);
+    } catch (error) {
+      console.error(error);
+      toast.error("Could not load page properly, try again");
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await BooksActive.get("/", {});
-        setBooks(response.data.data.Books);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchData();
   }, []);
   

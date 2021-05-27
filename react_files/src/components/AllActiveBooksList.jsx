@@ -12,19 +12,21 @@ toast.configure();
 const ActiveBooksList = ({ rep, user }) => {
   const { books, setBooks } = useContext(BooksContext);
 
+  const fetchData = async () => {
+    try {
+      const response = await BooksActive.get("/", {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      });
+      setBooks(response.data.data.Books);
+    } catch (error) {
+      console.error(error);
+      toast.error("Could not load page properly, try again");
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await BooksActive.get("/", {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        });
-        setBooks(response.data.data.Books);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchData();
   }, []);
 
@@ -40,9 +42,13 @@ const ActiveBooksList = ({ rep, user }) => {
             token: localStorage.getItem("token"),
           },
         }
-      );
-      console.log(response);
-      toast.success("Offer made!");
+      ).catch(error => {
+        toast.warning(error.response.data.msg);
+        console.error(error.response);
+      });
+      if(response) {
+        toast.success("Offer made!");
+      }
     } catch (error) {
       toast.error("Could not make offer, try again");
       console.error(error);
