@@ -11,6 +11,7 @@ toast.configure();
 
 const Update = () => {
   const [disable, setDisable] = useState(false);
+  const [locDisable, setLocDisable] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     phone: "",
@@ -21,6 +22,24 @@ const Update = () => {
     street: "",
   });
   
+  const universityChecked = (e) => {
+    if(!locDisable) {
+    setInputs({   
+      name: inputs.name,
+      phone: inputs.phone,
+      mail: inputs.mail,
+      state: "Tamil Nadu",
+      city: "Chennai",
+      area: "Guindy",
+      street: "Anna University, Sardar Patel Road",
+    });
+    setLocDisable(true);
+  } else {
+      getProfile();
+      setLocDisable(false);
+    }
+  }
+
   const getProfile = async () => {
     try {
       const res = await Dashboard.get("/", {
@@ -122,6 +141,15 @@ const Update = () => {
           onChange={(e) => onChange(e)}
           className="form-control my-3"
         />
+        <hr />
+        <input 
+          type="checkbox" 
+          className="university"
+          style={{ marginLeft: 10, marginRight: 30 }}
+          onChange={(e) => universityChecked(e)}
+        />
+        Anna University Student
+        <fieldset disabled={locDisable}>
         <input
           type="text"
           name="state"
@@ -154,6 +182,7 @@ const Update = () => {
           onChange={(e) => onChange(e)}
           className="form-control my-3"
         />
+        </fieldset>
         <button disabled={disable} className="btn btn-success btn-block">
           Update
         </button>
