@@ -114,5 +114,6 @@ CREATE OR REPLACE FUNCTION TransactOverCleanupProc()
             DELETE FROM transactions WHERE transaction_id = returned_ti;
             DELETE FROM offers WHERE offer_id = returned_oi;
         END IF;
+        RETURN NULL;
     END;
     $$ LANGUAGE plpgsql;
