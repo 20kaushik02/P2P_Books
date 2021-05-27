@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -10,6 +10,15 @@ const AddBook = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
+  const [disable, setDisable] = useState(true);
+
+  const checkInput = () => {
+    setDisable(!((title !== "") && (author !== "") && (category !== "")));
+  };
+  
+  useEffect(() => {
+    checkInput();
+  });
 
   const handleAddBook = async () => {
     try {
@@ -33,7 +42,7 @@ const AddBook = () => {
       console.error(error);
     }
   };
-
+  
   return (
     <div className="mb-4">
       <form action="">
@@ -71,7 +80,7 @@ const AddBook = () => {
         </div>
         <br />
         <Link to="#">
-          <button onClick={handleAddBook} className="btn btn-success">
+          <button disabled={disable} onClick={handleAddBook} className="btn btn-success">
             Add Book
           </button>
         </Link>
