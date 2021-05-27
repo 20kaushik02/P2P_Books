@@ -34,11 +34,18 @@ router.post("/register", credCheck, async (req, res) => {
     );
 
     if (user.rows.length > 0) {
-      return res.status(401).json("User already exists!");
+      return res.status(401).json({
+        status: "failure",
+        msg: "User already exists!",
+      });
     }
 
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!re.test(mail)) return res.status(401).json("Invalid email!");
+    if (!re.test(mail))
+      return res.status(401).json({
+        status: "failure",
+        msg: "Invalid email",
+      });
 
     const salt = await bcrypt.genSalt(10);
     const bcryptPassword = await bcrypt.hash(password, salt);
@@ -84,14 +91,20 @@ router.post("/login", credCheck, async (req, res) => {
       user = await db.query("SELECT * FROM users WHERE mail = $1", [username]);
 
     if (user.rows.length === 0)
-      return res.status(401).json("User does not exist");
+      return res.status(401).json({
+        status: "failure",
+        msg: "User does not exist",
+      });
 
     console.log(username);
 
     const validPassword = await bcrypt.compare(password, user.rows[0].password);
 
     if (!validPassword) {
-      return res.status(401).json("Invalid username or password");
+      return res.status(401).json({
+        status: "failure",
+        msg: "Invalid username or password",
+      });
     }
 
     const jwtToken = jwtGenerator(user.rows[0].username);
@@ -108,14 +121,18 @@ router.put("/", tokenCheck, async (req, res) => {
     const username = req.user;
     const { name, phone, mail, state, city, area, street } = req.body;
 
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(mail)) 
+      return res.status(401).json({
+        status: "failure",
+        msg: "Invalid email"
+      });
+    
     let updatedLoc = await db.query(
-      "UPDATE location SET state=$1, city=$2, area=$3, street=$4 WHERE\
-         location_id = (SELECT location_id FROM users WHERE username=$5)",
+      "UPDATE location SET state = $1, city = $2, area = $3, street=$4 WHERE\
+        location_id = (SELECT location_id FROM users WHERE username = $5)",
       [state, city, area, street, username]
     );
-
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!re.test(mail)) return res.status(401).json("Invalid email!");
 
     let updatedUser = await db.query(
       "UPDATE users SET name=$1, phone=$2, mail=$3 WHERE username = $4",

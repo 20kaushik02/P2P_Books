@@ -104,9 +104,20 @@ router.get("/filter", tokenCheck, async (req, res) => {
 router.post("/", tokenCheck, async (req, res) => {
   try {
     console.log(req.user);
+    const { title, author, category } = req.body;
+    const check_exist = await db.query(
+      "SELECT * FROM books WHERE title ~ $1 AND author ~ $2",
+      [title, author]
+    );
+    if(check_exist.rows.length > 0) {
+      return res.status(400).json({
+        status: "failure",
+        msg: "Book already exists"
+      })
+    }
     const results = await db.query(
       "INSERT INTO books(title, author, category) VALUES ($1, $2, $3) RETURNING *",
-      [req.body.title, req.body.author, req.body.category]
+      [title, author, category]
     );
     console.log(results.rows);
     res.status(201).json({

@@ -20,9 +20,11 @@ router.post("/", tokenCheck, async (req, res) => {
     console.log(check_offers.rows);
     if(check_offers.rows.length == 0) {
       console.log("Deleted offer");
-      return res.status(400);
-    }
-    else {
+      return res.status(400).json({
+        status: "failure",
+        msg: "Offer does not exist anymore..."
+      });
+    } else {
       console.log("Offer exists");
       const get_result = await db.query(
         "INSERT INTO transactions(date_of_transac, return_date, offer_id)\

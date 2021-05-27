@@ -98,11 +98,15 @@ router.post("/", tokenCheck, async (req, res) => {
     const username = req.user;
     const book_active_id = req.body.book_active_id;
     const check_dup = await db.query(
-      "SELECT * FROM offers WHERE book_active_id = $1 AND renter = $2",
+      "SELECT * FROM offers WHERE book_active_id = $1 AND renter = $2\
+      AND offer_id NOT IN (SELECT offer_id FROM transactions)",
       [book_active_id, username]
     );
     if (check_dup.rows.length > 0) {
-      return res.status(401).json("Offer already exists!");
+      return res.status(400).json({
+        status: "failure",
+        msg: "You have already made this offer..."
+      })
     }
 
     const get_result = await db.query(
