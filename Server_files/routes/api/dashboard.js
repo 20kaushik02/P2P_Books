@@ -15,8 +15,8 @@ router.get("/", tokenCheck, async (req, res) => {
       [req.user]
     );
     res.json(user.rows[0]);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 

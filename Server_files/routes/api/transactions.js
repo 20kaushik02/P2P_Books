@@ -8,6 +8,8 @@ const tokenCheck = require("../../middleware/tokenCheck");
 // Accept an offer/make a transaction
 
 router.post("/", tokenCheck, async (req, res) => {
+  await db.query("BEGIN");
+
   try {
     const username = req.user;
     const { offer_id, return_date } = req.body;
@@ -38,7 +40,12 @@ router.post("/", tokenCheck, async (req, res) => {
               AND o.offer_id = $2))",
         [username, offer_id]
       );
+
       console.log(get_result.rows);
+      console.log(update_book_status.rows);
+
+      await db.query("COMMIT");
+
       res.status(201).json({
         status: "success",
         data: {
@@ -46,8 +53,9 @@ router.post("/", tokenCheck, async (req, res) => {
         },
       });
     }
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
+    await db.query("ROLLBACK");
   }
 });
 
@@ -69,8 +77,8 @@ router.get("/", tokenCheck, async (req, res) => {
         transaction_details: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -89,8 +97,8 @@ router.put("/", tokenCheck, async (req, res) => {
         new_transaction_details: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -113,8 +121,8 @@ router.get("/profile", tokenCheck, async (req, res) => {
         transaction_details: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -137,8 +145,8 @@ router.get("/filter", tokenCheck, async (req, res) => {
         transaction_details: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 module.exports = router;

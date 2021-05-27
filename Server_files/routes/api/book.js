@@ -19,8 +19,8 @@ router.get("/", tokenCheck, async (req, res) => {
         Books: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -95,13 +95,15 @@ router.get("/filter", tokenCheck, async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
 // Add a new book
 
 router.post("/", tokenCheck, async (req, res) => {
+  await db.query("BEGIN");
+
   try {
     console.log(req.user);
     const { title, author, category } = req.body;
@@ -120,14 +122,16 @@ router.post("/", tokenCheck, async (req, res) => {
       [title, author, category]
     );
     console.log(results.rows);
+    await db.query("COMMIT");
     res.status(201).json({
       status: "success",
       data: {
         Book: results.rows[0],
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
+    await db.query("ROLLBACK");
   }
 });
 
@@ -143,7 +147,8 @@ router.get("/category", async (req, res) => {
         Categories: get_result.rows,
       },
     });
-  } catch (err) {
+  } catch (error) {
+    console.error(error);
     res.status(400).json({
       status: "bad request",
     });

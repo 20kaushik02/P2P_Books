@@ -39,8 +39,8 @@ router.get("/profile/owner", tokenCheck, async (req, res) => {
         Offer: bookwise_res,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -63,8 +63,8 @@ router.get("/profile/renter", tokenCheck, async (req, res) => {
         Offer: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -86,14 +86,16 @@ router.get("/profile/getone", tokenCheck, async (req, res) => {
         Offer: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
 // Make an offer
 
 router.post("/", tokenCheck, async (req, res) => {
+  await db.query("BEGIN");
+
   try {
     const username = req.user;
     const book_active_id = req.body.book_active_id;
@@ -114,14 +116,18 @@ router.post("/", tokenCheck, async (req, res) => {
       [book_active_id, username]
     );
     console.log(get_result.rows);
+
+    await db.query("COMMIT");
+
     res.status(201).json({
       status: "success",
       data: {
         Offer: get_result.rows[0],
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
+    await db.query("ROLLBACK");
   }
 });
 
@@ -141,8 +147,8 @@ router.delete("/", tokenCheck, async (req, res) => {
         Deleted_Offers: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 

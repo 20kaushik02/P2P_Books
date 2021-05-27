@@ -5,3 +5,4 @@
 \i view_create.sql
 \i trig_func_create.sql
 \i trig_create.sql
+\i proc_create.sql

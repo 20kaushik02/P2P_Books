@@ -21,8 +21,8 @@ router.get("/", async (req, res) => {
         Books: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -46,8 +46,8 @@ router.get("/profile", tokenCheck, async (req, res) => {
         Books: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -174,7 +174,7 @@ router.get("/filter", async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -261,7 +261,7 @@ router.get("/profile/filter", tokenCheck, async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -279,7 +279,8 @@ router.get("/category", async (req, res) => {
         Categories: get_result.rows,
       },
     });
-  } catch (err) {
+  } catch (error) {
+    console.error(error);
     res.status(400).json({
       status: "bad request",
     });
@@ -330,7 +331,8 @@ router.get("/sorting", async (req, res) => {
         Streets: get_street.rows,
       },
     });
-  } catch (err) {
+  } catch (error) {
+    console.error(error);
     res.status(400).json({
       status: "bad request",
     });
@@ -353,8 +355,8 @@ router.post("/", tokenCheck, async (req, res) => {
     res.status(201).json({
       status: "success",
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -371,8 +373,8 @@ router.put("/", tokenCheck, async (req, res) => {
     res.status(201).json({
       status: "success",
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 

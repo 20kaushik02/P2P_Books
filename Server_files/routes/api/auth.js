@@ -12,21 +12,25 @@ const tokenCheck = require("../../middleware/tokenCheck");
 // Register a new user
 
 router.post("/register", credCheck, async (req, res) => {
-  const {
-    username,
-    password,
-    name,
-    phone,
-    mail,
-    dob,
-    gender,
-    state,
-    city,
-    area,
-    street,
-  } = req.body;
-  console.log(name);
+  await db.query("BEGIN");
+
   try {
+
+    const {
+      username,
+      password,
+      name,
+      phone,
+      mail,
+      dob,
+      gender,
+      state,
+      city,
+      area,
+      street,
+    } = req.body;
+    console.log(name);
+
     const user = await db.query(
       "SELECT * FROM users WHERE username = $1\
             UNION SELECT * FROM users WHERE mail = $2",
@@ -71,18 +75,26 @@ router.post("/register", credCheck, async (req, res) => {
     );
 
     const jwtToken = jwtGenerator(newUser.rows[0].username);
+    
+    await db.query("COMMIT");
 
-    return res.json({ jwtToken });
-  } catch (err) {
-    console.log(err);
+    return res.status(201).json({ jwtToken });
+
+  } catch (error) {
+    console.error(error);
+    await db.query("ROLLBACK")
   }
 });
 
 // Login
 
 router.post("/login", credCheck, async (req, res) => {
-  const { username, password } = req.body;
+  await db.query("BEGIN");
+
   try {
+
+    const { username, password } = req.body;
+    
     var user = await db.query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
@@ -108,16 +120,23 @@ router.post("/login", credCheck, async (req, res) => {
     }
 
     const jwtToken = jwtGenerator(user.rows[0].username);
+
+    await db.query("COMMIT");
+
     return res.json({ jwtToken });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
+    await db.query("ROLLBACK");
   }
 });
 
 // Update user details
 
 router.put("/", tokenCheck, async (req, res) => {
+  await db.query("BEGIN");
+
   try {
+
     const username = req.user;
     const { name, phone, mail, state, city, area, street } = req.body;
 
@@ -139,11 +158,14 @@ router.put("/", tokenCheck, async (req, res) => {
       [name, phone, mail, username]
     );
 
+    await db.query("COMMIT");
+
     res.status(201).json({
       status: "success",
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
+    await db.query("ROLLBACK");
   }
 });
 
@@ -152,8 +174,8 @@ router.put("/", tokenCheck, async (req, res) => {
 router.post("/verify", tokenCheck, (req, res) => {
   try {
     res.json(true);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Server error");
   }
 });

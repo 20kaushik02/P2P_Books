@@ -21,8 +21,8 @@ router.get("/", tokenCheck, async (req, res) => {
         reqMessages: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -42,8 +42,8 @@ router.get("/notif-count", tokenCheck, async (req, res) => {
         Count: get_result.rows[0]["count"],
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -63,8 +63,8 @@ router.delete("/", tokenCheck, async (req, res) => {
         Deleted_notif: get_result.rows[0],
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 

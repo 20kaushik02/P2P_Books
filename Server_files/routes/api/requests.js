@@ -4,10 +4,11 @@ const router = express.Router();
 const db = require("../../DB_files");
 
 const tokenCheck = require("../../middleware/tokenCheck");
+const expiredReqClean = require('../../middleware/expiredReqClean');
 
 // Get all requests
 
-router.get("/", async (req, res) => {
+router.get("/", expiredReqClean, async (req, res) => {
   try {
     console.log("initiating get request for all requests...");
     const get_result = await db.query(
@@ -20,14 +21,14 @@ router.get("/", async (req, res) => {
         reqBooks: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
 // Get requests made by the user
 
-router.get("/profile", tokenCheck, async (req, res) => {
+router.get("/profile", tokenCheck, expiredReqClean, async (req, res) => {
   try {
     const username = req.user;
     const get_result = await db.query(
@@ -42,14 +43,14 @@ router.get("/profile", tokenCheck, async (req, res) => {
         reqBooks: get_result.rows,
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 
 // Filter all requests
 
-router.get("/filter", async (req, res) => {
+router.get("/filter", expiredReqClean, async (req, res) => {
   try {
     console.log("initiating get request for filtered requests...");
     const { search_title, search_author, search_category } = req.query;
@@ -127,13 +128,15 @@ router.get("/filter", async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
 // Make a request
 
-router.post("/", tokenCheck, async (req, res) => {
+router.post("/", tokenCheck, expiredReqClean, async (req, res) => {
+  await db.query("BEGIN");
+
   try {
     const username = req.user;
     const { books_id } = req.body;
@@ -156,17 +159,21 @@ router.post("/", tokenCheck, async (req, res) => {
     );
 
     console.log(new_request.rows[0]);
+
+    await db.query("COMMIT");
+
     res.status(201).json({
       status: "success",
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
+    await db.query("ROLLBACK");
   }
 });
 
 // Delete a request
 
-router.delete("/", tokenCheck, async (req, res) => {
+router.delete("/", tokenCheck, expiredReqClean, async (req, res) => {
   try {
     const { request_id } = req.query;
     const get_result = await db.query(
@@ -180,8 +187,8 @@ router.delete("/", tokenCheck, async (req, res) => {
         Deleted_request: get_result.rows[0],
       },
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 });
 module.exports = router;
