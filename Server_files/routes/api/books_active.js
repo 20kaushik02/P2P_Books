@@ -101,55 +101,79 @@ router.get("/filter", async (req, res) => {
     switch (search_method) {
       case 0:
         get_result = await db.query(
-          "SELECT * FROM books_active_loc\
+          "SELECT ba.*, b.title, b.author, b.category, u.location_id, l.state, l.city, l.area, l.street FROM books_active ba\
+          INNER JOIN books b ON ba.books_id = b.books_id\
+          INNER JOIN users u on u.username = ba.owner\
+          INNER JOIN location l ON l.location_id = u.location_id\
           WHERE book_status='A'"
         );
         break;
       case 1:
         get_result = await db.query(
-          "SELECT * FROM books_active_loc\
+          "SELECT ba.*, b.title, b.author, b.category, u.location_id, l.state, l.city, l.area, l.street FROM books_active ba\
+          INNER JOIN books b ON ba.books_id = b.books_id\
+          INNER JOIN users u on u.username = ba.owner\
+          INNER JOIN location l ON l.location_id = u.location_id\
           WHERE LOWER(title) ~ LOWER($1) AND book_status='A'",
           [search_title]
         );
         break;
       case 2:
         get_result = await db.query(
-          "SELECT * FROM books_active_loc\
+          "SELECT ba.*, b.title, b.author, b.category, u.location_id, l.state, l.city, l.area, l.street FROM books_active ba\
+          INNER JOIN books b ON ba.books_id = b.books_id\
+          INNER JOIN users u on u.username = ba.owner\
+          INNER JOIN location l ON l.location_id = u.location_id\
           WHERE LOWER(author) ~ LOWER($1) AND book_status='A'",
           [search_author]
         );
         break;
       case 3:
         get_result = await db.query(
-          "SELECT * FROM books_active_loc\
+          "SELECT ba.*, b.title, b.author, b.category, u.location_id, l.state, l.city, l.area, l.street FROM books_active ba\
+          INNER JOIN books b ON ba.books_id = b.books_id\
+          INNER JOIN users u on u.username = ba.owner\
+          INNER JOIN location l ON l.location_id = u.location_id\
           WHERE LOWER(title) ~ LOWER($1) AND LOWER(author) ~ LOWER($2) AND book_status='A'",
           [search_title, search_author]
         );
         break;
       case 4:
         get_result = await db.query(
-          "SELECT * FROM books_active_loc\
+          "SELECT ba.*, b.title, b.author, b.category, u.location_id, l.state, l.city, l.area, l.street FROM books_active ba\
+          INNER JOIN books b ON ba.books_id = b.books_id\
+          INNER JOIN users u on u.username = ba.owner\
+          INNER JOIN location l ON l.location_id = u.location_id\
           WHERE LOWER(category) ~ LOWER($1) AND book_status='A'",
           [search_category]
         );
         break;
       case 5:
         get_result = await db.query(
-          "SELECT * FROM books_active_loc\
+          "SELECT ba.*, b.title, b.author, b.category, u.location_id, l.state, l.city, l.area, l.street FROM books_active ba\
+          INNER JOIN books b ON ba.books_id = b.books_id\
+          INNER JOIN users u on u.username = ba.owner\
+          INNER JOIN location l ON l.location_id = u.location_id\
           WHERE LOWER(title) ~ LOWER($1) AND LOWER(category) = LOWER($2) AND book_status='A'",
           [search_title, search_category]
         );
         break;
       case 6:
         get_result = await db.query(
-          "SELECT * FROM books_active_loc\
+          "SELECT ba.*, b.title, b.author, b.category, u.location_id, l.state, l.city, l.area, l.street FROM books_active ba\
+          INNER JOIN books b ON ba.books_id = b.books_id\
+          INNER JOIN users u on u.username = ba.owner\
+          INNER JOIN location l ON l.location_id = u.location_id\
           WHERE LOWER(author) ~ LOWER($1) AND LOWER(category) = LOWER($2) AND book_status='A'",
           [search_author, search_category]
         );
         break;
       case 7:
         get_result = await db.query(
-          "SELECT * FROM books_active_loc\
+          "SELECT ba.*, b.title, b.author, b.category, u.location_id, l.state, l.city, l.area, l.street FROM books_active ba\
+          INNER JOIN books b ON ba.books_id = b.books_id\
+          INNER JOIN users u on u.username = ba.owner\
+          INNER JOIN location l ON l.location_id = u.location_id\
           WHERE LOWER(title) ~ LOWER($1) AND LOWER(author) ~ LOWER($2) AND LOWER(category) = LOWER($3) AND book_status='A'",
           [search_title, search_author, search_category]
         );

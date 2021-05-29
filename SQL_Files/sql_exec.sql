@@ -2,7 +2,6 @@
 
 \i db_schema_create.sql
 \i rel_create.sql
-\i view_create.sql
 \i trig_func_create.sql
 \i trig_create.sql
 \i proc_create.sql
